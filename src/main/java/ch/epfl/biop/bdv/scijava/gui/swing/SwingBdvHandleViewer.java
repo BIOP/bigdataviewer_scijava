@@ -2,8 +2,8 @@ package ch.epfl.biop.bdv.scijava.gui.swing;
 
 import bdv.util.Bdv;
 import bdv.util.BdvHandle;
-import net.imagej.ui.swing.viewer.EasySwingDisplayViewer;
 import org.scijava.plugin.Plugin;
+import org.scijava.ui.swing.viewer.EasySwingDisplayViewer;
 import org.scijava.ui.viewer.DisplayViewer;
 
 import javax.swing.*;

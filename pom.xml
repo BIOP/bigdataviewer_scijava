@@ -156,10 +156,22 @@
 			<groupId>sc.fiji</groupId>
 			<artifactId>bigdataviewer-vistools</artifactId>
 		</dependency>
+		<!---
+		// Dependency added while waiting for a potential PR:
+		https://github.com/scijava/scijava-ui-swing/pull/44
+		-->
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-ui-swing</artifactId>
+		</dependency>
+		<!---
+		// Removes dependency while waiting for a potential PR:
+		https://github.com/scijava/scijava-ui-swing/pull/44
 		<dependency>
 			<groupId>com.mycompany</groupId>
 			<artifactId>example-imagej-display</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
+		-->
 	</dependencies>
 </project>

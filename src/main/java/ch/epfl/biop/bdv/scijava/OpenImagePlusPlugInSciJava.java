@@ -49,7 +49,7 @@ import mpicbg.spim.data.sequence.TimePoints;
  * @author Tobias Pietzsch &lt;tobias.pietzsch@gmail.com&gt;
  */
 @Plugin(type = Command.class,
-        menuPath = "Plugins>BigDataViewer>SciJava> Open Current Image (SciJava)")
+        menuPath = "Plugins>BigDataViewer>SciJava>Open Current Image (SciJava)")
 public class OpenImagePlusPlugInSciJava implements Command
 {
     @Parameter(type = ItemIO.INPUT)

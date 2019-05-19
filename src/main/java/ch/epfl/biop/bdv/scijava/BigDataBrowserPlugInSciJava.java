@@ -34,7 +34,7 @@ import org.scijava.plugin.Plugin;
  * @author HongKee Moon &lt;moon@mpi-cbg.de&gt;
  */
 @Plugin(type = Command.class,
-        menuPath = "Plugins>BigDataViewer>SciJava>Browse BigDataServer")
+        menuPath = "Plugins>BigDataViewer>SciJava>Browse BigDataServer (SciJava)")
 public class BigDataBrowserPlugInSciJava implements Command
 {
     private final Map< String, ImageIcon > imageMap = new HashMap<>();

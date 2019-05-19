@@ -37,9 +37,10 @@ public class SwingBdvHandleViewer extends
     protected void redraw() {
         // Needs to update the display
         textInfo.setText(bdv_h.toString());
+
     }
 
-    Bdv bdv_h = null;
+    BdvHandle bdv_h = null;
 
     JPanel panelInfo;
     JLabel nameLabel;

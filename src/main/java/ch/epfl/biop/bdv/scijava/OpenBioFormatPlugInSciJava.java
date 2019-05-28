@@ -44,8 +44,12 @@ public class OpenBioFormatPlugInSciJava implements Command
         {
             ImgOpener opener = new ImgOpener();
 
-            List<SCIFIOImgPlus<?>> imgsPlus;
             BdvOptions options = BdvOptions.options();
+
+            if (createNewWindow) {
+                bdv_h=null;
+            }
+
             if (createNewWindow == false && bdv_h!=null) {
                 options.addTo(bdv_h);
             }
@@ -70,11 +74,18 @@ public class OpenBioFormatPlugInSciJava implements Command
 
                     if (bdv_h==null) {
                         // Creates bdv instance if none is existing
-                        bdv_h = BdvFunctions.show(img, "Test", options.is2D()).getBdvHandle();
+                        if (img.numDimensions()==2) {
+                            bdv_h = BdvFunctions.show(img, img.getName(), BdvOptions.options().is2D()).getBdvHandle();
+                        } else {
+                            bdv_h = BdvFunctions.show(img, img.getName(), BdvOptions.options()).getBdvHandle();
+                        }
                     } else {
                         // Appends to existing Bdv instance
-                        bdv_h = BdvFunctions.show(img, "Test", options.is2D()).getBdvHandle();
-                        options.addTo(bdv_h);
+                        if (img.numDimensions()==2) {
+                            bdv_h = BdvFunctions.show(img, img.getName(), BdvOptions.options().addTo(bdv_h).is2D()).getBdvHandle();
+                        } else {
+                            bdv_h = BdvFunctions.show(img, img.getName(), BdvOptions.options().addTo(bdv_h)).getBdvHandle();
+                        }
                     }
                 });
 

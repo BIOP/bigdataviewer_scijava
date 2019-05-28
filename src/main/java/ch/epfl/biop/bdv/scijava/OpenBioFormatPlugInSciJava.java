@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(type = Command.class,menuPath = "Plugins>BigDataViewer>SciJava>Open With BioFormats (SciJava)")
+@Plugin(type = Command.class,menuPath = "Plugins>BigDataViewer>SciJava>Open With SCIFIO + BioFormats (SciJava)")
 public class OpenBioFormatPlugInSciJava implements Command
 {
 
@@ -54,36 +54,28 @@ public class OpenBioFormatPlugInSciJava implements Command
 
                 SCIFIOConfig cfg = new SCIFIOConfig();
 
-
                 // Transform sourceIndexString to ArrayList of indexes
                 ArrayList<Integer> sourceIndexes = commaSeparatedListToArray(sourceIndexString);
 
-
-                // Wrap each source independently
+                // Open each source independently
                 sourceIndexes.stream().forEach( sourceIndex -> {
-                    //cfg.imgOpenerSetOpenAllImages(true);
-                    //AxisType xAxis;
 
-                    //cfg.imgOpenerSetRegion(new ImageRegion());
                     cfg.imgOpenerSetIndex(sourceIndex);
-
                     SCIFIOImgPlus img = opener.openImgs(file.getAbsolutePath(), cfg).get(0);
 
-                    System.out.println(sourceIndex+" will be opened ");
+                    LOGGER.info(sourceIndex+" will be opened ");
+                    LOGGER.info("imgdim="+img.numDimensions());
+                    LOGGER.info("x size = "+img.dimension(0));
+                    LOGGER.info("y size = "+img.dimension(1));
 
-                    //for (SCIFIOImgPlus img: imgsPlus) {
-                        //imgsPlus.get(0).getImageMetadata().getAxis(0);
-                        System.out.println("imgdim="+img.numDimensions());
-
-                        System.out.println("x size = "+img.dimension(0));
-                        System.out.println("y size = "+img.dimension(1));
-                        if (bdv_h==null) {
-                            bdv_h = BdvFunctions.show(img, "Test", options.is2D()).getBdvHandle();
-                        } else {
-                            bdv_h = BdvFunctions.show(img, "Test", options.is2D()).getBdvHandle();
-                            options.addTo(bdv_h);
-                        }
-                    //}
+                    if (bdv_h==null) {
+                        // Creates bdv instance if none is existing
+                        bdv_h = BdvFunctions.show(img, "Test", options.is2D()).getBdvHandle();
+                    } else {
+                        // Appends to existing Bdv instance
+                        bdv_h = BdvFunctions.show(img, "Test", options.is2D()).getBdvHandle();
+                        options.addTo(bdv_h);
+                    }
                 });
 
             }

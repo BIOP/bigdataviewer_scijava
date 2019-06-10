@@ -15,14 +15,13 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
-@Plugin(type = Command.class,menuPath = "Plugins>BigDataViewer>SciJava>Open With SCIFIO + BioFormats (SciJava)")
-public class OpenBioFormatPlugInSciJava implements Command
+@Plugin(type = Command.class,menuPath = "Plugins>BigDataViewer>SciJava>Open with SCIFIO (SciJava)")
+public class OpenSciFIOPlugInSciJava implements Command
 {
 
-    private static final Logger LOGGER = Logger.getLogger( OpenBioFormatPlugInSciJava.class.getName() );
+    private static final Logger LOGGER = Logger.getLogger( OpenSciFIOPlugInSciJava.class.getName() );
 
     @Parameter(label = "Image File")
     public File file;
@@ -147,6 +146,5 @@ public class OpenBioFormatPlugInSciJava implements Command
         }
         return arrayOfIndexes;
     }
-
 
 }

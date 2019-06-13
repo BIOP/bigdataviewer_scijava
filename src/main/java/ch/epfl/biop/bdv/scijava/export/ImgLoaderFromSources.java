@@ -5,16 +5,18 @@ import mpicbg.spim.data.generic.sequence.BasicSetupImgLoader;
 import mpicbg.spim.data.generic.sequence.TypedBasicImgLoader;
 import net.imglib2.type.Type;
 
-public class ImgLoaderFromSource<T extends Type<T>> implements TypedBasicImgLoader< T > {
+import java.util.List;
 
-    Source<T> src;
+public class ImgLoaderFromSources<T extends Type<T>> implements TypedBasicImgLoader< T > {
 
-    public ImgLoaderFromSource(Source<T> src) {
-        this.src = src;
+    List<Source<T>> srcs;
+
+    public ImgLoaderFromSources(List<Source<T>> srcs) {
+        this.srcs = srcs;
     }
 
     @Override
     public BasicSetupImgLoader<T> getSetupImgLoader(int setupId) {
-        return new BasicSetupImgLoaderFromSource<>(src);
+        return new BasicSetupImgLoaderFromSource<>(srcs.get(setupId));
     }
 }

@@ -74,8 +74,6 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
                     return bdv_h.getViewerPanel().getState().getSources().size()+i;
                 }});
 
-        idx_src.forEach(idx -> System.out.println("id = "+idx));
-
         List<Source<?>> srcs = idx_src
                         .stream()
                         .map(idx -> bdv_h.getViewerPanel().getState().getSources().get(idx).getSpimSource())
@@ -112,8 +110,7 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
 
             final BasicViewSetup basicviewsetup = new BasicViewSetup(idx_current_src, src.getName(), imageSize, voxelSize);
 
-            if ((imgDims[0] == 1) || (imgDims[1] == 1) || (imgDims[2] == 1)) {
-                // 2D case -> automipmap fails
+            if ((imgDims[0] <= 2) || (imgDims[1] <= 2) || (imgDims[2] <= 2)) {// automipmap fails if one dimension is below or equal to 2
                 int nLevels = 1;
                 int scaleFactor = 4;
                 long maxDimension = Math.max(Math.max(imgDims[0], imgDims[1]), imgDims[2]);
@@ -132,6 +129,12 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
                     subdivisions[iMipMap][0] = (long) ((double) imgDims[0] / (double) resolutions[iMipMap][0]) > 1 ? 64 : 1;
                     subdivisions[iMipMap][1] = (long) ((double) imgDims[1] / (double) resolutions[iMipMap][1]) > 1 ? 64 : 1;
                     subdivisions[iMipMap][2] = (long) ((double) imgDims[2] / (double) resolutions[iMipMap][2]) > 1 ? 64 : 1;
+
+                    // 2D dimension = 0 fix
+                    subdivisions[iMipMap][0] = Math.max(1,subdivisions[iMipMap][0]);
+                    subdivisions[iMipMap][1] = Math.max(1,subdivisions[iMipMap][1]);
+                    subdivisions[iMipMap][2] = Math.max(1,subdivisions[iMipMap][2]);
+
                 }
 
                 mipmapSettings = new ExportMipmapInfo(resolutions, subdivisions);

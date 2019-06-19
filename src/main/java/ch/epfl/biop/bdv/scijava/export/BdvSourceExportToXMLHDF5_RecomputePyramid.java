@@ -1,5 +1,6 @@
 package ch.epfl.biop.bdv.scijava.export;
 
+import bdv.BigDataViewer;
 import bdv.export.*;
 import bdv.ij.util.ProgressWriterIJ;
 import bdv.img.hdf5.Hdf5ImageLoader;
@@ -65,6 +66,8 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
     @Parameter
     int nTimePointEnd = 1;
 
+    BigDataViewer bdv;
+
     public void run() {
 
         ArrayList<Integer> idx_src = expressionToArray(index_srcs_to_save, i -> {
@@ -122,9 +125,11 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
                 int[][] subdivisions = new int[nLevels][3];
 
                 for (int iMipMap = 0; iMipMap < nLevels; iMipMap++) {
-                    resolutions[iMipMap][0] = (int) Math.pow(scaleFactor, iMipMap);
-                    resolutions[iMipMap][1] = (int) Math.pow(scaleFactor, iMipMap);
-                    resolutions[iMipMap][2] = (int) Math.pow(scaleFactor, iMipMap);
+
+
+                    resolutions[iMipMap][0] = imgDims[0]<=1?1:(int) Math.pow(scaleFactor, iMipMap);
+                    resolutions[iMipMap][1] = imgDims[1]<=1?1:(int) Math.pow(scaleFactor, iMipMap);
+                    resolutions[iMipMap][2] = imgDims[2]<=1?1:(int) Math.pow(scaleFactor, iMipMap);
 
                     subdivisions[iMipMap][0] = (long) ((double) imgDims[0] / (double) resolutions[iMipMap][0]) > 1 ? 64 : 1;
                     subdivisions[iMipMap][1] = (long) ((double) imgDims[1] / (double) resolutions[iMipMap][1]) > 1 ? 64 : 1;
@@ -134,6 +139,17 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
                     subdivisions[iMipMap][0] = Math.max(1,subdivisions[iMipMap][0]);
                     subdivisions[iMipMap][1] = Math.max(1,subdivisions[iMipMap][1]);
                     subdivisions[iMipMap][2] = Math.max(1,subdivisions[iMipMap][2]);
+
+                    /*System.out.println("iMipmap="+iMipMap);
+
+                    System.out.println("s0="+subdivisions[iMipMap][0]);
+                    System.out.println("s1="+subdivisions[iMipMap][1]);
+                    System.out.println("s2="+subdivisions[iMipMap][2]);
+
+
+                    System.out.println("r0="+resolutions[iMipMap][0]);
+                    System.out.println("r1="+resolutions[iMipMap][1]);
+                    System.out.println("r2="+resolutions[iMipMap][2]);*/
 
                 }
 

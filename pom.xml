@@ -14,7 +14,7 @@
 
 	<groupId>ch.epfl.biop</groupId>
 	<artifactId>bigdataviewer_scijava</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.1</version>
 
 	<name>BigDataViewer Scijava</name>
 	<description>Scijava commands for starting BigDataViewer and exporting data.</description>
@@ -176,20 +176,20 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!--
 		<dependency>
 			<groupId>ch.epfl.biop</groupId>
 			<artifactId>bigdataviewer_scijava</artifactId>
 			<scope>test</scope>
 			<version>0.1.1-SNAPSHOT</version>
 		</dependency>
-
 		<dependency>
 			<groupId>ch.epfl.biop</groupId>
 			<artifactId>bigdataviewer-bioformats</artifactId>
 			<scope>test</scope>
 			<version>0.1.1-SNAPSHOT</version>
 		</dependency>
-
+		-->
 		<!---
 		// Removes dependency while waiting for a potential PR:
 		https://github.com/scijava/scijava-ui-swing/pull/44

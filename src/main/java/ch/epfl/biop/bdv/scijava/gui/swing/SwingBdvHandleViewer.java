@@ -1,7 +1,8 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
-import bdv.util.Bdv;
 import bdv.util.BdvHandle;
+import bdv.viewer.state.SourceState;
+import net.imglib2.Volatile;
 import org.scijava.plugin.Plugin;
 import org.scijava.ui.swing.viewer.EasySwingDisplayViewer;
 import org.scijava.ui.viewer.DisplayViewer;
@@ -37,7 +38,12 @@ public class SwingBdvHandleViewer extends
     protected void redraw() {
         // Needs to update the display
         textInfo.setText(bdv_h.toString());
+        DefaultListModel<SourceState<?>> listModel = new DefaultListModel();
+        bdv_h.getViewerPanel().getState().getSources().forEach(src -> {
+            listModel.addElement(src);
+        });
 
+        listOfSources.setModel(listModel);
     }
 
     BdvHandle bdv_h = null;
@@ -45,6 +51,9 @@ public class SwingBdvHandleViewer extends
     JPanel panelInfo;
     JLabel nameLabel;
     JTextArea textInfo;
+
+    JList<SourceState<?>> listOfSources;
+
     @Override
     protected JPanel createDisplayPanel(BdvHandle bdv_h) {
         this.bdv_h = bdv_h;
@@ -56,8 +65,61 @@ public class SwingBdvHandleViewer extends
         panel.add(nameLabel, BorderLayout.NORTH);
         textInfo = new JTextArea();
         textInfo.setEditable(false);
-        panelInfo.add(textInfo);
+
+        DefaultListModel<SourceState<?>> listModel = new DefaultListModel();
+        bdv_h.getViewerPanel().getState().getSources().forEach(src -> {
+           listModel.addElement(src);
+        });
+
+        listOfSources = new JList(listModel);
+
+        listOfSources.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+        listOfSources.setLayoutOrientation(JList.VERTICAL);
+        listOfSources.setVisibleRowCount(-1);
+
+        SourceStateCellRenderer sscr = new SourceStateCellRenderer();
+        listOfSources.setCellRenderer(sscr);
+
+
+        JScrollPane listScroller = new JScrollPane(listOfSources);
+        listScroller.setPreferredSize(new Dimension(250, 300));
+        panelInfo.setLayout(new BorderLayout());
+        panelInfo.add(listScroller, BorderLayout.CENTER);
+
         this.redraw();
         return panel;
     }
+
+    class SourceStateCellRenderer extends JLabel implements ListCellRenderer<SourceState<?>> {
+        public SourceStateCellRenderer() {
+            setOpaque(true);
+            setHorizontalAlignment(CENTER);
+            setVerticalAlignment(CENTER);
+        }
+        @Override
+        public Component getListCellRendererComponent(JList<? extends SourceState<?>> list, SourceState<?> value, int index, boolean isSelected, boolean cellHasFocus) {
+
+            if (isSelected) {
+                setBackground(list.getSelectionBackground());
+                setForeground(list.getSelectionForeground());
+            } else {
+                setBackground(list.getBackground());
+                setForeground(list.getForeground());
+            }
+
+            if (value.getSpimSource().getType() instanceof Volatile) {
+                if (value.getSpimSource().getName().endsWith("(Volatile)")) {
+                    setText(value.getSpimSource().getName());
+                } else {
+                    setText(value.getSpimSource().getName() + " (Volatile)");
+                }
+            } else {
+                setText(value.getSpimSource().getName());
+            }
+
+            return this;
+        }
+    }
+
 }

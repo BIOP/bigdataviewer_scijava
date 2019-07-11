@@ -66,7 +66,23 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
     @Parameter
     int nTimePointEnd = 1;
 
-    BigDataViewer bdv;
+    @Parameter
+    boolean autoMipMap = false;
+
+    @Parameter
+    int scaleFactor = 4;
+
+    @Parameter
+    int subDivX = 64;
+
+    @Parameter
+    int subDivY = 64;
+
+    @Parameter
+    int subDivZ = 64;
+
+    @Parameter
+    boolean tryMergeIntoChannelWheneverPossible = true;
 
     public void run() {
 
@@ -113,9 +129,8 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
 
             final BasicViewSetup basicviewsetup = new BasicViewSetup(idx_current_src, src.getName(), imageSize, voxelSize);
 
-            if ((imgDims[0] <= 2) || (imgDims[1] <= 2) || (imgDims[2] <= 2)) {// automipmap fails if one dimension is below or equal to 2
+            if (((imgDims[0] <= 2) || (imgDims[1] <= 2) || (imgDims[2] <= 2))||(autoMipMap==false)) {// automipmap fails if one dimension is below or equal to 2
                 int nLevels = 1;
-                int scaleFactor = 4;
                 long maxDimension = Math.max(Math.max(imgDims[0], imgDims[1]), imgDims[2]);
                 while (maxDimension > 512) {
                     nLevels++;
@@ -125,32 +140,18 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
                 int[][] subdivisions = new int[nLevels][3];
 
                 for (int iMipMap = 0; iMipMap < nLevels; iMipMap++) {
-
-
                     resolutions[iMipMap][0] = imgDims[0]<=1?1:(int) Math.pow(scaleFactor, iMipMap);
                     resolutions[iMipMap][1] = imgDims[1]<=1?1:(int) Math.pow(scaleFactor, iMipMap);
                     resolutions[iMipMap][2] = imgDims[2]<=1?1:(int) Math.pow(scaleFactor, iMipMap);
 
-                    subdivisions[iMipMap][0] = (long) ((double) imgDims[0] / (double) resolutions[iMipMap][0]) > 1 ? 64 : 1;
-                    subdivisions[iMipMap][1] = (long) ((double) imgDims[1] / (double) resolutions[iMipMap][1]) > 1 ? 64 : 1;
-                    subdivisions[iMipMap][2] = (long) ((double) imgDims[2] / (double) resolutions[iMipMap][2]) > 1 ? 64 : 1;
+                    subdivisions[iMipMap][0] = (long) ((double) imgDims[0] / (double) resolutions[iMipMap][0]) > 1 ? subDivX : 1;
+                    subdivisions[iMipMap][1] = (long) ((double) imgDims[1] / (double) resolutions[iMipMap][1]) > 1 ? subDivY : 1;
+                    subdivisions[iMipMap][2] = (long) ((double) imgDims[2] / (double) resolutions[iMipMap][2]) > 1 ? subDivZ : 1;
 
                     // 2D dimension = 0 fix
                     subdivisions[iMipMap][0] = Math.max(1,subdivisions[iMipMap][0]);
                     subdivisions[iMipMap][1] = Math.max(1,subdivisions[iMipMap][1]);
                     subdivisions[iMipMap][2] = Math.max(1,subdivisions[iMipMap][2]);
-
-                    /*System.out.println("iMipmap="+iMipMap);
-
-                    System.out.println("s0="+subdivisions[iMipMap][0]);
-                    System.out.println("s1="+subdivisions[iMipMap][1]);
-                    System.out.println("s2="+subdivisions[iMipMap][2]);
-
-
-                    System.out.println("r0="+resolutions[iMipMap][0]);
-                    System.out.println("r1="+resolutions[iMipMap][1]);
-                    System.out.println("r2="+resolutions[iMipMap][2]);*/
-
                 }
 
                 mipmapSettings = new ExportMipmapInfo(resolutions, subdivisions);

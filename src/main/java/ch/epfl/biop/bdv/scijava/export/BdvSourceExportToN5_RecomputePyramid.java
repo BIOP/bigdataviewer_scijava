@@ -1,7 +1,9 @@
 package ch.epfl.biop.bdv.scijava.export;
 
+
 import bdv.BigDataViewer;
 import bdv.export.*;
+import bdv.export.n5.WriteSequenceToN5;
 import bdv.ij.util.ProgressWriterIJ;
 import bdv.img.hdf5.Hdf5ImageLoader;
 import bdv.img.hdf5.Partition;
@@ -20,11 +22,16 @@ import mpicbg.spim.data.sequence.VoxelDimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.realtransform.AffineTransform3D;
+import org.janelia.saalfeldlab.n5.GzipCompression;
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
+import bdv.export.ExportScalePyramid.AfterEachPlane;
+import bdv.export.ExportScalePyramid.LoopbackHeuristic;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,8 +50,8 @@ import java.util.stream.Collectors;
  *
  */
 
-@Plugin(type = Command.class, menuPath = "Plugins>BIOP>BDV>Save Source as Hdf5 (recompute Pyramid)", initializer = "initParams")
-public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
+@Plugin(type = Command.class, menuPath = "Plugins>BIOP>BDV>Save Source as N5 (recompute Pyramid)", initializer = "initParams")
+public class BdvSourceExportToN5_RecomputePyramid implements Command{
 
     private static final Logger LOGGER = Logger.getLogger( BdvSourceExportToXMLHDF5_RecomputePyramid.class.getName() );
 
@@ -87,16 +94,16 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
     public void run() {
 
         ArrayList<Integer> idx_src = expressionToArray(index_srcs_to_save, i -> {
-                if (i>=0) {
-                    return i;
-                } else {
-                    return bdv_h.getViewerPanel().getState().getSources().size()+i;
-                }});
+            if (i>=0) {
+                return i;
+            } else {
+                return bdv_h.getViewerPanel().getState().getSources().size()+i;
+            }});
 
         List<Source<?>> srcs = idx_src
-                        .stream()
-                        .map(idx -> bdv_h.getViewerPanel().getState().getSources().get(idx).getSpimSource())
-                        .collect(Collectors.toList());
+                .stream()
+                .map(idx -> bdv_h.getViewerPanel().getState().getSources().get(idx).getSpimSource())
+                .collect(Collectors.toList());
 
         ImgLoaderFromSources<?> imgLoader = new ImgLoaderFromSources(srcs);
 
@@ -178,8 +185,8 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
 
         final int numCellCreatorThreads = Math.max( 1, nThreads - 1 );
 
-        final ExportScalePyramid.LoopbackHeuristic loopbackHeuristic = new bdv.export.ExportScalePyramid.DefaultLoopbackHeuristic();
-             /*   ( originalImg,
+        final LoopbackHeuristic loopbackHeuristic = new bdv.export.ExportScalePyramid.DefaultLoopbackHeuristic();
+        /*        ( originalImg,
                   factorsToOriginalImg,
                   previousLevel,
                   factorsToPreviousLevel,
@@ -195,7 +202,7 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
                     return false;
                 };*/
 
-        final ExportScalePyramid.AfterEachPlane afterEachPlane = usedLoopBack -> { };
+        final AfterEachPlane afterEachPlane = usedLoopBack -> { };
 
         final ArrayList< Partition > partitions;
         partitions = null;
@@ -215,9 +222,15 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
         }
         final String hdf5Filename = seqFilename.substring( 0, seqFilename.length() - 4 ) + ".h5";
         final File hdf5File = new File( hdf5Filename );
-        boolean deflate = false;
+        //boolean deflate = false;
         {
-            WriteSequenceToHdf5.writeHdf5File( seq, perSetupExportMipmapInfo, deflate, hdf5File, loopbackHeuristic, afterEachPlane, numCellCreatorThreads, new SubTaskProgressWriter( progressWriter, 0, 0.95 ) );
+            try {
+                WriteSequenceToN5.writeN5File( seq, perSetupExportMipmapInfo,
+                        new GzipCompression(), // TODO: make user-settable//deflate,
+                        hdf5File, loopbackHeuristic, afterEachPlane, numCellCreatorThreads, new SubTaskProgressWriter( progressWriter, 0, 0.95 ) );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         // write xml sequence description

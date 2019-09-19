@@ -1,5 +1,6 @@
-package ch.epfl.biop.bdv.scijava;
+package ch.epfl.biop.bdv.scijava.command;
 
+import loci.common.DebugTools;
 import net.imagej.ImageJ;
 
 import org.scijava.command.Command;
@@ -10,12 +11,14 @@ import org.scijava.plugin.Plugin;
 import java.io.IOException;
 import java.net.URL;
 
+import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
+
 /**
  * Command which opens a page towards the source code of this repository
  * @author Nicolas Chiaruttini, BIOP, EPFL
  */
 
-@Plugin(type = Command.class, menuPath = "Plugins>BigDataViewer>SciJava>Info")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"SciJava Bdv Info")
 public class Info implements Command {
 
     @Parameter
@@ -39,9 +42,21 @@ public class Info implements Command {
      * @throws Exception
      */
     public static void main(final String... args) throws Exception {
+        DebugTools.enableLogging("INFO");
         // create the ImageJ application context with all available services
         final ImageJ ij = new ImageJ();
         ij.ui().showUI();
         ij.command().run(Info.class, true);
     }
+
+    /**
+     * Define the Menu position of all BDV SciJava Commands
+     */
+    final public static String ScijavaBdvRootMenu = "BDV_SciJava>";
+
+    /**
+     * Suffix added to previously existing commands to avoid confusion in Command Names
+     */
+    final public static String ScijavaBdvCmdSuffix = " (SciJava)";
+
 }

@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava;
+package ch.epfl.biop.bdv.scijava.command;
 
 import java.io.File;
 
@@ -17,7 +17,10 @@ import org.scijava.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-@Plugin(type = Command.class,menuPath = "Plugins>BigDataViewer>SciJava>Open with SCIFIO (SciJava)")
+import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
+import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
+
+@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Open with SCIFIO"+ScijavaBdvCmdSuffix)
 public class OpenSciFIOPlugInSciJava implements Command
 {
 

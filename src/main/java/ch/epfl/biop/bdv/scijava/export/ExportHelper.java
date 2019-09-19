@@ -5,7 +5,6 @@ import mpicbg.spim.data.sequence.VoxelDimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.realtransform.AffineTransform3D;
 
-import java.awt.geom.AffineTransform;
 import java.util.Arrays;
 
 public class ExportHelper {

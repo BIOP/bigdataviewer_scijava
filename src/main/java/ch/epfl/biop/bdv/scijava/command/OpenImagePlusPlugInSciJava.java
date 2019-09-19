@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava;
+package ch.epfl.biop.bdv.scijava.command;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,6 +43,9 @@ import mpicbg.spim.data.sequence.FinalVoxelDimensions;
 import mpicbg.spim.data.sequence.TimePoint;
 import mpicbg.spim.data.sequence.TimePoints;
 
+import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
+import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
+
 /**
  * ImageJ plugin to show the current image in BigDataViewer.
  *
@@ -55,7 +58,7 @@ import mpicbg.spim.data.sequence.TimePoints;
  */
 
 @Plugin(type = Command.class,
-        menuPath = "Plugins>BigDataViewer>SciJava>Open Current Image (SciJava)")
+        menuPath = ScijavaBdvRootMenu+"Open Current Image"+ScijavaBdvCmdSuffix)
 public class OpenImagePlusPlugInSciJava implements Command
 {
     @Parameter(type = ItemIO.INPUT)

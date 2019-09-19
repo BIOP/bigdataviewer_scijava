@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava;
+package ch.epfl.biop.bdv.scijava.command;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,10 @@ import org.scijava.plugin.Plugin;
 import bdv.img.imaris.Imaris;
 import bdv.spimdata.SpimDataMinimal;
 
-@Plugin(type = Command.class,menuPath = "Plugins>BigDataViewer>SciJava>Open Imaris (experimental) (SciJava)")
+import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
+import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
+
+@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Open Imaris (experimental)"+ScijavaBdvCmdSuffix)
 public class OpenImarisPlugInSciJava implements Command
 {
     @Parameter(label = "Imaris File")

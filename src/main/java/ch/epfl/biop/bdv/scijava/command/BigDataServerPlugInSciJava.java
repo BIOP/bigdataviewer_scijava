@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava;
+package ch.epfl.biop.bdv.scijava.command;
 
 import bdv.spimdata.SpimDataMinimal;
 import bdv.spimdata.XmlIoSpimDataMinimal;
@@ -18,7 +18,10 @@ import org.scijava.plugin.Plugin;
 import java.io.IOException;
 import java.util.Map;
 
-@Plugin(type = Command.class, menuPath = "Plugins>BigDataViewer>SciJava>Open Dataset from BigDataServer (SciJava)")
+import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
+import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
+
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Open Dataset from BigDataServer"+ScijavaBdvCmdSuffix)
 public class BigDataServerPlugInSciJava implements Command
 {
     @Parameter(label = "Big Data Server URL")

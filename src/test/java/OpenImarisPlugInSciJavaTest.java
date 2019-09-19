@@ -1,4 +1,4 @@
-import ch.epfl.biop.bdv.scijava.OpenImarisPlugInSciJava;
+import ch.epfl.biop.bdv.scijava.command.OpenImarisPlugInSciJava;
 import net.imagej.ImageJ;
 
 public class OpenImarisPlugInSciJavaTest {

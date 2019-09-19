@@ -1,4 +1,4 @@
-import ch.epfl.biop.bdv.scijava.BigDataServerPlugInSciJava;
+import ch.epfl.biop.bdv.scijava.command.BigDataServerPlugInSciJava;
 import net.imagej.ImageJ;
 
 public class BigDataServerPlugInSciJavaTest {

@@ -1,4 +1,4 @@
-import ch.epfl.biop.bdv.scijava.BigDataBrowserPlugInSciJava;
+import ch.epfl.biop.bdv.scijava.command.BigDataBrowserPlugInSciJava;
 import net.imagej.ImageJ;
 
 public class BigDataBrowserPlugInSciJavaTest {

@@ -1,5 +1,4 @@
-package ch.epfl.biop.bdv.scijava;
-
+package ch.epfl.biop.bdv.scijava.command;
 
 import bdv.util.BdvFunctions;
 import bdv.util.BdvHandle;
@@ -11,7 +10,10 @@ import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-@Plugin(type = Command.class, menuPath = "Plugins>BigDataViewer>SciJava>Open Current Image - ImgLib2 (SciJava)")
+import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
+import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
+
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Open Current Image - ImgLib2"+ScijavaBdvCmdSuffix)
 public class OpenCurrentImgPlusPlugInSciJava implements Command {
 
     @Parameter(label = "Open in new BigDataViewer window")

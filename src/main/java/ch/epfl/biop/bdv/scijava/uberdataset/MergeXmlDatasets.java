@@ -4,6 +4,7 @@ import bdv.spimdata.SpimDataMinimal;
 import mpicbg.spim.data.SpimData;
 import mpicbg.spim.data.XmlIoSpimData;
 import mpicbg.spim.data.generic.base.Entity;
+import mpicbg.spim.data.generic.sequence.BasicViewSetup;
 import mpicbg.spim.data.registration.ViewRegistration;
 import mpicbg.spim.data.registration.ViewRegistrations;
 import mpicbg.spim.data.registration.ViewTransform;
@@ -126,7 +127,7 @@ public class MergeXmlDatasets implements Command {
             mapFileToEntitiesIdRange.put(f,classEntityToRange);
         });
 
-        // Initial numbering of entities:
+        log.accept("Initial numbering of entities:");
         printEntitiesNumberingInfo();
 
         // Renumbers entities ids, if necessary ( most probably ):
@@ -146,7 +147,7 @@ public class MergeXmlDatasets implements Command {
             });
         }
 
-        // Final numbering of entities:
+        log.accept("Final numbering of entities:");
         printEntitiesNumberingInfo();
 
         // Needed to keep track of viewsetup renumbering
@@ -165,11 +166,25 @@ public class MergeXmlDatasets implements Command {
                                         .collect(Collectors.groupingBy(e -> e.getClass(),Collectors.toList()));
 
                         ViewSetup nvs;
-
+                        // For ViewSetup Construction -> because ViewSetup needs to all be of the same sort for a sequence description which is not minimal
+                        if (!newEntities.containsKey(Angle.class)) {
+                            List<Entity> dummyList = new ArrayList<>();
+                           dummyList.add(new Angle(-1));
+                           newEntities.put(Angle.class, dummyList);
+                        }
+                        if (!newEntities.containsKey(Illumination.class)) {
+                            List<Entity> dummyList = new ArrayList<>();
+                            dummyList.add(new Illumination(-1));
+                            newEntities.put(Illumination.class, dummyList);
+                        }
+                        if (!newEntities.containsKey(Channel.class)) {
+                            List<Entity> dummyList = new ArrayList<>();
+                            dummyList.add(new Channel(-1));
+                            newEntities.put(Channel.class, dummyList);
+                        }
                         // We assume all entities are of size 1
                         // TODO : assert ... all entities are of size 1
-
-                        // Different constructors depending on the presence of a Tile entity
+                        // Different constructors depending on the presence of some entities
                         if (newEntities.containsKey(Tile.class)) {
                             nvs = new ViewSetup(
                                     viewSetupCounter,
@@ -215,6 +230,7 @@ public class MergeXmlDatasets implements Command {
                 });
         });
 
+
         // ------------------- BUILDING AND SAVING DATASET
         try {
             // Make Timepoints List
@@ -222,13 +238,15 @@ public class MergeXmlDatasets implements Command {
             timePoints.addAll(mapIdToTp.values());
 
             // Construct Sequence Description
-            SequenceDescription sd = new SequenceDescription( new TimePoints( timePoints ), viewSetups , new UberImgLoader(inputFilesArray,null), null);
+            SequenceDescription sd = new SequenceDescription( new TimePoints( timePoints ), viewSetups , uil, null);
 
             // Construct spimData
             final SpimData spimData = new SpimData( xmlFilePath, sd, new ViewRegistrations( registrations ) );
 
             // Save Dataset
-            new XmlIoSpimData().save( spimData, new File(xmlFilePath,xmlFileName).getAbsolutePath() );
+            File f = new File(xmlFilePath,xmlFileName);
+            log.accept("Saving final uber dataset "+f.getAbsolutePath());
+            new XmlIoSpimData().save( spimData, f.getAbsolutePath() );
 
         } catch (Exception e) {
             e.printStackTrace();

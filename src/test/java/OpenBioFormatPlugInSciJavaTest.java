@@ -1,4 +1,4 @@
-import ch.epfl.biop.bdv.scijava.command.OpenSciFIOPlugInSciJava;
+import ch.epfl.biop.bdv.scijava.command.open.OpenSciFIOPlugInSciJava;
 import net.imagej.ImageJ;
 
 public class OpenBioFormatPlugInSciJavaTest {

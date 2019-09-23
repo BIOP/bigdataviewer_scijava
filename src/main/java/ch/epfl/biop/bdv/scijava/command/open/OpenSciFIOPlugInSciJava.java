@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.command;
+package ch.epfl.biop.bdv.scijava.command.open;
 
 import java.io.File;
 

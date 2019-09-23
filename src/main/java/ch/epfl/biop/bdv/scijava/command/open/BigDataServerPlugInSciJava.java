@@ -1,29 +1,34 @@
-package ch.epfl.biop.bdv.scijava.command;
+package ch.epfl.biop.bdv.scijava.command.open;
 
 import bdv.spimdata.SpimDataMinimal;
 import bdv.spimdata.XmlIoSpimDataMinimal;
 import bdv.util.BdvFunctions;
 import bdv.util.BdvHandle;
 import bdv.util.BdvOptions;
-import mpicbg.spim.data.SpimData;
+import ch.epfl.biop.bdv.scijava.util.BigDataServerUtilsSciJava;
+import ij.ImagePlus;
 import mpicbg.spim.data.SpimDataException;
-import mpicbg.spim.data.generic.AbstractSpimData;
+import net.imagej.DatasetService;
+import net.imagej.display.ImageDisplayService;
 import org.scijava.ItemIO;
 import org.scijava.command.Command;
-import org.scijava.object.ObjectService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Open XML/HDF5"+ScijavaBdvCmdSuffix)
-public class BigDataViewerPlugInSciJava implements Command {
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Open>Dataset from BigDataServer"+ScijavaBdvCmdSuffix)
+public class BigDataServerPlugInSciJava implements Command
+{
+    @Parameter(label = "Big Data Server URL")
+    String urlServer = "http://fly.mpi-cbg.de:8081";
 
-    @Parameter(label = "XML File")
-    public File file;
+    @Parameter(label = "Dataset Name")
+    String datasetName = "Drosophila";
 
     @Parameter(label = "Open in new BigDataViewer window")
     public boolean createNewWindow;
@@ -32,28 +37,32 @@ public class BigDataViewerPlugInSciJava implements Command {
     @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH, required = false)
     public BdvHandle bdv_h;
 
-    @Parameter(type = ItemIO.OUTPUT)
-    AbstractSpimData sd;
+    @Parameter
+    DatasetService ds;
+
+    @Parameter
+    ImageDisplayService ids;
 
     @Override
     public void run()
     {
-        try
-        {
-            final SpimDataMinimal spimData = new XmlIoSpimDataMinimal().load( file.getAbsolutePath() );
+        ds.getDatasets().size();
+        ds.getObjectService().getObjects(ImagePlus.class).size();
+        ids.getImageDisplays().size();
+        try {
+            Map<String,String> BDSList = BigDataServerUtilsSciJava.getDatasetList(urlServer);
+            final String urlString = BDSList.get(datasetName);
+
+            final SpimDataMinimal spimData = new XmlIoSpimDataMinimal().load(urlString);// xmlFilename );
             BdvOptions options = BdvOptions.options();
             if (createNewWindow == false && bdv_h!=null) {
                 options.addTo(bdv_h);
             }
             bdv_h = BdvFunctions.show( spimData, options ).get(0).getBdvHandle(); // Returns handle from index 0
 
-            sd = spimData;
-
-        }
-        catch ( SpimDataException e )
-        {
+        } catch (SpimDataException | IOException e) {
             e.printStackTrace();
-            throw new RuntimeException( e );
         }
     }
+
 }

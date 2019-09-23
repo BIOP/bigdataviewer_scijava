@@ -4,7 +4,7 @@ import bdv.util.BdvHandle;
 import bdv.viewer.Interpolation;
 import bdv.viewer.Source;
 import bdv.viewer.state.ViewerState;
-import ch.epfl.biop.bdv.scijava.command.BigDataServerPlugInSciJava;
+import ch.epfl.biop.bdv.scijava.command.open.BigDataServerPlugInSciJava;
 import ch.epfl.biop.bdv.scijava.command.CommandHelper;
 import ij.ImagePlus;
 import ij.measure.Calibration;
@@ -50,7 +50,7 @@ import static java.lang.Math.sqrt;
  * BIOP, EPFL, 2019
  */
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Current Bdv View to ImgPlus", initializer = "initParams")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Export>Current Bdv View to ImgPlus", initializer = "initParams")
 public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
 
     private static final Logger LOGGER = Logger.getLogger( BDVSlicesToImgPlus.class.getName() );

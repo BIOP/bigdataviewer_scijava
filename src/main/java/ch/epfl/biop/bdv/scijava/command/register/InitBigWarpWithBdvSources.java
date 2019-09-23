@@ -19,7 +19,7 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
 
-@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"BigWarp"+ScijavaBdvCmdSuffix)
+@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Registration>BigWarp"+ScijavaBdvCmdSuffix)
 public class InitBigWarpWithBdvSources implements Command {
 
     private static final Logger LOGGER = Logger.getLogger( InitBigWarpWithBdvSources.class.getName() );

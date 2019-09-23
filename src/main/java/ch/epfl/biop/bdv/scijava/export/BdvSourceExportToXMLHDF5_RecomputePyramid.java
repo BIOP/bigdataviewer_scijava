@@ -1,6 +1,5 @@
 package ch.epfl.biop.bdv.scijava.export;
 
-import bdv.BigDataViewer;
 import bdv.export.*;
 import bdv.ij.util.ProgressWriterIJ;
 import bdv.img.hdf5.Hdf5ImageLoader;
@@ -10,6 +9,7 @@ import bdv.spimdata.SpimDataMinimal;
 import bdv.spimdata.XmlIoSpimDataMinimal;
 import bdv.util.BdvHandle;
 import bdv.viewer.Source;
+import ch.epfl.biop.bdv.scijava.export.sourceimageloader.ImgLoaderFromSources;
 import mpicbg.spim.data.generic.sequence.BasicViewSetup;
 import mpicbg.spim.data.registration.ViewRegistration;
 import mpicbg.spim.data.registration.ViewRegistrations;
@@ -33,6 +33,8 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
+
 /**
  * Deeply copied from
  * https://github.com/bigdataviewer/bigdataviewer_fiji/blob/master/src/main/java/bdv/ij/ExportImagePlusPlugIn.java
@@ -43,7 +45,7 @@ import java.util.stream.Collectors;
  *
  */
 
-@Plugin(type = Command.class, menuPath = "Plugins>BIOP>BDV>Save Source (recompute Pyramid)", initializer = "initParams")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Export>Save Sources As Xml/Hdf5 (recompute Pyramid)", initializer = "initParams")
 public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
 
     private static final Logger LOGGER = Logger.getLogger( BdvSourceExportToXMLHDF5_RecomputePyramid.class.getName() );

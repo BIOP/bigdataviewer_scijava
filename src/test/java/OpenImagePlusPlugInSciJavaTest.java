@@ -1,4 +1,4 @@
-import ch.epfl.biop.bdv.scijava.command.OpenImagePlusPlugInSciJava;
+import ch.epfl.biop.bdv.scijava.command.open.OpenImagePlusPlugInSciJava;
 import ij.IJ;
 import ij.ImagePlus;
 import net.imagej.ImageJ;

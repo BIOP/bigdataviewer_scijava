@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.command;
+package ch.epfl.biop.bdv.scijava.command.open;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
  */
 
 @Plugin(type = Command.class,
-        menuPath = ScijavaBdvRootMenu+"Open Current Image"+ScijavaBdvCmdSuffix)
+        menuPath = ScijavaBdvRootMenu+"Current Image"+ScijavaBdvCmdSuffix)
 public class OpenImagePlusPlugInSciJava implements Command
 {
     @Parameter(type = ItemIO.INPUT)

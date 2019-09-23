@@ -1,6 +1,7 @@
-package ch.epfl.biop.bdv.scijava.export;
+package ch.epfl.biop.bdv.scijava.export.sourceimageloader;
 
 import bdv.viewer.Source;
+import ch.epfl.biop.bdv.scijava.export.sourceimageloader.BasicSetupImgLoaderFromSource;
 import mpicbg.spim.data.generic.sequence.BasicSetupImgLoader;
 import mpicbg.spim.data.generic.sequence.TypedBasicImgLoader;
 import net.imglib2.type.Type;

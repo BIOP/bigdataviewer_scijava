@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 abstract public class BDVSourceFunctionalInterfaceCommand extends DynamicCommand {
 
     @Parameter(label = "Input Bdv Frame", type = ItemIO.BOTH)
-    BdvHandle bdv_h_in;
+    public BdvHandle bdv_h_in;
 
     @Parameter(label="Indexes ('0,3-5'), of the sources to process")
     public String sourceIndexString = "0";
@@ -32,16 +32,16 @@ abstract public class BDVSourceFunctionalInterfaceCommand extends DynamicCommand
     protected Function<Source<?>, Source<?>> f;
 
     @Parameter(label = "Output Bdv Frame", type = ItemIO.BOTH)
-    BdvHandle bdv_h_out;
+    public BdvHandle bdv_h_out;
 
     @Parameter(choices = {"Replace In Bdv", "Add To Bdv", "Output As List Only"})
-    String output_mode;
+    public String output_mode;
 
     @Parameter
     boolean keepConverters = true;
 
     @Parameter(type = ItemIO.OUTPUT)
-    List<Source<?>> srcs_out;
+    public List<Source<?>> srcs_out;
 
     @Override
     public void run() {

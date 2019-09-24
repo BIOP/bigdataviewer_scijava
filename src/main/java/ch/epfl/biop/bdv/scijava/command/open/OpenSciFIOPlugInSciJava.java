@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Open with SCIFIO"+ScijavaBdvCmdSuffix)
+@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Open>Open with SCIFIO"+ScijavaBdvCmdSuffix)
 public class OpenSciFIOPlugInSciJava implements Command
 {
 

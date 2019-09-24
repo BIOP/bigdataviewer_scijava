@@ -58,7 +58,7 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
  */
 
 @Plugin(type = Command.class,
-        menuPath = ScijavaBdvRootMenu+"Current Image"+ScijavaBdvCmdSuffix)
+        menuPath = ScijavaBdvRootMenu+"Open>Current Image"+ScijavaBdvCmdSuffix)
 public class OpenImagePlusPlugInSciJava implements Command
 {
     @Parameter(type = ItemIO.INPUT)

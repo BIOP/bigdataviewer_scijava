@@ -171,12 +171,5 @@
 			<artifactId>bigwarp_fiji</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>ch.epfl.biop</groupId>
-			<artifactId>bigdataviewer-bioformats</artifactId>
-			<version>0.1.2-SNAPSHOT</version>
-			<scope>runtime</scope>
-		</dependency>
-
 	</dependencies>
 </project>

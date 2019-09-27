@@ -1,6 +1,7 @@
 package ch.epfl.biop.bdv.scijava.export;
 
 import bdv.util.BdvHandle;
+import bdv.util.RealCropper;
 import bdv.viewer.Interpolation;
 import bdv.viewer.Source;
 import bdv.viewer.state.ViewerState;
@@ -11,10 +12,7 @@ import ij.measure.Calibration;
 import ij.plugin.RGBStackMerge;
 import ij.process.LUT;
 import net.imagej.ImageJ;
-import net.imglib2.RandomAccessible;
-import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.RealPoint;
-import net.imglib2.RealRandomAccessible;
+import net.imglib2.*;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.realtransform.RealViews;
@@ -28,6 +26,7 @@ import org.scijava.plugin.Plugin;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -104,6 +103,8 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
     // Map containing wrapped sources, can be accessed in parallel -> Concurrent
     ConcurrentHashMap<Integer,ImagePlus> genImagePlus = new ConcurrentHashMap<>();
 
+    Consumer<String> errlog = (s) -> System.err.println(s);
+
     @Override
     public void run() {
 
@@ -112,7 +113,7 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
 
         // No source specified, end of Command
         if (sourceIndexes.size()==0) {
-            LOGGER.warning( "No source index defined.");
+            errlog.accept( "No source index defined.");
             return;
         }
 
@@ -146,8 +147,8 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
             Source<T> s = (Source<T>) viewerState.getSources().get(sourceIndex).getSpimSource();
 
             if (s.getNumMipmapLevels()<mipmapLevel) {
-                System.err.println("Error, mipmap level requested = "+mipmapLevel);
-                System.err.println("But there are only "+s.getNumMipmapLevels()+" in the source");
+                errlog.accept("Error, mipmap level requested = "+mipmapLevel);
+                errlog.accept("But there are only "+s.getNumMipmapLevels()+" in the source");
                 mipmapLevel = s.getNumMipmapLevels()-1;
             }
 
@@ -183,12 +184,14 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
             // Composition of source and viewer transform
             transformedSourceToViewer.concatenate(sourceTransform); // Concatenate viewer state transform and source transform to know the final slice of the source
 
-            // Gets randomAccessible view ...
-            RandomAccessible<T> ra = RealViews.affine(ipimg, transformedSourceToViewer); // Gets the view
-
-            // ... interval
-            RandomAccessibleInterval<T> view =
-                    Views.interval(ra, new long[]{-(int)(xSize/2), -(int)(ySize/2), -zSize}, new long[]{+(int)(xSize/2), +(int)(ySize/2), +zSize}); //Sets the interval
+            RandomAccessibleInterval<T> view = RealCropper.getCroppedSampledRRAI(
+                    ipimg,
+                    transformedSourceToViewer,
+                    /*new FinalRealInterval(new double[]{-(xSize/2), -(ySize/2), -zSize},
+                                          new double[]{+(xSize/2), +(ySize/2), +zSize}),*/
+                    new FinalRealInterval(new double[]{-(int)(xSize/2), -(int)(ySize/2), -zSize}, new double[]{+(int)(xSize/2), +(int)(ySize/2), +zSize}),
+                    1,1,1
+            );
 
             // Wrap as ImagePlus
             ImagePlus impTemp = ImageJFunctions.wrap(view, "");
@@ -256,7 +259,7 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
         double dY = this.getRealDistFromPixDist(samplingInXPixelUnit,1);
 
         if (Math.abs((dX/dY)-1.0)>1e-5) {
-            System.err.println("Warning : pixelDepth can be wrong because pixelWidth (= "+dX+") is different from pixelHeigth (= "+dY+")");
+            errlog.accept("Warning : pixelDepth can be wrong because pixelWidth (= "+dX+") is different from pixelHeigth (= "+dY+")");
         }
 
         double avgVoxelSize = (dX+dY)/2.0;

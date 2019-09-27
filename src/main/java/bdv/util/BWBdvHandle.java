@@ -8,12 +8,15 @@ import org.scijava.ui.behaviour.util.InputActionBindings;
 import org.scijava.ui.behaviour.util.TriggerBehaviourBindings;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class BWBdvHandle extends BdvHandle {
 
     BigWarp bw;
 
     boolean moving;
+
+    Consumer<String> errlog = s -> System.err.println(s);
 
     public BWBdvHandle(BigWarp bw, boolean moving ) {
         super(BdvOptions.options());
@@ -34,13 +37,13 @@ public class BWBdvHandle extends BdvHandle {
 
     @Override
     public ManualTransformationEditor getManualTransformEditor() {
-        System.err.println("Cannot edit transformation in BigWarp BdvHandle");
+        errlog.accept("Cannot edit transformation in BigWarp BdvHandle");
         return null;
     }
 
     @Override
     public InputActionBindings getKeybindings() {
-        System.err.println("Cannot get keyBindings in BigWarp BdvHandle");
+        errlog.accept("Cannot get keyBindings in BigWarp BdvHandle");
         return null;
     }
 
@@ -54,7 +57,7 @@ public class BWBdvHandle extends BdvHandle {
             List< ? extends ConverterSetup> converterSetups,
             List< ? extends SourceAndConverter< ? >> sources,
             int numTimepoints ) {
-        System.err.println("Cannot add sources in BigWarp BdvHandle");
+        errlog.accept("Cannot add sources in BigWarp BdvHandle");
         return false;
     }
 

@@ -134,6 +134,11 @@
 	</repositories>
 
 	<dependencies>
+		<!--- Necessary to test the image plus export -->
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>imagej-legacy</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>net.imagej</groupId>
 			<artifactId>imagej</artifactId>

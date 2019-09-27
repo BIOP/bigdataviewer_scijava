@@ -110,12 +110,12 @@ public class SwingBdvHandleViewer extends
 
             if (value.getSpimSource().getType() instanceof Volatile) {
                 if (value.getSpimSource().getName().endsWith("(Volatile)")) {
-                    setText(value.getSpimSource().getName());
+                    setText(index+":"+value.getSpimSource().getName());
                 } else {
-                    setText(value.getSpimSource().getName() + " (Volatile)");
+                    setText(index+":"+value.getSpimSource().getName() + " (Volatile)");
                 }
             } else {
-                setText(value.getSpimSource().getName());
+                setText(index+":"+value.getSpimSource().getName());
             }
 
             return this;

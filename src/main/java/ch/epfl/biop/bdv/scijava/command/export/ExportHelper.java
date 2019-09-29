@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.export;
+package ch.epfl.biop.bdv.scijava.command.export;
 
 import bdv.viewer.Source;
 import mpicbg.spim.data.sequence.VoxelDimensions;

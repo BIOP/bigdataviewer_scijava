@@ -17,6 +17,8 @@ import bdv.spimdata.SpimDataMinimal;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
+// TODO : Is this really necessary now ?
+
 @Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Open>Imaris (experimental)"+ScijavaBdvCmdSuffix)
 public class OpenImarisPlugInSciJava implements Command
 {

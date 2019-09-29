@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.util;
+package ch.epfl.biop.bdv.scijava.command.open;
 import java.net.URL;
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;

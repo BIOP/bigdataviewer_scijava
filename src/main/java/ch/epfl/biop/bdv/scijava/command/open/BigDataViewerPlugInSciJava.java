@@ -5,12 +5,10 @@ import bdv.spimdata.XmlIoSpimDataMinimal;
 import bdv.util.BdvFunctions;
 import bdv.util.BdvHandle;
 import bdv.util.BdvOptions;
-import mpicbg.spim.data.SpimData;
 import mpicbg.spim.data.SpimDataException;
 import mpicbg.spim.data.generic.AbstractSpimData;
 import org.scijava.ItemIO;
 import org.scijava.command.Command;
-import org.scijava.object.ObjectService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
@@ -19,7 +17,7 @@ import java.io.File;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Open>XML/HDF5"+ScijavaBdvCmdSuffix)
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Open>XML Bdv Dataset"+ScijavaBdvCmdSuffix)
 public class BigDataViewerPlugInSciJava implements Command {
 
     @Parameter(label = "XML File")

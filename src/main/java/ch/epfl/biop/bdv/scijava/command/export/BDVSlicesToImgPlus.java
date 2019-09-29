@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.export;
+package ch.epfl.biop.bdv.scijava.command.export;
 
 import bdv.util.BdvHandle;
 import bdv.util.RealCropper;
@@ -15,10 +15,8 @@ import net.imagej.ImageJ;
 import net.imglib2.*;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.realtransform.AffineTransform3D;
-import net.imglib2.realtransform.RealViews;
 import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.view.Views;
 import org.scijava.ItemIO;
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;

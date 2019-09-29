@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.util;
+package ch.epfl.biop.bdv.scijava.command.edit;
 
 import bdv.util.BdvHandle;
 import org.scijava.ItemIO;

@@ -6,6 +6,9 @@ import net.imglib2.realtransform.RealViews;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
+/**
+ * Utilities function used to crop a rrai
+ */
 // -- Not the appropriate repository location
 
 public class RealCropper {

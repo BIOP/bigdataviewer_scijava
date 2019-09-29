@@ -50,6 +50,7 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
  * ImageJ plugin to show the current image in BigDataViewer.
  *
  * @author Tobias Pietzsch &lt;tobias.pietzsch@gmail.com&gt;
+ * @author Nicolas Chiaruttini
  */
 
 /**

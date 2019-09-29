@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.util;
+package bdv.util;
 
 import net.imglib2.Volatile;
 import net.imglib2.type.numeric.ARGBType;

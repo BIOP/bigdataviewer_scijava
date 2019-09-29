@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.util;
+package bdv.util;
 
 import bdv.util.AbstractSource;
 import bdv.util.volatiles.SharedQueue;

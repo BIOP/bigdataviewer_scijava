@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.util;
+package ch.epfl.biop.bdv.scijava.command;
 
 import bdv.util.BdvFunctions;
 import bdv.util.BdvHandle;
@@ -6,6 +6,8 @@ import bdv.util.BdvOptions;
 import bdv.util.volatiles.SharedQueue;
 import bdv.viewer.Source;
 import bdv.viewer.SourceAndConverter;
+import bdv.util.VolatileBdvSource;
+import bdv.util.VolatileUtils;
 import net.imglib2.Volatile;
 import net.imglib2.converter.Converter;
 import net.imglib2.type.numeric.NumericType;
@@ -59,7 +61,7 @@ abstract public class BDVSourceFunctionalInterfaceCommand extends DynamicCommand
     @Override
     public void run() {
         initCommand();
-        List<Source<?>> srcs_in = BdvStringHelper.commaSeparatedListToArray(sourceIndexString)
+        List<Source<?>> srcs_in = CommandHelper.commaSeparatedListToArray(sourceIndexString)
                 .stream()
                 .map(idx -> bdv_h_in.getViewerPanel().getState().getSources().get(idx).getSpimSource())
                 .collect(Collectors.toList());

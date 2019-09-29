@@ -60,8 +60,6 @@ public class InitBigWarpWithBdvSources implements Command {
                         .collect(Collectors.toList())
                         .toArray(new Source<?>[]{});
 
-
-
         String[] names = new String[mvSrcs.length + fxSrcs.length];
 
         for (int i = 0; i < fxSrcs.length; i++) {

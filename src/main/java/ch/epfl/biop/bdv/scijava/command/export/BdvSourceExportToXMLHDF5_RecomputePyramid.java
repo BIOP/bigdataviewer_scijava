@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.export;
+package ch.epfl.biop.bdv.scijava.command.export;
 
 import bdv.export.*;
 import bdv.ij.util.ProgressWriterIJ;
@@ -9,7 +9,7 @@ import bdv.spimdata.SpimDataMinimal;
 import bdv.spimdata.XmlIoSpimDataMinimal;
 import bdv.util.BdvHandle;
 import bdv.viewer.Source;
-import ch.epfl.biop.bdv.scijava.export.sourceimageloader.ImgLoaderFromSources;
+import ch.epfl.biop.bdv.scijava.command.export.sourceimageloader.ImgLoaderFromSources;
 import mpicbg.spim.data.generic.sequence.BasicViewSetup;
 import mpicbg.spim.data.registration.ViewRegistration;
 import mpicbg.spim.data.registration.ViewRegistrations;

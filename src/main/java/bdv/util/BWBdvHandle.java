@@ -10,13 +10,17 @@ import org.scijava.ui.behaviour.util.TriggerBehaviourBindings;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Wraps a BigDataViewer instance into a BdvHandle
+ */
+
 public class BWBdvHandle extends BdvHandle {
 
     BigWarp bw;
 
     boolean moving;
 
-    Consumer<String> errlog = s -> System.err.println(s);
+    Consumer<String> errlog = s -> System.err.println(this.getClass()+" error: "+s);
 
     public BWBdvHandle(BigWarp bw, boolean moving ) {
         super(BdvOptions.options());

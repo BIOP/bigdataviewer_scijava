@@ -5,7 +5,6 @@ import bdv.spimdata.XmlIoSpimDataMinimal;
 import bdv.util.BdvFunctions;
 import bdv.util.BdvHandle;
 import bdv.util.BdvOptions;
-import ch.epfl.biop.bdv.scijava.util.BigDataServerUtilsSciJava;
 import ij.ImagePlus;
 import mpicbg.spim.data.SpimDataException;
 import net.imagej.DatasetService;

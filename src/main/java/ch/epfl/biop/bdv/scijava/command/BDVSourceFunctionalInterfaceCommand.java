@@ -115,20 +115,22 @@ abstract public class BDVSourceFunctionalInterfaceCommand extends DynamicCommand
                     }
 
                     Source<?> src_out = f.apply(src_inside);
-                    if (output_mode.equals(REPLACE)|| output_mode.equals(ADD)) {
-                        if (keepConverters) {
-                            Converter cvt = bdv_h_in.getViewerPanel()
-                                    .getState()
-                                    .getSources().stream()
-                                    .filter(stest -> stest.getSpimSource().equals(src_inside))
-                                    .findFirst().get().getConverter();
-                            bdv_h_out.getViewerPanel().addSource(new SourceAndConverter<>(src_out, cvt));
-                        } else {
-                            BdvFunctions.show(src_out, opts);
+                    if (src_out!=null) {
+                        if (output_mode.equals(REPLACE) || output_mode.equals(ADD)) {
+                            if (keepConverters) {
+                                Converter cvt = bdv_h_in.getViewerPanel()
+                                        .getState()
+                                        .getSources().stream()
+                                        .filter(stest -> stest.getSpimSource().equals(src_inside))
+                                        .findFirst().get().getConverter();
+                                bdv_h_out.getViewerPanel().addSource(new SourceAndConverter<>(src_out, cvt));
+                            } else {
+                                BdvFunctions.show(src_out, opts);
+                            }
                         }
-                    }
-                    if (output_mode.equals(REPLACE)) {
-                        bdv_h_in.getViewerPanel().removeSource(s);
+                        if (output_mode.equals(REPLACE)) {
+                            bdv_h_in.getViewerPanel().removeSource(s);
+                        }
                     }
                     return src_out;
                 }

@@ -1,9 +1,7 @@
 package ch.epfl.biop.bdv.scijava.command.edit;
 
-import bdv.util.BdvHandle;
-import org.scijava.ItemIO;
+import ch.epfl.biop.bdv.scijava.command.BDVSourceFunctionalInterfaceCommand;
 import org.scijava.command.Command;
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
@@ -12,14 +10,9 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
  * Removes Source being present in a Bdv Frame
  */
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Remove Source (unsupported)", initializer = "initParams")
-public class BdvRemoveSource implements Command {
-
-    @Parameter(label = "Bdv Frame", type = ItemIO.BOTH)
-    BdvHandle bdv_h_in;
-
-    @Override
-    public void run() {
-
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Edit>Remove Source")
+public class BdvRemoveSource extends BDVSourceFunctionalInterfaceCommand {
+    public BdvRemoveSource() {
+        this.f = (src) -> null;
     }
 }

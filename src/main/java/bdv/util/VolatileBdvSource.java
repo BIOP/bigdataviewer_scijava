@@ -1,6 +1,5 @@
 package bdv.util;
 
-import bdv.util.AbstractSource;
 import bdv.util.volatiles.SharedQueue;
 import bdv.util.volatiles.VolatileViews;
 import bdv.viewer.Source;

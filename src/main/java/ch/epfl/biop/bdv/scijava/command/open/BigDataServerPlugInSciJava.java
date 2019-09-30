@@ -58,7 +58,6 @@ public class BigDataServerPlugInSciJava implements Command
                 options.addTo(bdv_h);
             }
             bdv_h = BdvFunctions.show( spimData, options ).get(0).getBdvHandle(); // Returns handle from index 0
-
         } catch (SpimDataException | IOException e) {
             e.printStackTrace();
         }

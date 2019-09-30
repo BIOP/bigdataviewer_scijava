@@ -66,22 +66,34 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
     public boolean matchWindowSize=false;
 
     @Parameter(label = "Number of pixels X", callback = "matchXYBDVFrame")
-    public double xSize = 100;
+    public double xSizeInPix = 100;
 
     @Parameter(label = "Number of pixels Y", callback = "matchXYBDVFrame")
-    public double ySize = 100;
+    public double ySizeInPix = 100;
 
     @Parameter(label = "Number of slice Z (isotropic vs XY, 0 for single slice)")
-    public int zSize = 0;
+    public int zSizeInPix = 0;
+
+    @Parameter(label = "Physical Size X", callback = "matchXYBDVFrame")
+    public double xSize = 100;
+
+    @Parameter(label = "Physical Size Y", callback = "matchXYBDVFrame")
+    public double ySize = 100;
+
+    @Parameter(label = "Physical Size Z", callback = "matchXYBDVFrame")
+    public double zSize = 100;
 
     @Parameter(label = "Timepoint", persist = false)
     public int timepoint = 0;
 
-    @Parameter(label = "Pixel size sampling (px unit: 1 for current display)", callback = "matchXYBDVFrame")
-    public double samplingInXPixelUnit = 1;
+    //@Parameter(label = "Pixel size sampling (px unit: 1 for current display)", callback = "matchXYBDVFrame")
+    //public double samplingInXPixelUnit = 1;
 
-    @Parameter(label = "Pixel size sampling (physical unit)", callback = "changePhysicalSampling")
-    public double samplingInXPhysicalUnit = 1;
+    @Parameter(label = "XY Pixel size sampling (physical unit)", callback = "changePhysicalSampling")
+    public double samplingXYInPhysicalUnit = 1;
+
+    @Parameter(label = "Z Pixel size sampling (physical unit)", callback = "changePhysicalSampling")
+    public double samplingZInPhysicalUnit = 1;
 
     @Parameter(label = "Interpolate")
     public boolean interpolate = true;
@@ -171,7 +183,7 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
 
             // Getting an image independent of the view scaling unit (not sure)
             // double xNorm = getNormTransform(0, transformedSourceToViewer);//trans
-            transformedSourceToViewer.scale(1/ samplingInXPixelUnit);
+            // transformedSourceToViewer.scale(1/ samplingInXPixelUnit);
 
             // Alternative : Get a bounding box from - (TODO interesting related post : https://forum.image.sc/t/using-imglib2-to-shear-an-image/2534/3)
 
@@ -188,7 +200,7 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
                     /*new FinalRealInterval(new double[]{-(xSize/2), -(ySize/2), -zSize},
                                           new double[]{+(xSize/2), +(ySize/2), +zSize}),*/
                     new FinalRealInterval(new double[]{-(int)(xSize/2), -(int)(ySize/2), -zSize}, new double[]{+(int)(xSize/2), +(int)(ySize/2), +zSize}),
-                    1,1,1
+                    samplingXYInPhysicalUnit,samplingXYInPhysicalUnit,samplingZInPhysicalUnit
             );
 
             // Wrap as ImagePlus
@@ -231,7 +243,7 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
         // Title
         String title = bdv_h.toString() // TODO : find a relevant name / title from the bdv handle
                 + " - [T=" + timepoint + ", MML=" + mipmapLevel + "]"
-                +"[SRC="+sourceIndexString+"]"+"[S="+ samplingInXPixelUnit +"]";
+                +"[SRC="+sourceIndexString+"]"+"[XY,Z="+ samplingXYInPhysicalUnit +","+samplingZInPhysicalUnit+"]";
         imp.setTitle(title);
 
         // Calibration in the limit of what's possible to know and set
@@ -243,17 +255,23 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
         calibration.yOrigin=posY;
         calibration.zOrigin=posZ;
 
+        calibration.pixelWidth=samplingXYInPhysicalUnit;
+        calibration.pixelHeight=samplingXYInPhysicalUnit;
+        calibration.pixelDepth=samplingZInPhysicalUnit;
+
+        updateUnit();
+        calibration.setUnit(unitOfFirstSource);
+
+
         if (viewerState.getSources().get(sourceIndexes.get(0)).getSpimSource().getVoxelDimensions()!=null) {
             calibration.setUnit(viewerState.getSources().get(sourceIndexes.get(0)).getSpimSource().getVoxelDimensions().unit());
         }
 
         //*******************
         // Scaling factor
-        // Isotropic output image
-        // Get physical pixel size based on first source
         //*************
 
-        double dX = this.getRealDistFromPixDist(samplingInXPixelUnit,0);
+        /*double dX = this.getRealDistFromPixDist(samplingInXPixelUnit,0);
         double dY = this.getRealDistFromPixDist(samplingInXPixelUnit,1);
 
         if (Math.abs((dX/dY)-1.0)>1e-5) {
@@ -263,7 +281,7 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
         double avgVoxelSize = (dX+dY)/2.0;
         calibration.pixelWidth=avgVoxelSize;
         calibration.pixelHeight=avgVoxelSize;
-        calibration.pixelDepth=avgVoxelSize;
+        calibration.pixelDepth=avgVoxelSize;*/
 
         // Set generated calibration to output image
         imp.setCalibration(calibration);
@@ -301,7 +319,7 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
     // -- Initializers --
 
     /**
-     * Initializes xSize and ySize according to the current BigDataViewer window
+     * Initializes xSize(Pix) and ySize(Pix) according to the current BigDataViewer window
      */
     public void matchXYBDVFrame() {
         if (matchWindowSize) {
@@ -321,19 +339,13 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
             RealPoint ptBottomLeft = new RealPoint(3); // Number of dimension
             bdv_h.getViewerPanel().displayToGlobalCoordinates(h,0, ptBottomLeft);
 
-            // Get current big dataviewer transformation : source transform and viewer transform
-            AffineTransform3D transformedSourceToViewer = new AffineTransform3D(); // Empty Transform
+            // Gets physical size of pixels based on window size, image sampling size and user requested pixel size
+            this.xSize=distance(ptTopLeft, ptTopRight);
+            this.ySize=distance(ptTopLeft, ptBottomLeft);
 
-            // viewer transform
-            ViewerState viewerState = bdv_h.getViewerPanel().getState();
-            viewerState.getViewerTransform(transformedSourceToViewer); // Get current transformation by the viewer state and puts it into sourceToImgPlus
-
-            // Getting an image independent of the view scaling unit (not sure)
-            double xNorm = getNormTransform(0, transformedSourceToViewer);//trans
-
-            // Gets number of pixels based on window size, image sampling size and user requested pixel size
-            this.xSize=(int) (distance(ptTopLeft, ptTopRight)*xNorm/ samplingInXPixelUnit);
-            this.ySize=(int) (distance(ptTopLeft, ptBottomLeft)*xNorm/ samplingInXPixelUnit);
+            // Gets physical size of pixels based on window size, image sampling size and user requested pixel size
+            this.xSizeInPix=(int) (xSize/samplingXYInPhysicalUnit);
+            this.ySizeInPix=(int) (ySize/samplingXYInPhysicalUnit);
         }
     }
 
@@ -349,10 +361,6 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
                 unitOfFirstSource = viewerState.getSources().get(sourceIndexes.get(0)).getSpimSource().getVoxelDimensions().unit();
             }
         }
-    }
-
-    public void changePhysicalSampling() {
-
     }
 
     public double getRealDistFromPixDist(double pixDist, int axis) {

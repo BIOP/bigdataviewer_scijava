@@ -31,6 +31,7 @@ public class BdvCreateWindow implements Command {
         if (is2D) {
             opts = opts.is2D();
         }
+
         // TODO : ask why BdvHandle constructor not public ?
         ArrayImg dummyImg = ArrayImgs.bytes(2,2,2);
         bdv_h = BdvFunctions.show(dummyImg, "dummy", opts.frameTitle(windowTitle)).getBdvHandle();

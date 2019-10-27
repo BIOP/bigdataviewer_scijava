@@ -128,9 +128,9 @@ abstract public class BDVSourceFunctionalInterfaceCommand extends DynamicCommand
                                 BdvFunctions.show(src_out, opts);
                             }
                         }
-                        if (output_mode.equals(REPLACE)) {
-                            bdv_h_in.getViewerPanel().removeSource(s);
-                        }
+                    }
+                    if (output_mode.equals(REPLACE)) {
+                        bdv_h_in.getViewerPanel().removeSource(s); // Converter forgotten ...
                     }
                     return src_out;
                 }

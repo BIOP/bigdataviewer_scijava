@@ -51,8 +51,6 @@ public class BigDataViewerPlugInSciJava implements Command {
 
             bdv_h = BdvFunctions.show( spimData, options ).get(0).getBdvHandle(); // Returns handle from index 0
 
-            //ScijavaBdvSourceHelper.registerAndShowSource(cs, )
-
             sd = spimData;
 
         }

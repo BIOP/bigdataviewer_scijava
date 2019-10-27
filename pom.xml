@@ -176,7 +176,10 @@
 			<artifactId>bigwarp_fiji</artifactId>
 		</dependency>
 
-
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>ui-behaviour</artifactId>
+		</dependency>
 
 	</dependencies>
 </project>

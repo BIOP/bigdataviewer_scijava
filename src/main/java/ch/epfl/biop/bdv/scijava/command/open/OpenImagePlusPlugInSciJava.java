@@ -1,6 +1,8 @@
 package ch.epfl.biop.bdv.scijava.command.open;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,6 +15,7 @@ import net.imglib2.type.numeric.ARGBType;
 
 import org.scijava.ItemIO;
 import org.scijava.command.Command;
+import org.scijava.platform.PlatformService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
@@ -59,7 +62,7 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
  */
 
 @Plugin(type = Command.class,
-        menuPath = ScijavaBdvRootMenu+"Open>Current Image"+ScijavaBdvCmdSuffix)
+        menuPath = ScijavaBdvRootMenu+"Open>Current Image ( not working )"+ScijavaBdvCmdSuffix)
 public class OpenImagePlusPlugInSciJava implements Command
 {
     @Parameter(type = ItemIO.INPUT)
@@ -72,10 +75,18 @@ public class OpenImagePlusPlugInSciJava implements Command
     @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH, required = false)
     public BdvHandle bdv_h;
 
+    @Parameter
+    PlatformService ps;
+
     @Override
     public void run()
     {
-
+        try {
+            System.out.println("Command not working. See issue in the opened browser window");
+            ps.open(new URL("https://github.com/BIOP/bigdataviewer_scijava/issues/2"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         final ArrayList< ConverterSetup > converterSetups = new ArrayList<>();
         final ArrayList< SourceAndConverter< ? > > sources = new ArrayList<>();
 

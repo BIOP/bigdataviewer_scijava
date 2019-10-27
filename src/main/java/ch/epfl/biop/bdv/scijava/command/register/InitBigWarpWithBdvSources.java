@@ -1,8 +1,10 @@
 package ch.epfl.biop.bdv.scijava.command.register;
 
+import bdv.tools.brightness.ConverterSetup;
 import bdv.util.BWBdvHandle;
 import bdv.util.BdvHandle;
 import bdv.viewer.Source;
+import bdv.viewer.SourceAndConverter;
 import bigwarp.BigWarp;
 import bigwarp.BigWarpInit;
 import ch.epfl.biop.bdv.scijava.command.CommandHelper;
@@ -12,6 +14,8 @@ import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -46,31 +50,45 @@ public class InitBigWarpWithBdvSources implements Command {
     public void run() {
         // TODO fix names, transfer converters
 
-        Source<?>[] fxSrcs =
+        List<SourceAndConverter<?>> fxSrcs =
                 CommandHelper.commaSeparatedListToArray(idx_src_fixed)
                         .stream()
-                        .map(idx -> bdv_h_fixed.getViewerPanel().getState().getSources().get(idx).getSpimSource())
-                        .collect(Collectors.toList())
-                        .toArray(new Source<?>[]{});
+                        .map(idx -> bdv_h_fixed.getViewerPanel().getState().getSources().get(idx))
+                        .collect(Collectors.toList());
+                        //.toArray(new SourceAndConverter<?>[]{});
 
-        Source<?>[] mvSrcs =
+        List<SourceAndConverter<?>> mvSrcs =
                 CommandHelper.commaSeparatedListToArray(idx_src_moving)
                         .stream()
-                        .map(idx -> bdv_h_moving.getViewerPanel().getState().getSources().get(idx).getSpimSource())
-                        .collect(Collectors.toList())
-                        .toArray(new Source<?>[]{});
+                        .map(idx -> bdv_h_moving.getViewerPanel().getState().getSources().get(idx))
+                        .collect(Collectors.toList());
+                        //.toArray(new SourceAndConverter<?>[]{});
 
-        String[] names = new String[mvSrcs.length + fxSrcs.length];
+        String[] names = new String[mvSrcs.size() + fxSrcs.size()];
 
-        for (int i = 0; i < fxSrcs.length; i++) {
-            names[i] = fxSrcs[i].getName();
+        List<SourceAndConverter> allSources = new ArrayList<>();
+        allSources.addAll(fxSrcs);
+        allSources.addAll(mvSrcs);
+
+
+        List<ConverterSetup> allConverterSetups = new ArrayList<>();
+
+        int[] fxSrcIndices = new int[fxSrcs.size()];
+        for (int i = 0; i < fxSrcs.size(); i++) {
+            fxSrcIndices[i] = i;
+            //names[i] = fxSrcs[i].getSpimSource().getName();
+            //bwd.sources.add(fxSrcs[i]);
         }
 
-        for (int i = 0; i < mvSrcs.length; i++) {
-            names[i+fxSrcs.length] = mvSrcs[i].getName();
+        int[] mvSrcIndices = new int[mvSrcs.size()];
+        for (int i = 0; i < mvSrcs.size(); i++) {
+            //names[i+fxSrcs.size()] = mvSrcs[i].getSpimSource().getName();
+            mvSrcIndices[i] = i+fxSrcs.size();
         }
 
-        BigWarp.BigWarpData<?> bwd = BigWarpInit.createBigWarpData(mvSrcs, fxSrcs, names);
+        BigWarp.BigWarpData<?> bwd = new BigWarp.BigWarpData(allSources, allConverterSetups, null, mvSrcIndices, fxSrcIndices);
+
+        //BigWarpInit.initData(); //.createBigWarpData(mvSrcs, fxSrcs, names);
 
         try {
             BigWarp<?> bw = new BigWarp(bwd, "Big Warp", null);

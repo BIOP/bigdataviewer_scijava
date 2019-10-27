@@ -5,9 +5,11 @@ import bdv.spimdata.XmlIoSpimDataMinimal;
 import bdv.util.BdvFunctions;
 import bdv.util.BdvHandle;
 import bdv.util.BdvOptions;
+import ch.epfl.biop.bdv.scijava.ScijavaBdvSourceHelper;
 import mpicbg.spim.data.SpimDataException;
 import mpicbg.spim.data.generic.AbstractSpimData;
 import org.scijava.ItemIO;
+import org.scijava.cache.CacheService;
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -33,6 +35,9 @@ public class BigDataViewerPlugInSciJava implements Command {
     @Parameter(type = ItemIO.OUTPUT)
     AbstractSpimData sd;
 
+    @Parameter
+    CacheService cs;
+
     @Override
     public void run()
     {
@@ -43,7 +48,10 @@ public class BigDataViewerPlugInSciJava implements Command {
             if (createNewWindow == false && bdv_h!=null) {
                 options.addTo(bdv_h);
             }
+
             bdv_h = BdvFunctions.show( spimData, options ).get(0).getBdvHandle(); // Returns handle from index 0
+
+            //ScijavaBdvSourceHelper.registerAndShowSource(cs, )
 
             sd = spimData;
 

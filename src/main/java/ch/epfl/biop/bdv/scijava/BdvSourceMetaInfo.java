@@ -2,15 +2,19 @@ package ch.epfl.biop.bdv.scijava;
 
 import bdv.util.BdvHandle;
 import bdv.viewer.Source;
+import bdv.viewer.state.SourceState;
 import mpicbg.spim.data.generic.AbstractSpimData;
+import net.imglib2.converter.Converter;
 
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Because we cannot keep easily track each source with its volatile view
  * Because we do not always want to display them
  * Because we want to keep track of the linked AbstractSpimData
+ * Because we want to keep track of converters...
  */
 
 public class BdvSourceMetaInfo {
@@ -18,6 +22,7 @@ public class BdvSourceMetaInfo {
     final public WeakReference<Source> volatileSource;
     HashSet<WeakReference<BdvHandle>> bdvInstance;
     public WeakReference<AbstractSpimData> asd;
+    HashSet<WeakReference<Converter>> convertersInstance;
 
     public BdvSourceMetaInfo(Source src, Source vSrc) {
         source = new WeakReference<>(src);
@@ -34,6 +39,10 @@ public class BdvSourceMetaInfo {
     public void registerBdvH(BdvHandle bdvh) {
         if (!bdvInstance.stream().filter(wr -> bdvh.equals(wr.get())).findFirst().isPresent()) {
             bdvInstance.add(new WeakReference<>(bdvh));
+            if (source.get()!=null) {
+                List<SourceState<?>> lss = bdvh.getViewerPanel().getState().getSources();
+                convertersInstance.add(new WeakReference<>(lss.get(lss.indexOf(source.get())).getConverter()));
+            }
         }
     }
 

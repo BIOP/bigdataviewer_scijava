@@ -76,19 +76,14 @@ public class InitBigWarpWithBdvSources implements Command {
         int[] fxSrcIndices = new int[fxSrcs.size()];
         for (int i = 0; i < fxSrcs.size(); i++) {
             fxSrcIndices[i] = i;
-            //names[i] = fxSrcs[i].getSpimSource().getName();
-            //bwd.sources.add(fxSrcs[i]);
         }
 
         int[] mvSrcIndices = new int[mvSrcs.size()];
         for (int i = 0; i < mvSrcs.size(); i++) {
-            //names[i+fxSrcs.size()] = mvSrcs[i].getSpimSource().getName();
             mvSrcIndices[i] = i+fxSrcs.size();
         }
 
         BigWarp.BigWarpData<?> bwd = new BigWarp.BigWarpData(allSources, allConverterSetups, null, mvSrcIndices, fxSrcIndices);
-
-        //BigWarpInit.initData(); //.createBigWarpData(mvSrcs, fxSrcs, names);
 
         try {
             BigWarp<?> bw = new BigWarp(bwd, "Big Warp", null);
@@ -97,7 +92,6 @@ public class InitBigWarpWithBdvSources implements Command {
 
             bdvHandleP = new BWBdvHandle(bw, true);
             bdvHandleQ = new BWBdvHandle(bw, false);
-
 
         } catch (SpimDataException e) {
             e.printStackTrace();

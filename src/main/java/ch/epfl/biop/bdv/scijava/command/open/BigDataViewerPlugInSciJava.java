@@ -1,20 +1,20 @@
 package ch.epfl.biop.bdv.scijava.command.open;
 
-import bdv.spimdata.SpimDataMinimal;
 import bdv.spimdata.XmlIoSpimDataMinimal;
 import bdv.util.BdvFunctions;
 import bdv.util.BdvHandle;
 import bdv.util.BdvOptions;
-import ch.epfl.biop.bdv.scijava.ScijavaBdvSourceHelper;
+import bdv.util.BdvStackSource;
 import mpicbg.spim.data.SpimDataException;
 import mpicbg.spim.data.generic.AbstractSpimData;
 import org.scijava.ItemIO;
-import org.scijava.cache.CacheService;
+import org.scijava.cache.GuavaWeakCacheService;
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import java.io.File;
+import java.util.List;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
@@ -36,22 +36,23 @@ public class BigDataViewerPlugInSciJava implements Command {
     AbstractSpimData sd;
 
     @Parameter
-    CacheService cs;
+    GuavaWeakCacheService cs;
 
     @Override
     public void run()
     {
         try
         {
-            final SpimDataMinimal spimData = new XmlIoSpimDataMinimal().load( file.getAbsolutePath() );
+            sd = new XmlIoSpimDataMinimal().load( file.getAbsolutePath() );
             BdvOptions options = BdvOptions.options();
             if (createNewWindow == false && bdv_h!=null) {
                 options.addTo(bdv_h);
             }
 
-            bdv_h = BdvFunctions.show( spimData, options ).get(0).getBdvHandle(); // Returns handle from index 0
+            List<BdvStackSource<?>> lbss = BdvFunctions.show(sd, options);
+            bdv_h = lbss.get(0).getBdvHandle(); // Returns bdv handle from index 0
 
-            sd = spimData;
+            cs.put(sd,lbss); // If one needs to retrieve display options > limitation : only one place to display it
 
         }
         catch ( SpimDataException e )

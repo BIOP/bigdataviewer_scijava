@@ -2,11 +2,13 @@ package ch.epfl.biop.bdv.scijava.command;
 
 import bdv.util.*;
 import bdv.viewer.SourceAndConverter;
+import net.imglib2.Volatile;
 import org.scijava.ItemIO;
 import org.scijava.command.DynamicCommand;
 import org.scijava.plugin.Parameter;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,8 @@ abstract public class BDVSourceAndConverterFunctionalInterfaceCommand extends Dy
     @Parameter(type = ItemIO.OUTPUT)
     public List<SourceAndConverter<?>> srcs_out;
 
+    public static final Consumer<String> log = str -> System.out.println(str);
+
     @Override
     public void run() {
         initCommand();
@@ -50,6 +54,13 @@ abstract public class BDVSourceAndConverterFunctionalInterfaceCommand extends Dy
         srcs_out = srcs_in.stream().map(s -> {
                     final SourceAndConverter src_inside = s;
                     SourceAndConverter<?> src_out = f.apply(src_inside);
+
+                    // Volatile check
+                    if (src_out.asVolatile()==null) {
+                        if (! (src_out.getSpimSource().getType() instanceof Volatile))
+                            log.accept("Non volatile source "+src_out.getSpimSource().getName()+" : slow to display");
+                    }
+
                     if (src_out!=null) {
                         if (output_mode.equals(REPLACE) || output_mode.equals(ADD)) {
                             bdv_h_out.getViewerPanel().addSource(src_out);

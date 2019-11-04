@@ -75,6 +75,8 @@ public class SwingBdvHandleViewer extends
 
         listOfSources.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
+
+
         listOfSources.setLayoutOrientation(JList.VERTICAL);
         listOfSources.setVisibleRowCount(-1);
 

@@ -54,7 +54,7 @@ public class GuavaWeakCacheService extends AbstractService implements CacheServi
 
     @Override
     public void initialize() {
-        cache = CacheBuilder.newBuilder().weakKeys().weakValues().build();
+        cache = CacheBuilder.newBuilder().weakKeys().build();
     }
 
     @Override

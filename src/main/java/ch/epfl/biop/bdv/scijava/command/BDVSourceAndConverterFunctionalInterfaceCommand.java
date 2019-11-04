@@ -27,7 +27,7 @@ abstract public class BDVSourceAndConverterFunctionalInterfaceCommand extends Dy
     @Parameter(label = "Input Bdv Frame", type = ItemIO.BOTH)
     public BdvHandle bdv_h_in;
 
-    @Parameter(label="Indexes ('0,3-5'), of the sources to process")
+    @Parameter(label="Indexes ('0,3:5'), of the sources to process")
     public String sourceIndexString = "0";
 
     public Function<SourceAndConverter<?>, SourceAndConverter<?>> f;

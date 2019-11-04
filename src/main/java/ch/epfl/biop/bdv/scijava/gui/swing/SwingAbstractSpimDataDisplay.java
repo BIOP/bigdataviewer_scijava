@@ -1,25 +1,30 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
+import bdv.util.BdvStackSource;
+import ch.epfl.biop.bdv.scijava.command.edit.BdvHideSources;
+import ch.epfl.biop.bdv.scijava.command.edit.BdvSetColor;
+import ch.epfl.biop.bdv.scijava.command.edit.BdvSetMinMax;
+import ch.epfl.biop.bdv.scijava.command.edit.BdvShowSources;
 import mpicbg.spim.data.generic.AbstractSpimData;
 import mpicbg.spim.data.generic.base.Entity;
 import mpicbg.spim.data.generic.sequence.AbstractSequenceDescription;
 import mpicbg.spim.data.generic.sequence.BasicViewSetup;
-import mpicbg.spim.data.sequence.ViewSetup;
+import org.scijava.cache.GuavaWeakCacheService;
+import org.scijava.command.CommandService;
+import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.ui.swing.viewer.EasySwingDisplayViewer;
 import org.scijava.ui.viewer.DisplayViewer;
 
 import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +38,12 @@ import java.util.stream.Collectors;
 @Plugin(type = DisplayViewer.class)
 public class SwingAbstractSpimDataDisplay extends
         EasySwingDisplayViewer<AbstractSpimData> {
+
+    @Parameter
+    CommandService cmds;
+
+    @Parameter
+    GuavaWeakCacheService cs;
 
     /**
      * SpimData shown by this instance of display
@@ -109,7 +120,7 @@ public class SwingAbstractSpimDataDisplay extends
     public void updateCurrentEntityClasses() {
         presentEntities.clear();
         entitiesSortedByClass.keySet().forEach(
-                c -> presentEntities.add(((Class<Entity>)c).getSimpleName())
+                c -> presentEntities.add(((Class<Entity>)c).getSimpleName().toLowerCase())
         );
 
         String strEntities =
@@ -147,19 +158,18 @@ public class SwingAbstractSpimDataDisplay extends
         List<Class<? extends Entity>> newEntitiesOrder = new ArrayList<>();
         // Testing names
         for (String classStr:entityNames) {
-            Optional<String> cEntity =  presentEntities.stream().filter(e -> e.equals(classStr.trim())).findFirst();
+            Optional<String> cEntity =  presentEntities.stream().filter(e -> e.equals(classStr.toLowerCase().trim())).findFirst();
             if (!cEntity.isPresent()) {
                 textAreaMessage.setText("Cannot find entity "+classStr);
                 return;
             } else {
                 newEntitiesOrder.add(0,
                         entitiesSortedByClass.keySet().stream().filter(
-                                e -> e.getSimpleName().equals(cEntity.get())
+                                e -> e.getSimpleName().toLowerCase().equals(cEntity.get())
                         ).findFirst().get()
                 );
             }
         }
-
         // All names validated
         this.entitiesListUsedForViewSetupSorting = newEntitiesOrder;
         sdt = new SpimDataTree(entitiesListUsedForViewSetupSorting,null, asd.getSequenceDescription().getViewSetupsOrdered());
@@ -170,7 +180,7 @@ public class SwingAbstractSpimDataDisplay extends
         textAreaMessage.setText("SpimData tree ordering: done.");
     }
 
-    public void updateSelectedViewSetups() {
+    public List<Integer> getSelectedIds() {
         HashSet<Integer> selectedVSIds = new HashSet<>();
         for (TreePath tp : tree.getSelectionModel().getSelectionPaths()) {
             Object userObj = ((DefaultMutableTreeNode)tp.getLastPathComponent()).getUserObject();
@@ -183,8 +193,14 @@ public class SwingAbstractSpimDataDisplay extends
             }
         }
 
-        List<Integer> orderedVSIds = selectedVSIds.stream().sorted().collect(Collectors.toList());
+        return selectedVSIds.stream().sorted().collect(Collectors.toList());
+    }
 
+    public String updateSelectedViewSetupsIds() {
+
+        List<Integer> orderedVSIds = getSelectedIds();
+
+        // Simple List
         //String strIndexes = orderedVSIds.stream().map(id -> Integer.toString(id)).collect(Collectors.joining(","));
 
         String betterListOfIndexes = "";
@@ -217,8 +233,46 @@ public class SwingAbstractSpimDataDisplay extends
                 betterListOfIndexes = betterListOfIndexes+orderedVSIds.get(orderedVSIds.size()-1);
             }
         }
-
         textAreaMessage.setText(betterListOfIndexes);
+        return betterListOfIndexes;
+    }
+
+    public Map<String, Object> getPreFilledParameters() {
+        Map<String, Object> out = new HashMap<>();
+        if (cs.get(asd) != null) {
+            List<BdvStackSource<?>> lbss = (List<BdvStackSource<?>>) cs.get(asd);
+            if (lbss.size()>0) {
+                textAreaMessage.setText("OK.");
+                out.put("sourceIndexString", updateSelectedViewSetupsIds());
+                out.put("bdvh", lbss.get(0).getBdvHandle());
+                return out;
+            } else {
+                textAreaMessage.setText("No source found.");
+                return out;
+            }
+        } else {
+            textAreaMessage.setText("Could not find cached Bdv Window instance.");
+            return out;
+        }
+    }
+
+    public void applyForSelectedSource(Consumer<BdvStackSource> action) {
+        List<BdvStackSource<?>> lbss;
+        if (cs.get(asd)!=null) {
+            lbss = (List<BdvStackSource<?>>) cs.get(asd);
+            getSelectedIds().stream().map(
+                    id -> {
+                        System.out.println(id);
+                        return lbss.get(id);
+                    }
+            ).forEach(bss -> action.accept(bss));
+            if (lbss.size()>0) {
+                System.out.println("Update Bdv");
+                lbss.get(0).getBdvHandle().getViewerPanel().requestRepaint();
+            }
+        } else {
+            System.err.println("Could not find cached Bdv Window instance.");
+        }
     }
 
     @Override
@@ -260,13 +314,23 @@ public class SwingAbstractSpimDataDisplay extends
         // Tree view of Spimdata
         top = new DefaultMutableTreeNode("SpimData");
         tree = new JTree(top);
-        tree.setRootVisible(false);
 
-        tree.addTreeSelectionListener(new TreeSelectionListener() {
-            public void valueChanged(TreeSelectionEvent e) {
-                updateSelectedViewSetups();
+        // PopupMenu
+        final JPopupMenu popup = (new SwingBdvPopupMenu(cmds, () -> getPreFilledParameters())).getPopup();
+
+        // JTree of SpimData
+        tree.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    popup.show(e.getComponent(), e.getX(), e.getY());
+                }
             }
         });
+
+        tree.setRootVisible(false);
+        tree.addTreeSelectionListener(e -> updateSelectedViewSetupsIds());
 
         model = (DefaultTreeModel)tree.getModel();
         treeView = new JScrollPane(tree);
@@ -291,9 +355,7 @@ public class SwingAbstractSpimDataDisplay extends
     }
 
     private void addNodes(DefaultMutableTreeNode basenode, SpimDataTree sdt_in ) {
-
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(sdt_in);
-
         sdt_in.leavesOnNode.stream()
                 .map(vs -> new DefaultMutableTreeNode(new RenamableViewSetup(vs)))
                 .forEach(n -> node.add(n));
@@ -354,7 +416,7 @@ public class SwingAbstractSpimDataDisplay extends
 
         public String toString() {
             if (rootEntity!=null) {
-                return rootEntity.getClass().getSimpleName() + ":" + rootEntity.getId()+" ("+allVSFromBranch.size()+")";
+                return rootEntity.getClass().getSimpleName().toLowerCase() + ":" + rootEntity.getId()+" ("+allVSFromBranch.size()+")";
             } else {
                 return "SpimData";
             }

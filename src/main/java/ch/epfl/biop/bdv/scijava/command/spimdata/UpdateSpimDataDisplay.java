@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.command;
+package ch.epfl.biop.bdv.scijava.command.spimdata;
 
 import bdv.AbstractSpimSource;
 import bdv.tools.transformation.TransformedSource;
@@ -57,6 +57,8 @@ public class UpdateSpimDataDisplay implements Command {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            System.err.println("Could not find cached instance Bdv Window");
         }
     }
 }

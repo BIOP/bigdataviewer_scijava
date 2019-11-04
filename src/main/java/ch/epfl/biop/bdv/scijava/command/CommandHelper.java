@@ -21,9 +21,9 @@ public class CommandHelper {
         ArrayList<Integer> arrayOfIndexes = new ArrayList<>();
         for (String str : splitIndexes) {
             str.trim();
-            if (str.contains("-")) {
-                // Array of source, like 2-5 = 2,3,4,5
-                String[] boundIndex = str.split("-");
+            if (str.contains(":")) {
+                // Array of source, like 2:5 = 2,3,4,5
+                String[] boundIndex = str.split(":");
                 if (boundIndex.length==2) {
                     try {
                         int binf = Integer.valueOf(boundIndex[0].trim());

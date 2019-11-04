@@ -1,10 +1,6 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
 import bdv.util.BdvStackSource;
-import ch.epfl.biop.bdv.scijava.command.edit.BdvHideSources;
-import ch.epfl.biop.bdv.scijava.command.edit.BdvSetColor;
-import ch.epfl.biop.bdv.scijava.command.edit.BdvSetMinMax;
-import ch.epfl.biop.bdv.scijava.command.edit.BdvShowSources;
 import mpicbg.spim.data.generic.AbstractSpimData;
 import mpicbg.spim.data.generic.base.Entity;
 import mpicbg.spim.data.generic.sequence.AbstractSequenceDescription;
@@ -24,7 +20,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -36,7 +31,7 @@ import java.util.stream.Collectors;
  */
 
 @Plugin(type = DisplayViewer.class)
-public class SwingAbstractSpimDataDisplay extends
+public class SwingAbstractSpimDataViewer extends
         EasySwingDisplayViewer<AbstractSpimData> {
 
     @Parameter
@@ -92,7 +87,7 @@ public class SwingAbstractSpimDataDisplay extends
     JPanel panel;
     DefaultTreeModel model;
 
-    public SwingAbstractSpimDataDisplay()
+    public SwingAbstractSpimDataViewer()
     {
         super( AbstractSpimData.class );
     }
@@ -253,25 +248,6 @@ public class SwingAbstractSpimDataDisplay extends
         } else {
             textAreaMessage.setText("Could not find cached Bdv Window instance.");
             return out;
-        }
-    }
-
-    public void applyForSelectedSource(Consumer<BdvStackSource> action) {
-        List<BdvStackSource<?>> lbss;
-        if (cs.get(asd)!=null) {
-            lbss = (List<BdvStackSource<?>>) cs.get(asd);
-            getSelectedIds().stream().map(
-                    id -> {
-                        System.out.println(id);
-                        return lbss.get(id);
-                    }
-            ).forEach(bss -> action.accept(bss));
-            if (lbss.size()>0) {
-                System.out.println("Update Bdv");
-                lbss.get(0).getBdvHandle().getViewerPanel().requestRepaint();
-            }
-        } else {
-            System.err.println("Could not find cached Bdv Window instance.");
         }
     }
 

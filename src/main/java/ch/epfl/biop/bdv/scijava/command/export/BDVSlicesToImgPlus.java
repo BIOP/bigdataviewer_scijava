@@ -65,14 +65,14 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
     @Parameter(label="Match bdv frame window size", persist=false, callback = "matchXYBDVFrame")
     public boolean matchWindowSize=false;
 
-    @Parameter(label = "Number of pixels X", callback = "matchXYBDVFrame")
-    public double xSizeInPix = 100;
+    //@Parameter(label = "Number of pixels X", callback = "matchXYBDVFrame")
+    //public double xSizeInPix = 100;
 
-    @Parameter(label = "Number of pixels Y", callback = "matchXYBDVFrame")
-    public double ySizeInPix = 100;
+    //@Parameter(label = "Number of pixels Y", callback = "matchXYBDVFrame")
+    //public double ySizeInPix = 100;
 
-    @Parameter(label = "Number of slice Z (isotropic vs XY, 0 for single slice)")
-    public int zSizeInPix = 0;
+    //@Parameter(label = "Number of slice Z (isotropic vs XY, 0 for single slice)")
+    //public int zSizeInPix = 0;
 
     @Parameter(label = "Physical Size X", callback = "matchXYBDVFrame")
     public double xSize = 100;
@@ -80,7 +80,7 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
     @Parameter(label = "Physical Size Y", callback = "matchXYBDVFrame")
     public double ySize = 100;
 
-    @Parameter(label = "Physical Size Z", callback = "matchXYBDVFrame")
+    @Parameter(label = "Physical Size Z")//, callback = "matchXYBDVFrame")
     public double zSize = 100;
 
     @Parameter(label = "Timepoint", persist = false)
@@ -159,6 +159,7 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
             if (s.getNumMipmapLevels()<mipmapLevel) {
                 errlog.accept("Error, mipmap level requested = "+mipmapLevel);
                 errlog.accept("But there are only "+s.getNumMipmapLevels()+" in the source");
+                errlog.accept("Highest level chosen instead.");
                 mipmapLevel = s.getNumMipmapLevels()-1;
             }
 
@@ -182,8 +183,8 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
             transformedSourceToViewer.translate(-w / 2, -h / 2, 0);
 
             // Getting an image independent of the view scaling unit (not sure)
-            // double xNorm = getNormTransform(0, transformedSourceToViewer);//trans
-            // transformedSourceToViewer.scale(1/ samplingInXPixelUnit);
+             double xNorm = getNormTransform(0, transformedSourceToViewer);//trans
+             transformedSourceToViewer.scale(1/xNorm);//xNorm);//1/ samplingInXPixelUnit);
 
             // Alternative : Get a bounding box from - (TODO interesting related post : https://forum.image.sc/t/using-imglib2-to-shear-an-image/2534/3)
 
@@ -197,9 +198,7 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
             RandomAccessibleInterval<T> view = RealCropper.getCroppedSampledRRAI(
                     ipimg,
                     transformedSourceToViewer,
-                    /*new FinalRealInterval(new double[]{-(xSize/2), -(ySize/2), -zSize},
-                                          new double[]{+(xSize/2), +(ySize/2), +zSize}),*/
-                    new FinalRealInterval(new double[]{-(int)(xSize/2), -(int)(ySize/2), -zSize}, new double[]{+(int)(xSize/2), +(int)(ySize/2), +zSize}),
+                    new FinalRealInterval(new double[]{-(xSize/2), -(ySize/2), -zSize}, new double[]{+(xSize/2), +(ySize/2), +zSize}),
                     samplingXYInPhysicalUnit,samplingXYInPhysicalUnit,samplingZInPhysicalUnit
             );
 
@@ -267,22 +266,6 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
             calibration.setUnit(viewerState.getSources().get(sourceIndexes.get(0)).getSpimSource().getVoxelDimensions().unit());
         }
 
-        //*******************
-        // Scaling factor
-        //*************
-
-        /*double dX = this.getRealDistFromPixDist(samplingInXPixelUnit,0);
-        double dY = this.getRealDistFromPixDist(samplingInXPixelUnit,1);
-
-        if (Math.abs((dX/dY)-1.0)>1e-5) {
-            errlog.accept("Warning : pixelDepth can be wrong because pixelWidth (= "+dX+") is different from pixelHeigth (= "+dY+")");
-        }
-
-        double avgVoxelSize = (dX+dY)/2.0;
-        calibration.pixelWidth=avgVoxelSize;
-        calibration.pixelHeight=avgVoxelSize;
-        calibration.pixelDepth=avgVoxelSize;*/
-
         // Set generated calibration to output image
         imp.setCalibration(calibration);
     }
@@ -342,10 +325,6 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
             // Gets physical size of pixels based on window size, image sampling size and user requested pixel size
             this.xSize=distance(ptTopLeft, ptTopRight);
             this.ySize=distance(ptTopLeft, ptBottomLeft);
-
-            // Gets physical size of pixels based on window size, image sampling size and user requested pixel size
-            this.xSizeInPix=(int) (xSize/samplingXYInPhysicalUnit);
-            this.ySizeInPix=(int) (ySize/samplingXYInPhysicalUnit);
         }
     }
 
@@ -361,20 +340,6 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
                 unitOfFirstSource = viewerState.getSources().get(sourceIndexes.get(0)).getSpimSource().getVoxelDimensions().unit();
             }
         }
-    }
-
-    public double getRealDistFromPixDist(double pixDist, int axis) {
-        RealPoint pt1 = new RealPoint(3); // Number of dimension
-        bdv_h.getViewerPanel().displayToGlobalCoordinates(0, 0, pt1);
-
-        RealPoint pt2 = new RealPoint(3); // Number of dimension
-        if (axis==0) {
-            bdv_h.getViewerPanel().displayToGlobalCoordinates(pixDist, 0, pt2);
-        }
-        if (axis==1) {
-            bdv_h.getViewerPanel().displayToGlobalCoordinates(0, pixDist, pt2);
-        }
-        return distance(pt1,pt2);
     }
 
     public static void main(String... args) throws Exception {

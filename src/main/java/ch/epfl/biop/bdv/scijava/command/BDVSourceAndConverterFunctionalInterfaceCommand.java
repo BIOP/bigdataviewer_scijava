@@ -72,6 +72,8 @@ abstract public class BDVSourceAndConverterFunctionalInterfaceCommand extends Dy
                     return src_out;
                 }
         ).collect(Collectors.toList());
+
+        bdv_h_out.getViewerPanel().requestRepaint();
     }
 
     // --- Empty implementation to avoid writing it in subclasses

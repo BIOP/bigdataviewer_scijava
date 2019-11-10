@@ -1,27 +1,24 @@
 package ch.epfl.biop.bdv.scijava.command.open;
 
+import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import bdv.util.BdvFunctions;
 import bdv.util.BdvHandle;
-import bdv.util.BdvOptions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.type.numeric.ARGBType;
 
 import org.scijava.ItemIO;
 import org.scijava.command.Command;
-import org.scijava.platform.PlatformService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import bdv.BigDataViewer;
 import bdv.ViewerImgLoader;
 import bdv.cache.CacheControl;
+import bdv.ij.util.ProgressWriterIJ;
 import bdv.img.imagestack.ImageStackImageLoader;
 import bdv.img.virtualstack.VirtualStackImageLoader;
 import bdv.spimdata.SequenceDescriptionMinimal;
@@ -31,6 +28,7 @@ import bdv.tools.brightness.ConverterSetup;
 import bdv.tools.brightness.SetupAssignments;
 import bdv.viewer.DisplayMode;
 import bdv.viewer.SourceAndConverter;
+import bdv.viewer.ViewerOptions;
 import bdv.viewer.VisibilityAndGrouping;
 import ij.CompositeImage;
 import ij.IJ;
@@ -53,94 +51,82 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
  * ImageJ plugin to show the current image in BigDataViewer.
  *
  * @author Tobias Pietzsch &lt;tobias.pietzsch@gmail.com&gt;
- * @author Nicolas Chiaruttini
  */
-
-/**
- * CURRENTLY BROKEN -> Cache control problem
- *
- */
-
 @Plugin(type = Command.class,
-        menuPath = ScijavaBdvRootMenu+"Open>Current Image ( not working )"+ScijavaBdvCmdSuffix)
+        menuPath = ScijavaBdvRootMenu+"Open>Current Image"+ScijavaBdvCmdSuffix)
 public class OpenImagePlusPlugInSciJava implements Command
 {
     @Parameter(type = ItemIO.INPUT)
-    ImagePlus imp;
-
-    @Parameter(label = "Open in new BigDataViewer window")
-    public boolean createNewWindow;
-
-    // ItemIO.BOTH required because it can be modified in case of appending new data to BDV (-> requires INPUT), or created (-> requires OUTPUT)
-    @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH, required = false)
-    public BdvHandle bdv_h;
+    ImagePlus curr;
 
     @Parameter
-    PlatformService ps;
+    BdvHandle bdv_h;
+
+    int idxChannel = 0;
 
     @Override
     public void run()
     {
-        try {
-            System.out.println("Command not working. See issue in the opened browser window");
-            ps.open(new URL("https://github.com/BIOP/bigdataviewer_scijava/issues/2"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ArrayList< ImagePlus > inputImgList = new ArrayList<>();
+        inputImgList.add(curr);
+
         final ArrayList< ConverterSetup > converterSetups = new ArrayList<>();
         final ArrayList< SourceAndConverter< ? > > sources = new ArrayList<>();
 
         CacheControl.CacheControls cache = new CacheControl.CacheControls();
         int nTimepoints = 1;
-        //int setup_id_offset = 0;
-        //ArrayList< ImagePlus > imgList = new ArrayList<>();
-        //for ( ImagePlus imp : inputImgList )
-        //{
-            AbstractSpimData< ? > spimData = load( imp, converterSetups, sources);//, setup_id_offset );
+        int setup_id_offset = 0;
+        ArrayList< ImagePlus > imgList = new ArrayList<>();
+        for ( ImagePlus imp : inputImgList )
+        {
+            AbstractSpimData< ? > spimData = load( imp, converterSetups, sources, setup_id_offset );
             if ( spimData != null )
             {
-          //      imgList.add( imp );
+                imgList.add( imp );
                 cache.addCacheControl( ( ( ViewerImgLoader ) spimData.getSequenceDescription().getImgLoader() ).getCacheControl() );
-                //setup_id_offset += imp.getNChannels();
+                setup_id_offset += imp.getNChannels();
                 nTimepoints = Math.max( nTimepoints, imp.getNFrames() );
             }
-        //}
-
-        // Append to BigDataViewer or create new one
-        BdvOptions options = BdvOptions.options();
-        if (createNewWindow == false && bdv_h!=null) {
-            options.addTo(bdv_h);
         }
 
-        //CacheControl.CacheControls cache = new CacheControl.CacheControls();
-        //cache.addCacheControl( ( (ViewerImgLoader) spimData.getSequenceDescription().getImgLoader() ).getCacheControl() );
-        // TODO Check Cache control
-
-        bdv_h = BdvFunctions.show( spimData, options ).get(0).getBdvHandle(); // Returns handle from index 0
-
-        //if ( !imgList.isEmpty() )
+        if ( !imgList.isEmpty() )
         {
-          /*  final BigDataViewer bdv = BigDataViewer.open( converterSetups, sources,
+            /* Hacky stuff because BdvFunctions.show(spimdata) do not work */
+            final BigDataViewer bdv = BigDataViewer.open( converterSetups, sources,
                     nTimepoints, cache,
-                    "BigDataViewer", new ProgressWriterIJ(), ViewerOptions.options() );*/
+                    "BigDataViewer", new ProgressWriterIJ(), ViewerOptions.options() );
 
-            final SetupAssignments sa = bdv_h.getSetupAssignments();
-            final VisibilityAndGrouping vg = bdv_h.getViewerPanel().getVisibilityAndGrouping();
+            bdv.getViewer().getState().getSources().forEach(ss -> {
+                bdv_h.getViewerPanel().addSource(ss);
+                bdv_h.getSetupAssignments().addSetup(bdv.getSetupAssignments().getConverterSetups().get(idxChannel));
+                bdv_h.getSetupAssignments().getConverterSetups().get(bdv_h.getSetupAssignments().getConverterSetups().size()-1).setViewer(bdv_h.getViewerPanel());
+
+                idxChannel++;
+            });
+
+            bdv_h.getViewerPanel().requestRepaint();
+
+            final SetupAssignments sa = bdv.getSetupAssignments();
+            final VisibilityAndGrouping vg = bdv.getViewer().getVisibilityAndGrouping();
 
             int channelOffset = 0;
             int numActiveChannels = 0;
-          //  for ( ImagePlus imp : imgList )
+            for ( ImagePlus imp : imgList )
             {
                 numActiveChannels += transferChannelVisibility( channelOffset, imp,vg );
                 transferChannelSettings( channelOffset, imp, sa );
                 channelOffset += imp.getNChannels();
             }
             vg.setDisplayMode( numActiveChannels > 1 ? DisplayMode.FUSED : DisplayMode.SINGLE );
+
+            // Hackity hack
+            bdv.getViewerFrame().dispatchEvent(new WindowEvent(bdv.getViewerFrame(), WindowEvent.WINDOW_CLOSING));
+
         }
     }
 
-    protected AbstractSpimData< ? > load( ImagePlus imp, ArrayList< ConverterSetup > converterSetups, ArrayList< SourceAndConverter< ? > > sources)
-    //,                                       int setup_id_offset )
+    protected AbstractSpimData< ? > load( ImagePlus imp, ArrayList< ConverterSetup > converterSetups, ArrayList< SourceAndConverter< ? > > sources,
+                                          int setup_id_offset )
     {
         // check the image type
         switch ( imp.getType() )
@@ -153,13 +139,6 @@ public class OpenImagePlusPlugInSciJava implements Command
             default:
                 IJ.showMessage( imp.getShortTitle() + ": Only 8, 16, 32-bit images and RGB images are supported currently!" );
                 return null;
-        }
-
-        // check the image dimensionality
-        if ( imp.getNDimensions() < 3 )
-        {
-            IJ.showMessage( imp.getShortTitle() + ": Image must be at least 3-dimensional!" );
-            return null;
         }
 
         // get calibration and image size
@@ -176,7 +155,7 @@ public class OpenImagePlusPlugInSciJava implements Command
         final FinalDimensions size = new FinalDimensions( w, h, d );
 
         // propose reasonable mipmap settings
-//		final ExportMipmapInfo autoMipmapSettings = ProposeMipmaps.proposeMipmaps( new BasicViewSetup( 0, "", size, voxelSize ) );
+        //		final ExportMipmapInfo autoMipmapSettings = ProposeMipmaps.proposeMipmaps( new BasicViewSetup( 0, "", size, voxelSize ) );
 
         // create ImgLoader wrapping the image
         final BasicImgLoader imgLoader;
@@ -188,14 +167,14 @@ public class OpenImagePlusPlugInSciJava implements Command
                     imgLoader = VirtualStackImageLoader.createUnsignedByteInstance( imp );//, setup_id_offset );
                     break;
                 case ImagePlus.GRAY16:
-                    imgLoader = VirtualStackImageLoader.createUnsignedShortInstance( imp );//, setup_id_offset );
+                    imgLoader = VirtualStackImageLoader.createUnsignedShortInstance( imp );//), setup_id_offset );
                     break;
                 case ImagePlus.GRAY32:
-                    imgLoader = VirtualStackImageLoader.createFloatInstance( imp );//, setup_id_offset );
+                    imgLoader = VirtualStackImageLoader.createFloatInstance( imp ); //, setup_id_offset );
                     break;
                 case ImagePlus.COLOR_RGB:
                 default:
-                    imgLoader = VirtualStackImageLoader.createARGBInstance( imp );//, setup_id_offset );
+                    imgLoader = VirtualStackImageLoader.createARGBInstance( imp ); //, setup_id_offset );
                     break;
             }
         }
@@ -226,9 +205,9 @@ public class OpenImagePlusPlugInSciJava implements Command
         final HashMap< Integer, BasicViewSetup > setups = new HashMap<>( numSetups );
         for ( int s = 0; s < numSetups; ++s )
         {
-            final BasicViewSetup setup = new BasicViewSetup( /*setup_id_offset*/0 + s, String.format( imp.getTitle() + " channel %d", s + 1 ), size, voxelSize );
+            final BasicViewSetup setup = new BasicViewSetup( setup_id_offset + s, String.format( imp.getTitle() + " channel %d", s + 1 ), size, voxelSize );
             setup.setAttribute( new Channel( s + 1 ) );
-            setups.put( /*setup_id_offset*/ 0 + s, setup );
+            setups.put( setup_id_offset + s, setup );
         }
 
         // create timepoints
@@ -243,7 +222,7 @@ public class OpenImagePlusPlugInSciJava implements Command
         final ArrayList< ViewRegistration > registrations = new ArrayList<>();
         for ( int t = 0; t < numTimepoints; ++t )
             for ( int s = 0; s < numSetups; ++s )
-                registrations.add( new ViewRegistration( t, /*setup_id_offset*/ 0 + s, sourceTransform ) );
+                registrations.add( new ViewRegistration( t, setup_id_offset + s, sourceTransform ) );
 
         final File basePath = new File( "." );
         final AbstractSpimData< ? > spimData = new SpimDataMinimal( basePath, seq, new ViewRegistrations( registrations ) );

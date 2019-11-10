@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.command.edit;
+package ch.epfl.biop.bdv.scijava.command.edit.transform;
 
 import bdv.util.BdvHandle;
 import bdv.util.ResampledSource;
@@ -12,7 +12,7 @@ import org.scijava.plugin.Plugin;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
 
-@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit>Transformation>Resample Sources")
+@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Resample Sources")
 public class BDVSourceResample extends BDVSourceAndConverterFunctionalInterfaceCommand {
 
     @Parameter(label = "Bdv Frame containing source resampling template")

@@ -1,5 +1,6 @@
 package ch.epfl.biop.bdv.scijava.command.edit.register;
 
+import bdv.img.WarpedSource;
 import bdv.tools.brightness.ConverterSetup;
 import bdv.util.BWBdvHandle;
 import bdv.util.BdvHandle;
@@ -7,6 +8,7 @@ import bdv.viewer.SourceAndConverter;
 import bigwarp.BigWarp;
 import ch.epfl.biop.bdv.scijava.command.CommandHelper;
 import mpicbg.spim.data.SpimDataException;
+import net.imglib2.realtransform.RealTransform;
 import org.scijava.ItemIO;
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
@@ -21,7 +23,7 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
 
-@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Bdv>Edit>Registration>BigWarp"+ScijavaBdvCmdSuffix)
+@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Register>BigWarp"+ScijavaBdvCmdSuffix)
 public class InitBigWarpWithBdvSources implements Command {
 
     private static final Logger LOGGER = Logger.getLogger( InitBigWarpWithBdvSources.class.getName() );
@@ -43,6 +45,8 @@ public class InitBigWarpWithBdvSources implements Command {
 
     @Parameter(label="Moving source indexes ('2,3:5'), starts at 0")
     String idx_src_moving;
+
+
 
     @Override
     public void run() {
@@ -80,11 +84,13 @@ public class InitBigWarpWithBdvSources implements Command {
 
         try {
             BigWarp<?> bw = new BigWarp(bwd, "Big Warp", null);
+
             bw.getViewerFrameP().setVisible(true);
             bw.getViewerFrameQ().setVisible(true);
 
             bdvHandleP = new BWBdvHandle(bw, true);
             bdvHandleQ = new BWBdvHandle(bw, false);
+
 
         } catch (SpimDataException e) {
             e.printStackTrace();

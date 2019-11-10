@@ -12,7 +12,6 @@ import java.awt.*;
 public class SwingSyncBdvHandleViewer extends
         EasySwingDisplayViewer<SynchronizeBDV.SyncBdvHandle> {
 
-
     public SwingSyncBdvHandleViewer()
     {
         super( SynchronizeBDV.SyncBdvHandle.class );

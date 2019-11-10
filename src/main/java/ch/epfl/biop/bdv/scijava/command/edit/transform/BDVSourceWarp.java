@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.command.edit;
+package ch.epfl.biop.bdv.scijava.command.edit.transform;
 
 import bdv.img.WarpedSource;
 import bdv.viewer.SourceAndConverter;
@@ -11,7 +11,7 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit>Transformation>Transform Source (warp)")
+@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Transform Source (warp)")
 public class BDVSourceWarp extends BDVSourceAndConverterFunctionalInterfaceCommand {
     @Parameter(label = "RealTransform object")
     RealTransform rt;

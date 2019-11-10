@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.command.edit;
+package ch.epfl.biop.bdv.scijava.command.edit.transform;
 
 import bdv.tools.transformation.TransformedSource;
 import bdv.viewer.SourceAndConverter;
@@ -10,7 +10,7 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit>Transformation>Transform Source (affine)")
+@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Transform Source (affine)")
 public class BDVSourceAffineTransform extends BDVSourceAndConverterFunctionalInterfaceCommand {
 
     @Parameter(label = "Affine Transform Matrix", style = "text area")

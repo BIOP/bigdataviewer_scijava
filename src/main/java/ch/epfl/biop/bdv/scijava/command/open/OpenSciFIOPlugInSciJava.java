@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Add to Bdv>Image File [SCIFIO]")
+@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Bdv>Add>Image File [SCIFIO]")
 public class OpenSciFIOPlugInSciJava implements Command
 {
 

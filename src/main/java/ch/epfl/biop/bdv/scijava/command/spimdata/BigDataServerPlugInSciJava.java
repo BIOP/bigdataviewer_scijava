@@ -21,7 +21,7 @@ import java.util.Map;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Open SpimDataset>SpimDataset [BigDataServer]")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"SpimDataset>Open>SpimDataset [BigDataServer]")
 public class BigDataServerPlugInSciJava implements Command
 {
     @Parameter(label = "Big Data Server URL")

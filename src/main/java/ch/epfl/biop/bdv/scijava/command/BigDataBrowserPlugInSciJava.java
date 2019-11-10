@@ -47,7 +47,7 @@ public class BigDataBrowserPlugInSciJava implements Command
     private final Map< String, String > datasetUrlMap = new HashMap<>();
 
     @Parameter(required = false)
-    String serverUrl = "http://";
+    String serverUrl = "http://cbb-bigdata01.embl.de/0.6.0";
 
     @Parameter
     CommandService cs;

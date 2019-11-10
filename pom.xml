@@ -14,7 +14,7 @@
 
 	<groupId>ch.epfl.biop</groupId>
 	<artifactId>bigdataviewer_scijava</artifactId>
-	<version>0.1.4-SOC-SNAPSHOT</version>
+	<version>0.1.4-SNAPSHOT</version>
 
 	<name>BigDataViewer Scijava</name>
 	<description>Scijava commands for starting BigDataViewer and exporting data.</description>

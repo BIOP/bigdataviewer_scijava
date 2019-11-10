@@ -8,7 +8,7 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Display>Set Sources Min Max Display")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Set Sources Min Max Display")
 public class BdvSetMinMax implements Command {
     @Parameter
     BdvHandle bdvh;

@@ -1,6 +1,7 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
 import bdv.util.BdvStackSource;
+import ch.epfl.biop.bdv.scijava.command.spimdata.AppendSpimDataToBdv;
 import mpicbg.spim.data.generic.AbstractSpimData;
 import mpicbg.spim.data.generic.base.Entity;
 import mpicbg.spim.data.generic.sequence.AbstractSequenceDescription;
@@ -246,7 +247,7 @@ public class SwingAbstractSpimDataViewer extends
                 return out;
             }
         } else {
-            textAreaMessage.setText("Could not find cached Bdv Window instance.");
+            textAreaMessage.setText("Could not find cached Bdv Window instance, please run Add to Bdv > SpimDataset.");
             return out;
         }
     }
@@ -325,6 +326,14 @@ public class SwingAbstractSpimDataViewer extends
         panel.add(tabbedPane, BorderLayout.CENTER);
         // Bottom: indexes or message
         panel.add(textAreaMessage, BorderLayout.SOUTH);
+
+        JButton showInBdv = new JButton("<html>S<br>H<br>O<br>W</html>");
+
+        showInBdv.addActionListener(a -> {
+            cmds.run(AppendSpimDataToBdv.class, true, "spimData", abstractSpimData);
+        });
+
+        panel.add(showInBdv, BorderLayout.WEST);
 
         this.redraw();
         return panel;

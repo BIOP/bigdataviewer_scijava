@@ -8,7 +8,7 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Display>Hide Sources")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Hide Sources")
 public class BdvHideSources implements Command {
 
     @Parameter

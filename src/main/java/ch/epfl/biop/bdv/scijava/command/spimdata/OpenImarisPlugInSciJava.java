@@ -22,7 +22,7 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
 // TODO : Is this really necessary now ?
 
-@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Open SpimDataset>SpimDataset [Imaris File]")
+@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"SpimDataset>Open>SpimDataset [Imaris File]")
 public class OpenImarisPlugInSciJava implements Command
 {
     @Parameter(label = "Imaris File")

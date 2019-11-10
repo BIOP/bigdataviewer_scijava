@@ -47,7 +47,7 @@ import static java.lang.Math.sqrt;
  * BIOP, EPFL, 2019
  */
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Export>Current Bdv View to ImgPlus", initializer = "initParams")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Export>Bdv View as ImagePlus", initializer = "initParams")
 public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
 
     private static final Logger LOGGER = Logger.getLogger( BDVSlicesToImgPlus.class.getName() );

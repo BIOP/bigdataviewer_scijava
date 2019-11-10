@@ -10,6 +10,7 @@ import bdv.spimdata.XmlIoSpimDataMinimal;
 import bdv.util.BdvHandle;
 import bdv.viewer.Source;
 import bdv.util.sourceimageloader.ImgLoaderFromSources;
+import mpicbg.spim.data.generic.AbstractSpimData;
 import mpicbg.spim.data.generic.sequence.BasicViewSetup;
 import mpicbg.spim.data.registration.ViewRegistration;
 import mpicbg.spim.data.registration.ViewRegistrations;
@@ -20,6 +21,7 @@ import mpicbg.spim.data.sequence.VoxelDimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.realtransform.AffineTransform3D;
+import org.scijava.ItemIO;
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -45,16 +47,19 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
  *
  */
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Export>Save Sources As Xml/Hdf5 (recompute Pyramid)", initializer = "initParams")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Export>Bdv Sources As Xml/Hdf5 SpimDataset", initializer = "initParams")
 public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
 
     private static final Logger LOGGER = Logger.getLogger( BdvSourceExportToXMLHDF5_RecomputePyramid.class.getName() );
 
-    @Parameter(label="Sources to save ('2,3-5'), starts at 0")
+    @Parameter(label="Sources to save ('2,3:5'), starts at 0")
     String index_srcs_to_save;
 
     @Parameter(label = "BigDataViewer Frame")
     public BdvHandle bdv_h;
+
+    @Parameter(type = ItemIO.OUTPUT)
+    public AbstractSpimData spimData;
 
     @Parameter
     int nThreads = 4;
@@ -223,8 +228,9 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
         }
 
         // write xml sequence description
-        final Hdf5ImageLoader hdf5Loader = new Hdf5ImageLoader( hdf5File, partitions, null, false );
-        final SequenceDescriptionMinimal seqh5 = new SequenceDescriptionMinimal( seq, hdf5Loader );
+        final SequenceDescriptionMinimal seqh5 = new SequenceDescriptionMinimal( seq, null );
+        final Hdf5ImageLoader hdf5Loader = new Hdf5ImageLoader( hdf5File, partitions, seqh5, false );
+        seqh5.setImgLoader(hdf5Loader);
 
         final ArrayList<ViewRegistration> registrations = new ArrayList<>();
         for ( int t = 0; t < numTimepoints; ++t )
@@ -232,13 +238,14 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
                 registrations.add( new ViewRegistration( t, s, getSrcTransform(srcs.get(s),t,0)));
 
         final File basePath = seqFile.getParentFile();
-        final SpimDataMinimal spimData = new SpimDataMinimal( basePath, seqh5, new ViewRegistrations( registrations ) );
+
+        spimData = new SpimDataMinimal( basePath, seqh5, new ViewRegistrations( registrations ) );
 
         //------------------------------------ SAVING NOW!
 
         try
         {
-            new XmlIoSpimDataMinimal().save( spimData, seqFile.getAbsolutePath() );
+            new XmlIoSpimDataMinimal().save( (SpimDataMinimal) spimData, seqFile.getAbsolutePath() );
             progressWriter.setProgress( 1.0 );
         }
         catch ( final Exception e )

@@ -8,7 +8,7 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Display>Show Sources")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Show Sources")
 public class BdvShowSources implements Command {
 
     @Parameter

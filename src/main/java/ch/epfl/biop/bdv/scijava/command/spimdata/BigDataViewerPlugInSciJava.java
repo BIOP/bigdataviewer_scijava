@@ -19,7 +19,7 @@ import java.util.List;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Open SpimDataset>SpimDataset [XML File]")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"SpimDataset>Open>SpimDataset [XML File]")
 public class BigDataViewerPlugInSciJava implements Command {
 
     @Parameter(label = "XML File")

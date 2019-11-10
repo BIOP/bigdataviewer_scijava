@@ -10,7 +10,7 @@ import org.scijava.util.ColorRGB;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Display>Set Sources Color")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Set Sources Color")
 public class BdvSetColor implements Command {
 
     @Parameter

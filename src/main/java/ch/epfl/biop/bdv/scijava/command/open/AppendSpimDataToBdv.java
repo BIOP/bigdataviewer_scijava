@@ -16,7 +16,7 @@ import java.util.List;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Add>SpimDataset")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>SpimDataset")
 public class AppendSpimDataToBdv implements Command {
 
     @Parameter

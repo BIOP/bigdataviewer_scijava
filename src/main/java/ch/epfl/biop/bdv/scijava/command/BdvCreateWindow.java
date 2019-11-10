@@ -12,7 +12,7 @@ import org.scijava.plugin.Plugin;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Create Empty Frame")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Create Empty BDV Frame")
 public class BdvCreateWindow implements Command {
 
     @Parameter

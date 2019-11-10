@@ -47,7 +47,7 @@ import static java.lang.Math.sqrt;
  * BIOP, EPFL, 2019
  */
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Export>Bdv View as ImagePlus", initializer = "initParams")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Export Sources>As ImagePlus", initializer = "initParams")
 public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
 
     private static final Logger LOGGER = Logger.getLogger( BDVSlicesToImgPlus.class.getName() );
@@ -347,7 +347,7 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
         //  create the ImageJ application context with all available services
         final ImageJ ij = new ImageJ();
         ij.ui().showUI();
-        // Gets sample dataset
+        // Gets samples dataset
         ij.command().run(BigDataServerPlugInSciJava.class, true,
                 "urlServer","http://fly.mpi-cbg.de:8081",
                 "datasetName", "Drosophila").get();

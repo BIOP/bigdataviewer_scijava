@@ -47,7 +47,7 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
  *
  */
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Export>Bdv Sources As Xml/Hdf5 SpimDataset", initializer = "initParams")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Export Sources>As Xml/Hdf5 SpimDataset", initializer = "initParams")
 public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
 
     private static final Logger LOGGER = Logger.getLogger( BdvSourceExportToXMLHDF5_RecomputePyramid.class.getName() );

@@ -1,7 +1,7 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
 import bdv.util.BdvStackSource;
-import ch.epfl.biop.bdv.scijava.command.spimdata.AppendSpimDataToBdv;
+import ch.epfl.biop.bdv.scijava.command.open.AppendSpimDataToBdv;
 import mpicbg.spim.data.generic.AbstractSpimData;
 import mpicbg.spim.data.generic.base.Entity;
 import mpicbg.spim.data.generic.sequence.AbstractSequenceDescription;

@@ -59,7 +59,7 @@ public class OpenImagePlusPlugInSciJava implements Command
     @Parameter(type = ItemIO.INPUT)
     ImagePlus curr;
 
-    @Parameter
+    @Parameter(type = ItemIO.BOTH)
     BdvHandle bdv_h;
 
     int idxChannel = 0;

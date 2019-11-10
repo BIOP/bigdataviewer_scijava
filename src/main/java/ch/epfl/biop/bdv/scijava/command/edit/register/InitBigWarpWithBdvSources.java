@@ -35,13 +35,13 @@ public class InitBigWarpWithBdvSources implements Command {
     @Parameter
     BdvHandle bdv_h_fixed;
 
-    @Parameter(label="Fixed source indexes ('2,3-5'), starts at 0")
+    @Parameter(label="Fixed source indexes ('2,3:5'), starts at 0")
     String idx_src_fixed;
 
     @Parameter
     BdvHandle bdv_h_moving;
 
-    @Parameter(label="Moving source indexes ('2,3-5'), starts at 0")
+    @Parameter(label="Moving source indexes ('2,3:5'), starts at 0")
     String idx_src_moving;
 
     @Override
@@ -53,32 +53,27 @@ public class InitBigWarpWithBdvSources implements Command {
                         .stream()
                         .map(idx -> bdv_h_fixed.getViewerPanel().getState().getSources().get(idx))
                         .collect(Collectors.toList());
-                        //.toArray(new SourceAndConverter<?>[]{});
 
         List<SourceAndConverter<?>> mvSrcs =
                 CommandHelper.commaSeparatedListToArray(idx_src_moving)
                         .stream()
                         .map(idx -> bdv_h_moving.getViewerPanel().getState().getSources().get(idx))
                         .collect(Collectors.toList());
-                        //.toArray(new SourceAndConverter<?>[]{});
-
-        String[] names = new String[mvSrcs.size() + fxSrcs.size()];
 
         List<SourceAndConverter> allSources = new ArrayList<>();
         allSources.addAll(fxSrcs);
         allSources.addAll(mvSrcs);
 
-
         List<ConverterSetup> allConverterSetups = new ArrayList<>();
-
-        int[] fxSrcIndices = new int[fxSrcs.size()];
-        for (int i = 0; i < fxSrcs.size(); i++) {
-            fxSrcIndices[i] = i;
-        }
 
         int[] mvSrcIndices = new int[mvSrcs.size()];
         for (int i = 0; i < mvSrcs.size(); i++) {
-            mvSrcIndices[i] = i+fxSrcs.size();
+            mvSrcIndices[i] = i;
+        }
+
+        int[] fxSrcIndices = new int[fxSrcs.size()];
+        for (int i = 0; i < fxSrcs.size(); i++) {
+            fxSrcIndices[i] = i+mvSrcs.size();
         }
 
         BigWarp.BigWarpData<?> bwd = new BigWarp.BigWarpData(allSources, allConverterSetups, null, mvSrcIndices, fxSrcIndices);

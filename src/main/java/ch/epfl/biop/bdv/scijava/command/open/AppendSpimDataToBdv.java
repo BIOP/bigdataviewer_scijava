@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.command.spimdata;
+package ch.epfl.biop.bdv.scijava.command.open;
 
 import bdv.util.BdvFunctions;
 import bdv.util.BdvHandle;

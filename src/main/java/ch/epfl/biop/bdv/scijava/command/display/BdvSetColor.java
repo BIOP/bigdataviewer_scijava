@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.command.edit;
+package ch.epfl.biop.bdv.scijava.command.display;
 
 import bdv.util.BdvHandle;
 import ch.epfl.biop.bdv.scijava.command.CommandHelper;

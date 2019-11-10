@@ -1,25 +1,28 @@
-package ch.epfl.biop.bdv.scijava.command.open;
+package ch.epfl.biop.bdv.scijava.command.spimdata;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import bdv.util.BdvFunctions;
 import bdv.util.BdvHandle;
 import bdv.util.BdvOptions;
+import bdv.util.BdvStackSource;
+import mpicbg.spim.data.generic.AbstractSpimData;
 import org.scijava.ItemIO;
+import org.scijava.cache.GuavaWeakCacheService;
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import bdv.img.imaris.Imaris;
-import bdv.spimdata.SpimDataMinimal;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
 // TODO : Is this really necessary now ?
 
-@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Open>Imaris (experimental)"+ScijavaBdvCmdSuffix)
+@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Open SpimDataset>SpimDataset [Imaris File]")
 public class OpenImarisPlugInSciJava implements Command
 {
     @Parameter(label = "Imaris File")
@@ -29,21 +32,24 @@ public class OpenImarisPlugInSciJava implements Command
     public boolean createNewWindow;
 
     // ItemIO.BOTH required because it can be modified in case of appending new data to BDV (-> requires INPUT), or created (-> requires OUTPUT)
-    @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH, required = false)
+    @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH)
     public BdvHandle bdv_h;
+
+    @Parameter(type = ItemIO.OUTPUT)
+    AbstractSpimData spimData;
+
+    @Parameter
+    GuavaWeakCacheService cs;
 
     @Override
     public void run()
     {
         try
         {
-            final SpimDataMinimal spimData = Imaris.openIms( file.getAbsolutePath() );
-            BdvOptions options = BdvOptions.options();
-            if (createNewWindow == false && bdv_h!=null) {
-                options.addTo(bdv_h);
-            }
-            bdv_h = BdvFunctions.show( spimData, options ).get(0).getBdvHandle(); // Returns handle from index 0
-
+            spimData = Imaris.openIms( file.getAbsolutePath() );
+            List<BdvStackSource<?>> lbss = BdvFunctions.show(spimData, BdvOptions.options().addTo(bdv_h));
+            bdv_h = lbss.get(0).getBdvHandle();
+            cs.put(spimData, lbss);
         }
         catch ( final IOException e )
         {

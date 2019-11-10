@@ -1,4 +1,5 @@
-package ch.epfl.biop.bdv.scijava.command.open;
+package ch.epfl.biop.bdv.scijava.command;
+import ch.epfl.biop.bdv.scijava.command.spimdata.BigDataServerPlugInSciJava;
 import org.scijava.command.Command;
 
 import com.google.gson.stream.JsonReader;
@@ -38,7 +39,7 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
  * @author Nicolas Chiaruttini biop.epfl.ch
  */
 @Plugin(type = Command.class,
-        menuPath = ScijavaBdvRootMenu+"Open>Browse BigDataServer"+ScijavaBdvCmdSuffix)
+        menuPath = ScijavaBdvRootMenu+"Browse BigDataServer"+ScijavaBdvCmdSuffix)
 public class BigDataBrowserPlugInSciJava implements Command
 {
     private final Map< String, ImageIcon > imageMap = new HashMap<>();

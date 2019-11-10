@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.command.edit;
+package ch.epfl.biop.bdv.scijava.command;
 
 import bdv.util.*;
 import net.imglib2.img.array.ArrayImg;

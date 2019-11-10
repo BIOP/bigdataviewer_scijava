@@ -166,12 +166,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>ch.epfl.biop</groupId>
-			<artifactId>bigdataviewer-bioformats</artifactId>
-			<version>0.1.6-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
 			<groupId>io.scif</groupId>
 			<artifactId>scifio-bf-compat</artifactId>
 			<scope>runtime</scope>

@@ -14,7 +14,10 @@ import java.util.List;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"SpimData>Update Bdv")
+/**
+ * Reflection java trick to access private method
+ */
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Display>SpimDataset>Update Bdv")
 public class UpdateSpimDataDisplay implements Command {
     @Parameter
     AbstractSpimData spimData;

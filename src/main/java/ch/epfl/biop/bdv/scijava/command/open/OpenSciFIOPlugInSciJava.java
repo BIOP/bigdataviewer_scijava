@@ -18,10 +18,9 @@ import org.scijava.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Open>Open with SCIFIO"+ScijavaBdvCmdSuffix)
+@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Add to Bdv>Image File [SCIFIO]")
 public class OpenSciFIOPlugInSciJava implements Command
 {
 
@@ -30,14 +29,11 @@ public class OpenSciFIOPlugInSciJava implements Command
     @Parameter(label = "Image File")
     public File file;
 
-    @Parameter(label = "Open in new BigDataViewer window")
-    public boolean createNewWindow;
-
     // ItemIO.BOTH required because it can be modified in case of appending new data to BDV (-> requires INPUT), or created (-> requires OUTPUT)
-    @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH, required = false)
+    @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH)
     public BdvHandle bdv_h;
 
-    @Parameter(label="Source indexes ('2,3-5'), starts at 0")
+    @Parameter(label="Source indexes ('2,3:5'), starts at 0")
     public String sourceIndexString = "0";
 
     @Override
@@ -47,15 +43,7 @@ public class OpenSciFIOPlugInSciJava implements Command
         {
             ImgOpener opener = new ImgOpener();
 
-            BdvOptions options = BdvOptions.options();
-
-            if (createNewWindow) {
-                bdv_h=null;
-            }
-
-            if (createNewWindow == false && bdv_h!=null) {
-                options.addTo(bdv_h);
-            }
+            BdvOptions options = BdvOptions.options().addTo(bdv_h);
 
             try {
 
@@ -75,19 +63,12 @@ public class OpenSciFIOPlugInSciJava implements Command
                     LOGGER.info("x size = "+img.dimension(0));
                     LOGGER.info("y size = "+img.dimension(1));
 
-                    if (bdv_h==null) {
-                        // Creates bdv instance if none is existing
-                        if (img.numDimensions()==2) {
-                            bdv_h = BdvFunctions.show(img, img.getName(), BdvOptions.options().is2D()).getBdvHandle();
-                        } else {
-                            bdv_h = BdvFunctions.show(img, img.getName(), BdvOptions.options()).getBdvHandle();
-                        }
-                    } else {
+                    {
                         // Appends to existing Bdv instance
                         if (img.numDimensions()==2) {
-                            bdv_h = BdvFunctions.show(img, img.getName(), BdvOptions.options().addTo(bdv_h).is2D()).getBdvHandle();
+                            bdv_h = BdvFunctions.show(img, img.getName(), options.is2D()).getBdvHandle();
                         } else {
-                            bdv_h = BdvFunctions.show(img, img.getName(), BdvOptions.options().addTo(bdv_h)).getBdvHandle();
+                            bdv_h = BdvFunctions.show(img, img.getName(), options.addTo(bdv_h)).getBdvHandle();
                         }
                     }
                 });

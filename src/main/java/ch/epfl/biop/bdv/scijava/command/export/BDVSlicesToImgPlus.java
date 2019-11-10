@@ -5,7 +5,7 @@ import bdv.util.RealCropper;
 import bdv.viewer.Interpolation;
 import bdv.viewer.Source;
 import bdv.viewer.state.ViewerState;
-import ch.epfl.biop.bdv.scijava.command.open.BigDataServerPlugInSciJava;
+import ch.epfl.biop.bdv.scijava.command.spimdata.BigDataServerPlugInSciJava;
 import ch.epfl.biop.bdv.scijava.command.CommandHelper;
 import ij.ImagePlus;
 import ij.measure.Calibration;

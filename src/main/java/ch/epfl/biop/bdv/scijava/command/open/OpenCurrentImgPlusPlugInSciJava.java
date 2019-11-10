@@ -12,11 +12,11 @@ import org.scijava.plugin.Plugin;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Open>Current Image - ImgLib2"+ScijavaBdvCmdSuffix)
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Add to Bdv>Current IJ1 Image [ImgLib2]")
 public class OpenCurrentImgPlusPlugInSciJava implements Command {
 
     // ItemIO.BOTH required because it can be modified in case of appending new data to BDV (-> requires INPUT), or created (-> requires OUTPUT)
-    @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH, required = false)
+    @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH)
     public BdvHandle bdv_h;
 
     @Parameter(type = ItemIO.INPUT)

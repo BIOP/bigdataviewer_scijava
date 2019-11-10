@@ -1,12 +1,10 @@
-package ch.epfl.biop.bdv.scijava.command.register;
+package ch.epfl.biop.bdv.scijava.command.edit.register;
 
 import bdv.tools.brightness.ConverterSetup;
 import bdv.util.BWBdvHandle;
 import bdv.util.BdvHandle;
-import bdv.viewer.Source;
 import bdv.viewer.SourceAndConverter;
 import bigwarp.BigWarp;
-import bigwarp.BigWarpInit;
 import ch.epfl.biop.bdv.scijava.command.CommandHelper;
 import mpicbg.spim.data.SpimDataException;
 import org.scijava.ItemIO;
@@ -23,7 +21,7 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
 
-@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Registration>BigWarp"+ScijavaBdvCmdSuffix)
+@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Edit>Registration>BigWarp"+ScijavaBdvCmdSuffix)
 public class InitBigWarpWithBdvSources implements Command {
 
     private static final Logger LOGGER = Logger.getLogger( InitBigWarpWithBdvSources.class.getName() );

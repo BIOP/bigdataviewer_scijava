@@ -1,9 +1,9 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
-import ch.epfl.biop.bdv.scijava.command.edit.BdvHideSources;
-import ch.epfl.biop.bdv.scijava.command.edit.BdvSetColor;
-import ch.epfl.biop.bdv.scijava.command.edit.BdvSetMinMax;
-import ch.epfl.biop.bdv.scijava.command.edit.BdvShowSources;
+import ch.epfl.biop.bdv.scijava.command.display.BdvHideSources;
+import ch.epfl.biop.bdv.scijava.command.display.BdvSetColor;
+import ch.epfl.biop.bdv.scijava.command.display.BdvSetMinMax;
+import ch.epfl.biop.bdv.scijava.command.display.BdvShowSources;
 import org.scijava.command.CommandService;
 
 import javax.swing.*;

@@ -9,7 +9,7 @@ import bdv.spimdata.SpimDataMinimal;
 import bdv.spimdata.XmlIoSpimDataMinimal;
 import bdv.util.BdvHandle;
 import bdv.viewer.Source;
-import ch.epfl.biop.bdv.scijava.command.export.sourceimageloader.ImgLoaderFromSources;
+import bdv.util.sourceimageloader.ImgLoaderFromSources;
 import mpicbg.spim.data.generic.sequence.BasicViewSetup;
 import mpicbg.spim.data.registration.ViewRegistration;
 import mpicbg.spim.data.registration.ViewRegistrations;

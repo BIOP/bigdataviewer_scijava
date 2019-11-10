@@ -9,9 +9,9 @@ import java.util.function.Function;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
 @Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Edit>Duplicate Source")
-public class BdvMoveSources  extends BDVSourceAndConverterFunctionalInterfaceCommand {
+public class BdvDuplicateSources extends BDVSourceAndConverterFunctionalInterfaceCommand {
 
-    public BdvMoveSources() {
+    public BdvDuplicateSources() {
         this.f = Function.identity();
     }
 }

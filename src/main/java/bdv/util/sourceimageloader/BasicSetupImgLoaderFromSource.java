@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.command.export.sourceimageloader;
+package bdv.util.sourceimageloader;
 
 import bdv.viewer.Source;
 import mpicbg.spim.data.generic.sequence.BasicSetupImgLoader;

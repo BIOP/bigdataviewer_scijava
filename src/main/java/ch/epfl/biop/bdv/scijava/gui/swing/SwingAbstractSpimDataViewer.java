@@ -2,6 +2,7 @@ package ch.epfl.biop.bdv.scijava.gui.swing;
 
 import bdv.util.BdvStackSource;
 import ch.epfl.biop.bdv.scijava.command.open.AppendSpimDataToBdv;
+import ch.epfl.biop.bdv.scijava.command.spimdata.SaveSpimDataSciJava;
 import mpicbg.spim.data.generic.AbstractSpimData;
 import mpicbg.spim.data.generic.base.Entity;
 import mpicbg.spim.data.generic.sequence.AbstractSequenceDescription;
@@ -334,6 +335,14 @@ public class SwingAbstractSpimDataViewer extends
         });
 
         panel.add(showInBdv, BorderLayout.WEST);
+
+        JButton saveButton = new JButton("<html>S<br>A<br>V<br>E</html>");
+
+        saveButton.addActionListener(a -> {
+            cmds.run(SaveSpimDataSciJava.class, true, "spimData", abstractSpimData);
+        });
+
+        panel.add(saveButton, BorderLayout.EAST);
 
         this.redraw();
         return panel;

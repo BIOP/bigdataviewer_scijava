@@ -78,12 +78,6 @@ public class SwingBdvHandleViewer extends
     }
 
     public String updateSelectedViewSetupsIds(java.util.List<Integer> orderedVSIds) {
-
-        //java.util.List<Integer> orderedVSIds = getSelectedIds();
-
-        // Simple List
-        //String strIndexes = orderedVSIds.stream().map(id -> Integer.toString(id)).collect(Collectors.joining(","));
-
         String betterListOfIndexes = "";
         if (orderedVSIds.size()>0) {
             int lastIndex = orderedVSIds.get(0);

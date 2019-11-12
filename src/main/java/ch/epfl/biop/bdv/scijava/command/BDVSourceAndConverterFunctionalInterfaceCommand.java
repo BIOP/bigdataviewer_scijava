@@ -22,7 +22,7 @@ abstract public class BDVSourceAndConverterFunctionalInterfaceCommand extends Dy
 
     final public static String REPLACE = "Replace In Bdv";
     final public static String ADD = "Add To Bdv";
-    final public static String LIST = "Output As List Only";
+    final public static String LIST = "Output List Only";
 
     @Parameter(label = "Input Bdv Frame", type = ItemIO.BOTH)
     public BdvHandle bdv_h_in;
@@ -55,13 +55,12 @@ abstract public class BDVSourceAndConverterFunctionalInterfaceCommand extends Dy
                     final SourceAndConverter src_inside = s;
                     SourceAndConverter<?> src_out = f.apply(src_inside);
 
-                    // Volatile check
-                    if (src_out.asVolatile()==null) {
-                        if (! (src_out.getSpimSource().getType() instanceof Volatile))
-                            log.accept("Non volatile source "+src_out.getSpimSource().getName()+" : slow to display");
-                    }
-
                     if (src_out!=null) {
+                        // Volatile check
+                        /*if (src_out.asVolatile()==null) {
+                            if (! (src_out.getSpimSource().getType() instanceof Volatile))
+                                log.accept("Non volatile source "+src_out.getSpimSource().getName()+" : slow to display");
+                        }*/
                         if (output_mode.equals(REPLACE) || output_mode.equals(ADD)) {
                             bdv_h_out.getViewerPanel().addSource(src_out);
                         }

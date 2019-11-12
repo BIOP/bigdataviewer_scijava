@@ -11,7 +11,7 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Transform Source (warp)")
+@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Transform Sources (realtransform)")
 public class BDVSourceWarp extends BDVSourceAndConverterFunctionalInterfaceCommand {
     @Parameter(label = "RealTransform object")
     RealTransform rt;
@@ -25,7 +25,6 @@ public class BDVSourceWarp extends BDVSourceAndConverterFunctionalInterfaceComma
                     return new SourceAndConverter<>(ws, src.getConverter());
                 } else {
                     if (src.asVolatile()== null) {
-                        // TODO : wrap source as volatile and create volatile        sourceandconverter
                         return new SourceAndConverter<>(ws, src.getConverter());
                     } else {
                         WarpedSource vws = new WarpedSource(src.asVolatile().getSpimSource(),"Warped_"+src.asVolatile().getSpimSource().getName());

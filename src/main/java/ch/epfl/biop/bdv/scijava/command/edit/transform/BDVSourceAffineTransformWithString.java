@@ -10,17 +10,20 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Affine>Transform Sources (AffineTransform3D)")
-public class BDVSourceAffineTransform extends BDVSourceAndConverterFunctionalInterfaceCommand {
+@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Affine>Transform Sources (Affine, string)")
+public class BDVSourceAffineTransformWithString extends BDVSourceAndConverterFunctionalInterfaceCommand {
 
     @Parameter(label = "Affine Transform Matrix", style = "text area")
-    AffineTransform3D at;
+    String stringMatrix = "1,0,0,0,\n 0,1,0,0,\n 0,0,1,0, \n 0,0,0,1";
 
     @Parameter
     boolean transformInPlace = true;
 
-    public BDVSourceAffineTransform() {
+    public BDVSourceAffineTransformWithString() {
         this.f = src -> {
+            AffineTransform3D at = new AffineTransform3D();
+            at.set(this.toDouble());
+
             if ((src.getSpimSource() instanceof TransformedSource) && (transformInPlace)) {
                 TransformedSource ts = (TransformedSource) src.getSpimSource();
                 AffineTransform3D at3d = new AffineTransform3D();
@@ -54,4 +57,30 @@ public class BDVSourceAffineTransform extends BDVSourceAndConverterFunctionalInt
         };
     }
 
+    public double[] toDouble() {
+        String inputString = stringMatrix;
+        // Test if the String is written using AffineTransform3D toString() method
+        String[] testIfParenthesis = stringMatrix.split("[\\(\\)]+");// right of left parenthesis
+
+        if (testIfParenthesis!=null) {
+            for (String str : testIfParenthesis) {
+                System.out.println(str);
+            }
+
+            if (testIfParenthesis.length > 1) {
+                inputString = testIfParenthesis[1] + ",0,0,0,1";
+            }
+        }
+
+        String[] strNumber = inputString.split(",");
+        double[] mat = new double[16];
+        if (strNumber.length!=16) {
+            System.err.println("matrix has not enough elements");
+            return null;
+        }
+        for (int i=0;i<16;i++) {
+            mat[i] = Double.valueOf(strNumber[i].trim());
+        }
+        return mat;
+    }
 }

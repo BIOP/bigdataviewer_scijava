@@ -1,13 +1,15 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
+import net.imglib2.realtransform.AffineTransform;
 import net.imglib2.realtransform.RealTransform;
+import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
 import org.scijava.ui.swing.viewer.EasySwingDisplayViewer;
 import org.scijava.ui.viewer.DisplayViewer;
 
 import javax.swing.*;
 
-@Plugin(type = DisplayViewer.class)
+@Plugin(type = DisplayViewer.class, priority = Priority.LOW)
 public class SwingRealTransformViewer extends
         EasySwingDisplayViewer<RealTransform> {
 
@@ -18,7 +20,7 @@ public class SwingRealTransformViewer extends
 
     @Override
     protected boolean canView(RealTransform rt) {
-        return true;
+        return !(rt instanceof AffineTransform);
     }
 
     @Override

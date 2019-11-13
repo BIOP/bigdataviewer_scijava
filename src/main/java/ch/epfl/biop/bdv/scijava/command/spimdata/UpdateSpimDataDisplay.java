@@ -54,6 +54,8 @@ public class UpdateSpimDataDisplay implements Command {
                     }
                 }
 
+                lbss.get(0).getBdvHandle().getViewerPanel().requestRepaint();
+
             } catch (ClassCastException e) {
                 System.err.println("Scijava GuavaWeakCacheService cache do not contain the except class for spimdata "+spimData);
                 e.printStackTrace();

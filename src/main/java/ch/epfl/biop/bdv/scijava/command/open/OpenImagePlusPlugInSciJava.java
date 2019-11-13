@@ -5,6 +5,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import bdv.SpimSource;
+import bdv.tools.transformation.TransformedSource;
 import bdv.util.BdvHandle;
 import net.imglib2.FinalDimensions;
 import net.imglib2.realtransform.AffineTransform3D;
@@ -97,6 +99,20 @@ public class OpenImagePlusPlugInSciJava implements Command
                     "BigDataViewer", new ProgressWriterIJ(), ViewerOptions.options() );
 
             bdv.getViewer().getState().getSources().forEach(ss -> {
+                double[] centerLocationInPix = new double[2];
+                centerLocationInPix[0] = curr.getWidth()/2d;
+                centerLocationInPix[1] = curr.getHeight()/2d;
+                centerLocationInPix[2] = curr.getNSlices()/2d;
+
+                AffineTransform3D at3D = new AffineTransform3D();
+                at3D.translate(curr.getCalibration().xOrigin,
+                               curr.getCalibration().yOrigin,
+                               curr.getCalibration().zOrigin);
+                ((TransformedSource) ss.getSpimSource()).setFixedTransform(at3D);
+                if (ss.asVolatile()!=null) {
+                    ((TransformedSource) ss.asVolatile().getSpimSource()).setFixedTransform(at3D);
+                }
+
                 bdv_h.getViewerPanel().addSource(ss);
                 bdv_h.getSetupAssignments().addSetup(bdv.getSetupAssignments().getConverterSetups().get(idxChannel));
                 bdv_h.getSetupAssignments().getConverterSetups().get(bdv_h.getSetupAssignments().getConverterSetups().size()-1).setViewer(bdv_h.getViewerPanel());

@@ -33,6 +33,7 @@ package org.scijava.cache;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
@@ -44,13 +45,28 @@ import com.google.common.cache.CacheBuilder;
 /**
  * {@link CacheService} implementation wrapping a guava {@link Cache}.
  *
- * Small modification by Nicolas Chiaruttini : using weak keys
+ * Modifications by Nicolas Chiaruttini :
+ * - using weak keys
+ * - logs content
+ * - cache can be retrieved
  * @author Mark Hiner
  */
 @Plugin(type = Service.class)
 public class GuavaWeakCacheService extends AbstractService implements CacheService {
 
     private Cache<Object, Object> cache;
+
+    public Cache getCache() {
+        return cache;
+    }
+
+    public void logCache(Consumer<String> logger) {
+        cache.asMap().entrySet().forEach(e -> {
+            logger.accept(e.getKey().getClass().getSimpleName()+":"+e.getKey().toString());
+            logger.accept("\t"+e.getValue().getClass().getSimpleName()+":"+e.getValue().toString());
+
+        });
+    }
 
     @Override
     public void initialize() {

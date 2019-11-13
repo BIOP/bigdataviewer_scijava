@@ -5,14 +5,15 @@ import bdv.util.RealCropper;
 import bdv.viewer.Interpolation;
 import bdv.viewer.Source;
 import bdv.viewer.state.ViewerState;
-import ch.epfl.biop.bdv.scijava.command.spimdata.BigDataServerPlugInSciJava;
 import ch.epfl.biop.bdv.scijava.command.CommandHelper;
 import ij.ImagePlus;
 import ij.measure.Calibration;
 import ij.plugin.RGBStackMerge;
 import ij.process.LUT;
-import net.imagej.ImageJ;
-import net.imglib2.*;
+import net.imglib2.FinalRealInterval;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.RealPoint;
+import net.imglib2.RealRandomAccessible;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.type.numeric.ARGBType;
@@ -24,36 +25,20 @@ import org.scijava.plugin.Plugin;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.function.Consumer;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 import static java.lang.Math.sqrt;
 
-/**
- * Command to export a BigDataViewer window into an ImageJ Composite Image
- * The default location logic is that it's centered on the current center of the BigDataViewer window
- * Limitations:
- *  - Single timepoint
- *  - All sources should have an identical bit depth when wrapped in ImageJ
- *  - LUT based on single RGB color
- *  - Isotropic export
- * T needs to be RealType for ImageJ1 Wrapping
- * @param <T>
- *
- * @author Nicolas Chiaruttini
- * BIOP, EPFL, 2019
- */
-
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Export Sources>As ImagePlus (current view)", initializer = "initParams")
-public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
-
-    private static final Logger LOGGER = Logger.getLogger( BDVSlicesToImgPlus.class.getName() );
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Export Sources>As ImagePlus", initializer = "initParams")
+public class BDVToImgPlusCommand<T extends RealType<T>> implements Command {
+    @Parameter(label = "BigDataViewer View (affine transform 3D)")
+    AffineTransform3D transformedSourceToViewer;
 
     // ItemIO.BOTH required because it can be modified in case of appending new data to BDV (-> requires INPUT), or created (-> requires OUTPUT)
-    @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH, callback = "matchXYBDVFrame")
+    @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH)
     public BdvHandle bdv_h;
 
     @Parameter(label="Source indexes ('2,3:5'), starts at 0")
@@ -62,32 +47,17 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
     @Parameter(label="Mipmap level, 0 for highest resolution")
     public int mipmapLevel = 0;
 
-    @Parameter(label="Match bdv frame window size", persist=false, callback = "matchXYBDVFrame")
-    public boolean matchWindowSize=false;
-
-    //@Parameter(label = "Number of pixels X", callback = "matchXYBDVFrame")
-    //public double xSizeInPix = 100;
-
-    //@Parameter(label = "Number of pixels Y", callback = "matchXYBDVFrame")
-    //public double ySizeInPix = 100;
-
-    //@Parameter(label = "Number of slice Z (isotropic vs XY, 0 for single slice)")
-    //public int zSizeInPix = 0;
-
-    @Parameter(label = "Physical Size X", callback = "matchXYBDVFrame")
+    @Parameter(label = "Physical Size X")
     public double xSize = 100;
 
-    @Parameter(label = "Physical Size Y", callback = "matchXYBDVFrame")
+    @Parameter(label = "Physical Size Y")
     public double ySize = 100;
 
-    @Parameter(label = "Physical Size Z")//, callback = "matchXYBDVFrame")
+    @Parameter(label = "Physical Size Z")
     public double zSize = 100;
 
     @Parameter(label = "Timepoint", persist = false)
     public int timepoint = 0;
-
-    //@Parameter(label = "Pixel size sampling (px unit: 1 for current display)", callback = "matchXYBDVFrame")
-    //public double samplingInXPixelUnit = 1;
 
     @Parameter(label = "XY Pixel size sampling (physical unit)", callback = "changePhysicalSampling")
     public double samplingXYInPhysicalUnit = 1;
@@ -131,13 +101,13 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
         ViewerState viewerState = bdv_h.getViewerPanel().getState();
 
         //Center on the display center of the viewer ...
-        double w = bdv_h.getViewerPanel().getDisplay().getWidth();
-        double h = bdv_h.getViewerPanel().getDisplay().getHeight();
+        //double w = bdv_h.getViewerPanel().getDisplay().getWidth();
+        //double h = bdv_h.getViewerPanel().getDisplay().getHeight();
 
         RealPoint pt = new RealPoint(3); // Number of dimension
 
         //Get global coordinates of the central position  of the viewer
-        bdv_h.getViewerPanel().displayToGlobalCoordinates(w/2.0, h/2.0, pt);
+        //bdv_h.getViewerPanel().displayToGlobalCoordinates(w/2.0, h/2.0, pt);
         double posX = pt.getDoublePosition(0);
         double posY = pt.getDoublePosition(1);
         double posZ = pt.getDoublePosition(2);
@@ -175,16 +145,16 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
             final RealRandomAccessible<T> ipimg = s.getInterpolatedSource(timepoint, mipmapLevel, interpolation);
 
             // Get current big dataviewer transformation : source transform and viewer transform
-            AffineTransform3D transformedSourceToViewer = new AffineTransform3D(); // Empty Transform
+            //AffineTransform3D transformedSourceToViewer = new AffineTransform3D(); // Empty Transform
             // viewer transform
-            viewerState.getViewerTransform(transformedSourceToViewer); // Get current transformation by the viewer state and puts it into sourceToImgPlus
+            //viewerState.getViewerTransform(transformedSourceToViewer); // Get current transformation by the viewer state and puts it into sourceToImgPlus
 
             // Center on the display center of the viewer ...
-            transformedSourceToViewer.translate(-w / 2, -h / 2, 0);
+            //transformedSourceToViewer.translate(-w / 2, -h / 2, 0);
 
             // Getting an image independent of the view scaling unit (not sure)
-             double xNorm = getNormTransform(0, transformedSourceToViewer);//trans
-             transformedSourceToViewer.scale(1/xNorm);//xNorm);//1/ samplingInXPixelUnit);
+            double xNorm = getNormTransform(0, transformedSourceToViewer);//trans
+            transformedSourceToViewer.scale(1/xNorm);//xNorm);//1/ samplingInXPixelUnit);
 
             // Alternative : Get a bounding box from - (TODO interesting related post : https://forum.image.sc/t/using-imglib2-to-shear-an-image/2534/3)
 
@@ -232,7 +202,7 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
             if (identicalBitDepth) {
                 imp = RGBStackMerge.mergeChannels(orderedArray, false);
             } else {
-                LOGGER.warning("All channels do not have the same bit depth, sending back first channel only");
+                System.err.println("All channels do not have the same bit depth, sending back first channel only");
                 imp = orderedArray[0];
             }
         } else {
@@ -304,33 +274,6 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
 
     // -- Initializers --
 
-    /**
-     * Initializes xSize(Pix) and ySize(Pix) according to the current BigDataViewer window
-     */
-    public void matchXYBDVFrame() {
-        if (matchWindowSize) {
-            // Gets window size
-            double w = bdv_h.getViewerPanel().getDisplay().getWidth();
-            double h = bdv_h.getViewerPanel().getDisplay().getHeight();
-
-            // Get global coordinates of the top left position  of the viewer
-            RealPoint ptTopLeft = new RealPoint(3); // Number of dimension
-            bdv_h.getViewerPanel().displayToGlobalCoordinates(0, 0, ptTopLeft);
-
-            // Get global coordinates of the top right position  of the viewer
-            RealPoint ptTopRight = new RealPoint(3); // Number of dimension
-            bdv_h.getViewerPanel().displayToGlobalCoordinates(0, w, ptTopRight);
-
-            // Get global coordinates of the top right position  of the viewer
-            RealPoint ptBottomLeft = new RealPoint(3); // Number of dimension
-            bdv_h.getViewerPanel().displayToGlobalCoordinates(h,0, ptBottomLeft);
-
-            // Gets physical size of pixels based on window size, image sampling size and user requested pixel size
-            this.xSize=distance(ptTopLeft, ptTopRight);
-            this.ySize=distance(ptTopLeft, ptBottomLeft);
-        }
-    }
-
     public void updateUnit() {
 
         // Transform sourceIndexString to ArrayList of indexes
@@ -344,18 +287,4 @@ public class BDVSlicesToImgPlus<T extends RealType<T>> implements Command {
             }
         }
     }
-
-    public static void main(String... args) throws Exception {
-        // Arrange
-        //  create the ImageJ application context with all available services
-        final ImageJ ij = new ImageJ();
-        ij.ui().showUI();
-        // Gets samples dataset
-        ij.command().run(BigDataServerPlugInSciJava.class, true,
-                "urlServer","http://fly.mpi-cbg.de:8081",
-                "datasetName", "Drosophila").get();
-        // Returns ImagePlus slice
-        ij.command().run(BDVSlicesToImgPlus.class, true);
-    }
-
 }

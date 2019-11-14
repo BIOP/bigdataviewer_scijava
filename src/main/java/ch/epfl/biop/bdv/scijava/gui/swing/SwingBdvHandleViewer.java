@@ -1,7 +1,6 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
 import bdv.util.BdvHandle;
-import bdv.util.BdvStackSource;
 import bdv.viewer.state.SourceState;
 import net.imglib2.Volatile;
 import org.scijava.command.CommandService;
@@ -11,8 +10,6 @@ import org.scijava.ui.swing.viewer.EasySwingDisplayViewer;
 import org.scijava.ui.viewer.DisplayViewer;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

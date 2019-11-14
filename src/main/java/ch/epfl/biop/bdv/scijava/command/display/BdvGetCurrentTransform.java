@@ -1,12 +1,16 @@
 package ch.epfl.biop.bdv.scijava.command.display;
 
 import bdv.util.BdvHandle;
+import ch.epfl.biop.bdv.scijava.gui.BdvHandleDisplay;
 import net.imglib2.realtransform.AffineTransform3D;
 import org.scijava.ItemIO;
 import org.scijava.cache.GuavaWeakCacheService;
 import org.scijava.command.Command;
+import org.scijava.display.DisplayService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.ui.UIService;
+import org.scijava.widget.WidgetService;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 

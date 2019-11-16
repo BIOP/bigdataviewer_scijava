@@ -58,11 +58,6 @@ public class BdvCreateWindow implements Command {
         bdv_h.getViewerPanel().requestRepaint();
         bss.removeFromBdv();
 
-        Runnable storeLastInCache = () -> {
-            System.out.println("Focus gained " + bdv_h.toString());
-            cacheService.put("LAST_FOCUSED_BDVH", new WeakReference<>(bdv_h));
-        };
-
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(bdv_h.getViewerPanel());
 
         topFrame.addWindowListener(new WindowAdapter() {

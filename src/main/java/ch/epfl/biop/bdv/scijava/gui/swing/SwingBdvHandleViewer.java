@@ -2,6 +2,7 @@ package ch.epfl.biop.bdv.scijava.gui.swing;
 
 import bdv.util.BdvHandle;
 import bdv.viewer.state.SourceState;
+import ch.epfl.biop.bdv.scijava.command.display.AlignBdvOnSource;
 import net.imglib2.Volatile;
 import org.scijava.command.CommandService;
 import org.scijava.plugin.Parameter;
@@ -146,8 +147,17 @@ public class SwingBdvHandleViewer extends
                 if (SwingUtilities.isRightMouseButton(e)) {
                     popup.show(e.getComponent(), e.getX(), e.getY());
                 }
+
+                if (e.getClickCount()==2 && !e.isConsumed()) {
+                    e.consume();
+                    cmds.run(AlignBdvOnSource.class, true,
+                            "bdvh", bdv_h,
+                            "sourceIndex", listOfSources.locationToIndex(new Point(e.getX(), e.getY())));
+                }
             }
         });
+
+
 
         listOfSources.addListSelectionListener(e -> updateSelectedViewSetupsIds(getSelectedIds()));
 

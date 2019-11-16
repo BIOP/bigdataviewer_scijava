@@ -23,7 +23,6 @@ public class SwingBdvPopupMenu {
         popup = new JPopupMenu();
 
         // Show
-
         JMenuItem menuItem = new JMenuItem("Make Sources Visible");
         menuItem.addActionListener(e -> cmds.run(BdvShowSources.class, true, paramSupplier.get()));
         popup.add(menuItem);

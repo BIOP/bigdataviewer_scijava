@@ -1,6 +1,7 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
 import bdv.util.BdvStackSource;
+import ch.epfl.biop.bdv.scijava.command.display.AlignBdvOnSource;
 import ch.epfl.biop.bdv.scijava.command.open.AppendSpimDataToBdv;
 import ch.epfl.biop.bdv.scijava.command.spimdata.SaveSpimDataSciJava;
 import mpicbg.spim.data.generic.AbstractSpimData;
@@ -303,6 +304,19 @@ public class SwingAbstractSpimDataViewer extends
                 super.mouseClicked(e);
                 if (SwingUtilities.isRightMouseButton(e)) {
                     popup.show(e.getComponent(), e.getX(), e.getY());
+                }
+                if (e.getClickCount()==2 && !e.isConsumed()) {
+                    e.consume();
+                    Map params = getPreFilledParameters();
+                    if (params.containsKey("sourceIndexString")) {
+                        String sourceIndexes = (String) params.get("sourceIndexString");
+                        if ((sourceIndexes.split(":").length==1)&&(sourceIndexes.split(",").length==1)) {
+                            int idSelected = Integer.valueOf(sourceIndexes);
+                            cmds.run(AlignBdvOnSource.class, true,
+                                    "bdvh", params.get("bdvh"),
+                                    "sourceIndex", idSelected);
+                        }
+                    }
                 }
             }
         });

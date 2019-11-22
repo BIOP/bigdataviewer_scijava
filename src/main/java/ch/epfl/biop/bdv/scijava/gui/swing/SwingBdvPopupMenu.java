@@ -1,9 +1,12 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
+import bdv.util.BdvHandle;
+import ch.epfl.biop.bdv.scijava.command.InspectBdvSources;
 import ch.epfl.biop.bdv.scijava.command.display.BdvHideSources;
 import ch.epfl.biop.bdv.scijava.command.display.BdvSetColor;
 import ch.epfl.biop.bdv.scijava.command.display.BdvSetMinMax;
 import ch.epfl.biop.bdv.scijava.command.display.BdvShowSources;
+import ch.epfl.biop.bdv.scijava.command.edit.transform.BDVSourceAffineTransform;
 import org.scijava.command.CommandService;
 
 import javax.swing.*;
@@ -34,9 +37,27 @@ public class SwingBdvPopupMenu {
         menuItem = new JMenuItem("Set Min Max Display Value");
         menuItem.addActionListener(e -> cmds.run(BdvSetMinMax.class, true, paramSupplier.get()));
         popup.add(menuItem);
+
         // Color
         menuItem = new JMenuItem("Set Color");
         menuItem.addActionListener(e -> cmds.run(BdvSetColor.class, true, paramSupplier.get()));
+        popup.add(menuItem);
+
+        // Inspect
+        menuItem = new JMenuItem("Transform");
+        menuItem.addActionListener(e -> {
+            // TODO : set same convention for name parameters
+            Map<String,Object> params = paramSupplier.get();
+            BdvHandle bdvh = (BdvHandle) params.get("bdvh");
+            params.remove("bdvh");
+            params.put("bdv_h_in", bdvh);
+            cmds.run(BDVSourceAffineTransform.class, true, params);
+        });
+        popup.add(menuItem);
+
+        // Inspect
+        menuItem = new JMenuItem("Inspect");
+        menuItem.addActionListener(e -> cmds.run(InspectBdvSources.class, true, paramSupplier.get()));
         popup.add(menuItem);
     }
 }

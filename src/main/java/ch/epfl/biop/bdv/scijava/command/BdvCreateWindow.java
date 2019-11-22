@@ -14,9 +14,9 @@ import org.scijava.plugin.Plugin;
 import javax.swing.*;
 import java.awt.event.*;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
-
 
 @Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Create Empty BDV Frame")
 public class BdvCreateWindow implements Command {

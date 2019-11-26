@@ -11,8 +11,8 @@ import org.scijava.plugin.Plugin;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 import static java.lang.Math.sqrt;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Set Bdv Location On Source")
-public class AlignBdvOnSource implements Command {
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Translate Bdv Location On Source")
+public class TranslateBdvOnSource implements Command {
 
     @Parameter
     BdvHandle bdvh;
@@ -25,24 +25,25 @@ public class AlignBdvOnSource implements Command {
 
     public void run() {
 
-        AffineTransform3D at3D = new AffineTransform3D();
+        AffineTransform3D atSrc = new AffineTransform3D();
         int timepoint = bdvh.getViewerPanel().getState().getCurrentTimepoint();
         Source ss = bdvh.getViewerPanel().getState().getSources().get(sourceIndex).getSpimSource();
-        ss.getSourceTransform(timepoint,0,at3D);
-        System.out.println("at3D transform:"+at3D);
+        ss.getSourceTransform(timepoint,0,atSrc);
 
-        AffineTransform3D atViewer = new AffineTransform3D();
-        bdvh.getViewerPanel().getState().getViewerTransform(atViewer); // Get current transformation by the viewer state and puts it into sourceToImgPlus
-        double bdvScale = getNormTransform(0,atViewer);
+        double[] src = {0,0,0};
+        double[] tgt = new double[3];
 
-        AffineTransform3D at3Di = new AffineTransform3D();
-        at3Di.set(at3D.inverse());
-        at3Di = makeRigidOrthoNormal(at3Di);
-        at3Di.scale(bdvScale);
+        atSrc.apply(src,tgt);
 
-        System.out.println(at3Di);
 
-        cs.run(BdvSetCurrentTransform.class, true, "bdv_h", bdvh, "at3D", at3Di);
+        AffineTransform3D atBdv = new AffineTransform3D();
+        bdvh.getViewerPanel().getState().getViewerTransform(atBdv);
+
+        atBdv.set(-tgt[0]*getNormTransform(0,atBdv),0,3);
+        atBdv.set(-tgt[1]*getNormTransform(1,atBdv),1,3);
+        atBdv.set(-tgt[2]*getNormTransform(2,atBdv),2,3);
+
+        cs.run(BdvSetCurrentTransform.class, true, "bdv_h", bdvh, "at3D", atBdv);
     }
 
     /**
@@ -87,6 +88,23 @@ public class AlignBdvOnSource implements Command {
 
         AffineTransform3D out = new AffineTransform3D();
 
+        double [][] m = new double[3][4];//out.getRowPackedCopy();
+        m[0][0] = xDir.x;
+        m[0][1] = xDir.y;
+        m[0][2] = xDir.z;
+        //m[0][3] = at.get(0,3);///scaleForShift;
+
+        m[1][0] = yDirOrtho.x;
+        m[1][1] = yDirOrtho.y;
+        m[1][2] = yDirOrtho.z;
+        //m[1][3] = at.get(1,3);///scaleForShift;
+
+        m[2][0] = zDirOrtho.x;
+        m[2][1] = zDirOrtho.y;
+        m[2][2] = zDirOrtho.z;
+        //m[2][3] = at.get(2,3);///scaleForShift;
+
+        /*
         out.set(xDir.x,0,0);
         out.set(xDir.y,0,1);
         out.set(xDir.z,0,2);
@@ -102,6 +120,10 @@ public class AlignBdvOnSource implements Command {
         out.set(zDirOrtho.y,2,1);
         out.set(zDirOrtho.z,2,2);
         out.set(at.get(2,3),2,3);// /scaleForShift
+        */
+
+        out.set(m);
+
 
         return out;
     }

@@ -4,6 +4,7 @@ import bdv.util.BdvFunctions;
 import bdv.util.BdvHandle;
 import bdv.util.BdvOptions;
 import bdv.util.BdvSource;
+import bdv.util.volatiles.VolatileViews;
 import net.imglib2.*;
 import net.imglib2.algorithm.util.Grids;
 import net.imglib2.img.array.ArrayImgFactory;
@@ -49,9 +50,7 @@ public class VoronoiLabel3DCommand implements Command{
 
     public void run() {
         BdvOptions options = BdvOptions.options().addTo(bdv_h);
-
         final RandomAccessibleInterval<FloatType> labelImage = getTestLabelImage(new long[] { sx, sy, sz }, numLabels, computeImageBeforeDisplay);
-
         final BdvSource source = BdvFunctions.show(labelImage,"Voronoi Label Image",  options);
         source.setColor(new ARGBType(0xFF00FF00));
         source.setDisplayRange(0,1);

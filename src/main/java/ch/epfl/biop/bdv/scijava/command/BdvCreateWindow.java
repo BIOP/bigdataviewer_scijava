@@ -48,7 +48,7 @@ public class BdvCreateWindow implements Command {
 
         // TODO : ask why BdvHandle constructor not public ?
         ArrayImg dummyImg = ArrayImgs.bytes(2, 2, 2);
-        BdvStackSource bss = BdvFunctions.show(dummyImg, "dummy", opts.frameTitle(windowTitle));
+        BdvStackSource bss = BdvFunctions.show(dummyImg, "dummy", opts.frameTitle(windowTitle).sourceTransform(new AffineTransform3D()));
         bdv_h = bss.getBdvHandle();
         AffineTransform3D at3D = new AffineTransform3D();
         at3D.translate(-px, -py, -pz);

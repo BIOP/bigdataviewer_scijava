@@ -1,7 +1,9 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
+import bdv.util.BdvHandle;
 import bdv.util.BdvStackSource;
-import ch.epfl.biop.bdv.scijava.command.display.AlignBdvOnSource;
+import bdv.viewer.Source;
+import ch.epfl.biop.bdv.scijava.command.display.TranslateBdvOnSource;
 import ch.epfl.biop.bdv.scijava.command.open.AppendSpimDataToBdv;
 import ch.epfl.biop.bdv.scijava.command.spimdata.SaveSpimDataSciJava;
 import mpicbg.spim.data.generic.AbstractSpimData;
@@ -89,6 +91,8 @@ public class SwingAbstractSpimDataViewer extends
     JScrollPane treeView;
     JPanel panel;
     DefaultTreeModel model;
+
+    public int offsetBdvSourceIndex = 0;
 
     public SwingAbstractSpimDataViewer()
     {
@@ -190,8 +194,7 @@ public class SwingAbstractSpimDataViewer extends
                 selectedVSIds.add(((RenamableViewSetup) userObj).vs.getId());
             }
         }
-
-        return selectedVSIds.stream().sorted().collect(Collectors.toList());
+        return selectedVSIds.stream().sorted().map(id -> id + offsetBdvSourceIndex).collect(Collectors.toList());
     }
 
     public String updateSelectedViewSetupsIds() {
@@ -312,7 +315,7 @@ public class SwingAbstractSpimDataViewer extends
                         String sourceIndexes = (String) params.get("sourceIndexString");
                         if ((sourceIndexes.split(":").length==1)&&(sourceIndexes.split(",").length==1)) {
                             int idSelected = Integer.valueOf(sourceIndexes);
-                            cmds.run(AlignBdvOnSource.class, true,
+                            cmds.run(TranslateBdvOnSource.class, true,
                                     "bdvh", params.get("bdvh"),
                                     "sourceIndex", idSelected);
                         }

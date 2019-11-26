@@ -2,12 +2,20 @@ package ch.epfl.biop.bdv.scijava.command;
 
 import bdv.util.*;
 import bdv.viewer.SourceAndConverter;
+import bdv.viewer.ViewerPanel;
+import bdv.viewer.state.SourceState;
+import bdv.viewer.state.ViewerState;
 import net.imglib2.Volatile;
 import org.scijava.ItemIO;
+import org.scijava.command.Command;
 import org.scijava.command.DynamicCommand;
 import org.scijava.plugin.Parameter;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -18,7 +26,7 @@ import java.util.stream.Collectors;
  * -> sets whether the output source are replacing the original sources or just appended
  */
 
-abstract public class BDVSourceAndConverterFunctionalInterfaceCommand extends DynamicCommand {
+abstract public class BDVSourceAndConverterFunctionalInterfaceCommand implements Command {//extends DynamicCommand {
 
     final public static String REPLACE = "Replace In Bdv";
     final public static String ADD = "Add To Bdv";
@@ -46,26 +54,49 @@ abstract public class BDVSourceAndConverterFunctionalInterfaceCommand extends Dy
     @Override
     public void run() {
         initCommand();
+
+        ArrayList<Integer> listIdxToBdvIdx = new ArrayList<>();
         List<SourceAndConverter<?>> srcs_in = CommandHelper.commaSeparatedListToArray(sourceIndexString)
                 .stream()
-                .map(idx -> bdv_h_in.getViewerPanel().getState().getSources().get(idx))
+                .map(idx -> {
+                    listIdxToBdvIdx.add(idx);
+                    return bdv_h_in.getViewerPanel().getState().getSources().get(idx);
+                })
                 .collect(Collectors.toList());
 
         srcs_out = srcs_in.stream().map(s -> {
                     final SourceAndConverter src_inside = s;
                     SourceAndConverter<?> src_out = f.apply(src_inside);
-
                     if (src_out!=null) {
-                        // Volatile check
-                        /*if (src_out.asVolatile()==null) {
-                            if (! (src_out.getSpimSource().getType() instanceof Volatile))
-                                log.accept("Non volatile source "+src_out.getSpimSource().getName()+" : slow to display");
-                        }*/
-                        if (output_mode.equals(REPLACE) || output_mode.equals(ADD)) {
+                        if (output_mode.equals(REPLACE)) {
+                            if (bdv_h_in==bdv_h_out) {
+                                // Proper replacement can be done -> sources is private...
+                                // Lack a function to replace a source ? Or to add at a certain position
+                                int original_index = listIdxToBdvIdx.get(srcs_in.indexOf(s));//map_srcs_in.get(src_inside);//bdv_h_out.getViewerPanel().getState().getSources().indexOf(s);
+
+                                System.out.println("org index = "+original_index);
+                                try {
+                                    Field fSources = ViewerState.class.getDeclaredField("sources");
+                                    Field fState = ViewerPanel.class.getDeclaredField("state");
+
+                                    fState.setAccessible(true);
+                                    fSources.setAccessible(true);
+
+                                    SourceState ss = SourceState.create(src_out, (ViewerState) fState.get(bdv_h_out.getViewerPanel()));
+                                    ((ArrayList< SourceState< ? >>) fSources.get(fState.get(bdv_h_out.getViewerPanel()))).set(original_index,ss);
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                bdv_h_out.getViewerPanel().addSource(src_out);
+                                bdv_h_in.getViewerPanel().removeSource(s.getSpimSource()); // ConverterSetup forgotten ...
+                            }
+                        }
+                        if (output_mode.equals(ADD)) {
                             bdv_h_out.getViewerPanel().addSource(src_out);
                         }
-                    }
-                    if (output_mode.equals(REPLACE)) {
+                    } else if (output_mode.equals(REPLACE)) {
                         bdv_h_in.getViewerPanel().removeSource(s.getSpimSource()); // ConverterSetup forgotten ...
                     }
                     return src_out;

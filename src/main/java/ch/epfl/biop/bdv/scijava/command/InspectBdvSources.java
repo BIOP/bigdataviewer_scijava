@@ -1,6 +1,7 @@
 package ch.epfl.biop.bdv.scijava.command;
 
 import bdv.SpimSource;
+import bdv.VolatileSpimSource;
 import bdv.img.WarpedSource;
 import bdv.tools.transformation.TransformedSource;
 import bdv.util.BdvHandle;
@@ -42,13 +43,16 @@ public class InspectBdvSources implements Command {
                         log.accept(sourceState.getSpimSource().getName()+":"+"has NO volatile view");
                     }
                     inspect(sourceState.getSpimSource(),"",MaxRecursivityOfInspector);
+                    if (sourceState.asVolatile()!=null) {
+                        inspect(sourceState.asVolatile().getSpimSource(),"",MaxRecursivityOfInspector);
+                    }
                 });
     }
 
 
     public void inspect(Source bdvSrc, String logPrefix, int recurslevel) {
         if (recurslevel<0) {
-            log.accept("Max recursivity level of inspector reached");
+            log.accept("--- Max recursivity level of inspector reached ---");
             return;
         }
         log.accept(logPrefix + "BdvSource:"+bdvSrc.getName()+" is of class "+bdvSrc.getClass().getSimpleName());
@@ -87,6 +91,13 @@ public class InspectBdvSources implements Command {
             } else {
                 log.accept(logPrefix + "- voxel dimensions:null");
             }
+        }
+
+        if (bdvSrc instanceof VolatileSpimSource) {
+            log.accept(logPrefix + "- type:"+((VolatileSpimSource) bdvSrc).getType().getClass().getSimpleName());
+            if (((VolatileSpimSource)bdvSrc).nonVolatile()!=null)
+                // Potential circularity ?
+                inspect(((VolatileSpimSource)bdvSrc).nonVolatile(),logPrefix+"\t", recurslevel-1);
         }
 
     }

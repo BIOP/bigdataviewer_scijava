@@ -1,9 +1,6 @@
 
 import net.imagej.ImageJ;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class SimpleIJLaunch {
 
     static public void main(String... args) {

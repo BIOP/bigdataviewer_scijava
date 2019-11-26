@@ -22,22 +22,21 @@ public class BDVSourceAffineTransform extends BDVSourceAndConverterFunctionalInt
     public BDVSourceAffineTransform() {
         this.f = src -> {
             if ((src.getSpimSource() instanceof TransformedSource) && (transformInPlace)) {
+                this.output_mode = LIST; // Transform
                 TransformedSource ts = (TransformedSource) src.getSpimSource();
                 AffineTransform3D at3d = new AffineTransform3D();
                 ts.getFixedTransform(at3d);
-                at3d.concatenate(at);
+                at3d = at3d.preConcatenate(at);
                 ts.setFixedTransform(at3d);
                 if (src.asVolatile()!=null) {
                     assert src.asVolatile().getSpimSource() instanceof TransformedSource;
-                    TransformedSource vts = (TransformedSource) src.getSpimSource();
-                    //at3d = new AffineTransform3D();
-                    //vts.getFixedTransform(at3d);
-                    vts.setFixedTransform(at3d);//.concatenate(at));
+                    TransformedSource vts = (TransformedSource) src.asVolatile().getSpimSource();
+                    vts.setFixedTransform(at3d);
                 }
                 return src;
             } else
             {
-                // wrap source within a TransformedSource
+                // Wrap source within a TransformedSource
                 SourceAndConverter sac;
                 TransformedSource ts = new TransformedSource(src.getSpimSource());
                 ts.setFixedTransform(at);

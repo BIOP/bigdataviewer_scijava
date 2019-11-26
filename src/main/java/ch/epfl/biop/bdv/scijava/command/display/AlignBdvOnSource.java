@@ -29,6 +29,7 @@ public class AlignBdvOnSource implements Command {
         int timepoint = bdvh.getViewerPanel().getState().getCurrentTimepoint();
         Source ss = bdvh.getViewerPanel().getState().getSources().get(sourceIndex).getSpimSource();
         ss.getSourceTransform(timepoint,0,at3D);
+        System.out.println("at3D transform:"+at3D);
 
         AffineTransform3D atViewer = new AffineTransform3D();
         bdvh.getViewerPanel().getState().getViewerTransform(atViewer); // Get current transformation by the viewer state and puts it into sourceToImgPlus
@@ -38,6 +39,8 @@ public class AlignBdvOnSource implements Command {
         at3Di.set(at3D.inverse());
         at3Di = makeRigidOrthoNormal(at3Di);
         at3Di.scale(bdvScale);
+
+        System.out.println(at3Di);
 
         cs.run(BdvSetCurrentTransform.class, true, "bdv_h", bdvh, "at3D", at3Di);
     }
@@ -98,7 +101,7 @@ public class AlignBdvOnSource implements Command {
         out.set(zDirOrtho.x,2,0);
         out.set(zDirOrtho.y,2,1);
         out.set(zDirOrtho.z,2,2);
-        out.set(at.get(2,3)/scaleForShift,2,3);
+        out.set(at.get(2,3),2,3);// /scaleForShift
 
         return out;
     }

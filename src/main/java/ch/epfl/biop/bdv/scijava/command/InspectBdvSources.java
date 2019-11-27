@@ -1,5 +1,6 @@
 package ch.epfl.biop.bdv.scijava.command;
 
+import bdv.AbstractSpimSource;
 import bdv.SpimSource;
 import bdv.VolatileSpimSource;
 import bdv.img.WarpedSource;
@@ -65,7 +66,7 @@ public class InspectBdvSources implements Command {
         }
 
         if (bdvSrc instanceof TransformedSource) {
-            log.accept(logPrefix + bdvSrc.getName()+" is a TRANSFORMED source:");
+            log.accept(logPrefix + bdvSrc.getName()+" is a "+TransformedSource.class.getSimpleName());
             ((TransformedSource)bdvSrc).getFixedTransform(at3D);
             log.accept(logPrefix + "- fixed transform:"+at3D.toString());
             ((TransformedSource)bdvSrc).getIncrementalTransform(at3D);
@@ -75,7 +76,7 @@ public class InspectBdvSources implements Command {
         }
 
         if (bdvSrc instanceof WarpedSource) {
-            log.accept(logPrefix + bdvSrc.getName()+" is a WARPED source:");
+            log.accept(logPrefix + bdvSrc.getName()+" is a "+WarpedSource.class.getSimpleName());
             log.accept(logPrefix + "- transform:"+((WarpedSource)bdvSrc).getTransform());
             log.accept(logPrefix + "- is transformed ?:"+((WarpedSource)bdvSrc).isTransformed());
             log.accept(logPrefix + "- Source Wrapped:");
@@ -83,7 +84,7 @@ public class InspectBdvSources implements Command {
         }
 
         if (bdvSrc instanceof SpimSource) {
-            log.accept(logPrefix + bdvSrc.getName()+" is a spim source:");
+            log.accept(logPrefix + bdvSrc.getName()+" is a "+SpimSource.class.getSimpleName());
             log.accept(logPrefix + "- setup id:"+((SpimSource) bdvSrc).getSetupId());
             log.accept(logPrefix + "- type:"+((SpimSource) bdvSrc).getType().getClass().getSimpleName());
             if ((bdvSrc).getVoxelDimensions()!=null) {
@@ -94,10 +95,18 @@ public class InspectBdvSources implements Command {
         }
 
         if (bdvSrc instanceof VolatileSpimSource) {
+            log.accept(logPrefix + bdvSrc.getName()+" is a "+VolatileSpimSource.class.getSimpleName());
             log.accept(logPrefix + "- type:"+((VolatileSpimSource) bdvSrc).getType().getClass().getSimpleName());
             if (((VolatileSpimSource)bdvSrc).nonVolatile()!=null)
                 // Potential circularity ?
                 inspect(((VolatileSpimSource)bdvSrc).nonVolatile(),logPrefix+"\t", recurslevel-1);
+        }
+
+        if (bdvSrc instanceof AbstractSpimSource) {
+            log.accept(logPrefix + bdvSrc.getName()+" is a "+AbstractSpimSource.class.getSimpleName());
+            AbstractSpimSource ass = (AbstractSpimSource) bdvSrc;
+            // Can access fields to get more informations ?
+
         }
 
     }

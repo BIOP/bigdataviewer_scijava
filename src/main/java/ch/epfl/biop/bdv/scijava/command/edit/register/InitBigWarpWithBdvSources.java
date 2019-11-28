@@ -4,13 +4,16 @@ import bdv.img.WarpedSource;
 import bdv.tools.brightness.ConverterSetup;
 import bdv.util.BWBdvHandle;
 import bdv.util.BdvHandle;
+import bdv.util.BdvHandleHelper;
 import bdv.viewer.SourceAndConverter;
 import bigwarp.BigWarp;
 import ch.epfl.biop.bdv.scijava.command.CommandHelper;
 import mpicbg.spim.data.SpimDataException;
 import net.imglib2.realtransform.RealTransform;
 import org.scijava.ItemIO;
+import org.scijava.cache.GuavaWeakCacheService;
 import org.scijava.command.Command;
+import org.scijava.object.ObjectService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
@@ -46,7 +49,11 @@ public class InitBigWarpWithBdvSources implements Command {
     @Parameter(label="Moving source indexes ('2,3:5'), starts at 0")
     String idx_src_moving;
 
+    @Parameter
+    ObjectService os;
 
+    @Parameter
+    GuavaWeakCacheService cs;
 
     @Override
     public void run() {
@@ -91,6 +98,8 @@ public class InitBigWarpWithBdvSources implements Command {
             bdvHandleP = new BWBdvHandle(bw, true);
             bdvHandleQ = new BWBdvHandle(bw, false);
 
+            BdvHandleHelper.setBdvHandleCloseOperation(bdvHandleP,os, cs,true);
+            BdvHandleHelper.setBdvHandleCloseOperation(bdvHandleQ,os, cs,true);
 
         } catch (SpimDataException e) {
             e.printStackTrace();

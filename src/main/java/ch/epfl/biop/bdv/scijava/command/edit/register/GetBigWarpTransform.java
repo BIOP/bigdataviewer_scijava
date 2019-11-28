@@ -21,8 +21,13 @@ public class GetBigWarpTransform implements Command {
     RealTransform realtransform;
 
     public void run() {
-        realtransform = ((WarpedSource) ((BWBdvHandle)bdvh).getBW().getViewerFrameQ()
-                .getViewerPanel().getState().getSources().get(0).getSpimSource())
-                .getTransform();
+        if (bdvh instanceof BWBdvHandle) {
+            realtransform = ((WarpedSource) ((BWBdvHandle)bdvh).getBW().getViewerFrameQ()
+                    .getViewerPanel().getState().getSources().get(0).getSpimSource())
+                    .getTransform();
+        } else {
+            System.err.println("Bdv Window given as an input to this command is not a BigWarp frame -> no transformation retrieved");
+            System.err.println("Select a bdv BigWarp window and try again.");
+        }
     }
 }

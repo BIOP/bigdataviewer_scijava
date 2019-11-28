@@ -58,21 +58,6 @@ public class BdvCreateWindow implements Command {
         bdv_h.getViewerPanel().requestRepaint();
         bss.removeFromBdv();
 
-        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(bdv_h.getViewerPanel());
-
-        topFrame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);
-                os.removeObject(bdv_h);
-                e.getWindow().dispose();
-            }
-
-            @Override
-            public void windowActivated(WindowEvent e) {
-                super.windowActivated(e);
-                cacheService.put("LAST_ACTIVE_BDVH", new WeakReference<>(bdv_h));
-            }
-        });
+        BdvHandleHelper.setBdvHandleCloseOperation(bdv_h,os,cacheService, true);
     }
 }

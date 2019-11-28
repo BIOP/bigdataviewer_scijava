@@ -28,12 +28,20 @@ public class InspectBdvSources implements Command {
     @Parameter
     int timepoint;
 
+    @Parameter
+    boolean getFullInformations = true;
+
     Consumer<String> log = (str) -> System.out.println(str);
+
+    Consumer<String> logFull = (str) -> System.out.println(str);
 
     public static int MaxRecursivityOfInspector = 40;
 
     @Override
     public void run() {
+        if (!getFullInformations) {
+            logFull = (str) -> {};
+        }
         CommandHelper.commaSeparatedListToArray(sourceIndexString)
                 .stream()
                 .map(id -> bdvh.getViewerPanel().getState().getSources().get(id))
@@ -59,44 +67,44 @@ public class InspectBdvSources implements Command {
         log.accept(logPrefix + "BdvSource:"+bdvSrc.getName()+" is of class "+bdvSrc.getClass().getSimpleName());
 
         AffineTransform3D at3D = new AffineTransform3D();
-        log.accept(logPrefix + "#mipmaps: "+bdvSrc.getNumMipmapLevels());
+        logFull.accept(logPrefix + "#mipmaps: "+bdvSrc.getNumMipmapLevels());
         for (int i=0;i<bdvSrc.getNumMipmapLevels();i++) {
             bdvSrc.getSourceTransform(timepoint,i,at3D);
-            log.accept(logPrefix + "- transform mipmap "+i+":"+at3D.toString());
+            logFull.accept(logPrefix + "- transform mipmap "+i+":"+at3D.toString());
         }
 
         if (bdvSrc instanceof TransformedSource) {
             log.accept(logPrefix + bdvSrc.getName()+" is a "+TransformedSource.class.getSimpleName());
             ((TransformedSource)bdvSrc).getFixedTransform(at3D);
-            log.accept(logPrefix + "- fixed transform:"+at3D.toString());
+            logFull.accept(logPrefix + "- fixed transform:"+at3D.toString());
             ((TransformedSource)bdvSrc).getIncrementalTransform(at3D);
-            log.accept(logPrefix + "- incremental transform:"+at3D.toString());
-            log.accept(logPrefix + "- Source Wrapped:");
+            logFull.accept(logPrefix + "- incremental transform:"+at3D.toString());
+            logFull.accept(logPrefix + "- Source Wrapped:");
             inspect(((TransformedSource)bdvSrc).getWrappedSource(),logPrefix+"\t", recurslevel-1);
         }
 
         if (bdvSrc instanceof WarpedSource) {
             log.accept(logPrefix + bdvSrc.getName()+" is a "+WarpedSource.class.getSimpleName());
-            log.accept(logPrefix + "- transform:"+((WarpedSource)bdvSrc).getTransform());
-            log.accept(logPrefix + "- is transformed ?:"+((WarpedSource)bdvSrc).isTransformed());
-            log.accept(logPrefix + "- Source Wrapped:");
+            logFull.accept(logPrefix + "- transform:"+((WarpedSource)bdvSrc).getTransform());
+            logFull.accept(logPrefix + "- is transformed ?:"+((WarpedSource)bdvSrc).isTransformed());
+            logFull.accept(logPrefix + "- Source Wrapped:");
             inspect(((WarpedSource)bdvSrc).getWrappedSource(),logPrefix+"\t", recurslevel-1);
         }
 
         if (bdvSrc instanceof SpimSource) {
             log.accept(logPrefix + bdvSrc.getName()+" is a "+SpimSource.class.getSimpleName());
-            log.accept(logPrefix + "- setup id:"+((SpimSource) bdvSrc).getSetupId());
-            log.accept(logPrefix + "- type:"+((SpimSource) bdvSrc).getType().getClass().getSimpleName());
+            logFull.accept(logPrefix + "- setup id:"+((SpimSource) bdvSrc).getSetupId());
+            logFull.accept(logPrefix + "- type:"+((SpimSource) bdvSrc).getType().getClass().getSimpleName());
             if ((bdvSrc).getVoxelDimensions()!=null) {
-                log.accept(logPrefix + "- voxel dimensions:"+(bdvSrc).getVoxelDimensions().toString());
+                logFull.accept(logPrefix + "- voxel dimensions:"+(bdvSrc).getVoxelDimensions().toString());
             } else {
-                log.accept(logPrefix + "- voxel dimensions:null");
+                logFull.accept(logPrefix + "- voxel dimensions:null");
             }
         }
 
         if (bdvSrc instanceof VolatileSpimSource) {
             log.accept(logPrefix + bdvSrc.getName()+" is a "+VolatileSpimSource.class.getSimpleName());
-            log.accept(logPrefix + "- type:"+((VolatileSpimSource) bdvSrc).getType().getClass().getSimpleName());
+            logFull.accept(logPrefix + "- type:"+((VolatileSpimSource) bdvSrc).getType().getClass().getSimpleName());
             if (((VolatileSpimSource)bdvSrc).nonVolatile()!=null)
                 // Potential circularity ?
                 inspect(((VolatileSpimSource)bdvSrc).nonVolatile(),logPrefix+"\t", recurslevel-1);

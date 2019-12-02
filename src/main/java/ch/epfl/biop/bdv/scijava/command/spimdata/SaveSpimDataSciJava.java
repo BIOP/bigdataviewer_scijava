@@ -1,10 +1,12 @@
 package ch.epfl.biop.bdv.scijava.command.spimdata;
 
+import bdv.img.WarpedSource;
 import bdv.tools.transformation.TransformedSource;
 import bdv.util.BdvHandle;
 import bdv.util.BdvStackSource;
 import bdv.viewer.Source;
 import bdv.viewer.state.SourceState;
+import bigwarp.BigWarp;
 import mpicbg.spim.data.SpimData;
 import mpicbg.spim.data.XmlIoSpimData;
 import mpicbg.spim.data.generic.AbstractSpimData;
@@ -92,6 +94,24 @@ public class SaveSpimDataSciJava implements Command {
                 listOfTransforms.add(at3D);
             }
         }
+        if (src instanceof WarpedSource) {
+            // Is it an affine transform ?
+            //BigWarp.WrappedCoordinateTransform wct;
+            WarpedSource wsrc = (WarpedSource) src;
+            if (wsrc.getTransform() instanceof BigWarp.WrappedCoordinateTransform) {
+                listOfTransforms = getTransformsRecursively(((TransformedSource) src).getWrappedSource());
+                AffineTransform3D at3D = new AffineTransform3D();
+                BigWarp.WrappedCoordinateTransform wct = (BigWarp.WrappedCoordinateTransform) wsrc.getTransform();
+                wct.getTransform();
+                if (!at3D.isIdentity()) {
+                    listOfTransforms.add(at3D);
+                }
+            } else {
+                System.out.println("Source Warping cannot be pushed to spimdata...");
+                System.out.println("Found realTransform of class"+wsrc.getTransform().getClass().getSimpleName());
+            }
+        }
+
         return listOfTransforms;
     }
 

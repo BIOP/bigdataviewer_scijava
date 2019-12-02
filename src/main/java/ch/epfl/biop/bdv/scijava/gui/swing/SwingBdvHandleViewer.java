@@ -1,8 +1,10 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
 import bdv.util.BdvHandle;
+import bdv.util.BdvHandleHelper;
 import bdv.viewer.state.SourceState;
 import ch.epfl.biop.bdv.scijava.command.display.TranslateBdvOnSource;
+import ij.plugin.frame.Recorder;
 import net.imglib2.Volatile;
 import org.scijava.command.CommandService;
 import org.scijava.plugin.Parameter;
@@ -14,6 +16,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -50,12 +55,12 @@ public class SwingBdvHandleViewer extends
     @Override
     protected void redraw() {
         // Needs to update the display
-        textInfo.setText(bdv_h.toString());
+        textInfo.setText(BdvHandleHelper.getWindowTitle(bdv_h));
+        nameLabel.setText(BdvHandleHelper.getWindowTitle(bdv_h));
         DefaultListModel<SourceState<?>> listModel = new DefaultListModel();
         bdv_h.getViewerPanel().getState().getSources().forEach(src -> {
             listModel.addElement(src);
         });
-
         listOfSources.setModel(listModel);
     }
 
@@ -124,7 +129,7 @@ public class SwingBdvHandleViewer extends
         panel.setLayout(new BorderLayout());
         panelInfo = new JPanel();
         panel.add(panelInfo, BorderLayout.CENTER);
-        nameLabel = new JLabel(bdv_h.toString());
+        nameLabel = new JLabel(BdvHandleHelper.getWindowTitle(bdv_h));
         panel.add(nameLabel, BorderLayout.NORTH);
         textInfo = new JTextArea();
         textInfo.setEditable(false);
@@ -157,8 +162,6 @@ public class SwingBdvHandleViewer extends
             }
         });
 
-
-
         listOfSources.addListSelectionListener(e -> updateSelectedViewSetupsIds(getSelectedIds()));
 
         listOfSources.setLayoutOrientation(JList.VERTICAL);
@@ -174,6 +177,7 @@ public class SwingBdvHandleViewer extends
         panelInfo.add(listScroller, BorderLayout.CENTER);
 
         this.redraw();
+
         return panel;
     }
 

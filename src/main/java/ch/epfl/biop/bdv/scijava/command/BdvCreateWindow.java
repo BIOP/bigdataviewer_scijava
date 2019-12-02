@@ -59,5 +59,7 @@ public class BdvCreateWindow implements Command {
         bss.removeFromBdv();
 
         BdvHandleHelper.setBdvHandleCloseOperation(bdv_h,os,cacheService, true);
+        windowTitle = BdvHandleHelper.getUniqueWindowTitle(os, windowTitle);
+        BdvHandleHelper.setWindowTitle(bdv_h, windowTitle);
     }
 }

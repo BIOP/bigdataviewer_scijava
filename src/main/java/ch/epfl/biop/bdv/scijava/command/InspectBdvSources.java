@@ -114,7 +114,6 @@ public class InspectBdvSources implements Command {
             log.accept(logPrefix + bdvSrc.getName()+" is a "+AbstractSpimSource.class.getSimpleName());
             AbstractSpimSource ass = (AbstractSpimSource) bdvSrc;
             // Can access fields to get more informations ?
-
         }
 
     }

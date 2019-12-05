@@ -70,25 +70,28 @@ public class BdvHandleHelper {
     public static String getUniqueWindowTitle(ObjectService os, String iniTitle) {
         List<BdvHandle> bdvs = os.getObjects(BdvHandle.class);
         boolean duplicateExist = true;
-        String iniTitleF = iniTitle;
+        String uniqueTitle = iniTitle;
+        duplicateExist = bdvs.stream().filter(bdv ->
+                (bdv.toString().equals(iniTitle))||(getWindowTitle(bdv).equals(iniTitle)))
+                .findFirst().isPresent();
         while (duplicateExist) {
-            duplicateExist = bdvs.stream().filter(bdv ->
-                    (bdv.toString().equals(iniTitleF))||(getWindowTitle(bdv).equals(iniTitleF)))
-                    .findFirst().isPresent();
-            if (iniTitle.matches("^.+?\\d$")) {
-                int idx = Integer.valueOf(iniTitle.substring(iniTitle.lastIndexOf("_")));
-                iniTitle = iniTitle.substring(0, iniTitle.lastIndexOf("_"));
-                iniTitle += (idx+1);
+            if (uniqueTitle.matches(".+(_)\\d+")) {
+                int idx = Integer.valueOf(uniqueTitle.substring(uniqueTitle.lastIndexOf("_")+1));
+                uniqueTitle = uniqueTitle.substring(0, uniqueTitle.lastIndexOf("_")+1);
+                uniqueTitle += String.format("%02d", idx+1);
             } else {
-                iniTitle+="_00";
-                System.out.println(iniTitle);
+                uniqueTitle+="_00";
             }
             try {
                 Thread.sleep(300);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            String uTTest = uniqueTitle;
+            duplicateExist = bdvs.stream().filter(bdv ->
+                    (bdv.toString().equals(uTTest))||(getWindowTitle(bdv).equals(uTTest)))
+                    .findFirst().isPresent();
         }
-        return iniTitle;
+        return uniqueTitle;
     }
 }

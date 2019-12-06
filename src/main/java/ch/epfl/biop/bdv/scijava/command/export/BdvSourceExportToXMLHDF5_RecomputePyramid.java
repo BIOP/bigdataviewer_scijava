@@ -21,6 +21,7 @@ import mpicbg.spim.data.sequence.VoxelDimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.realtransform.AffineTransform3D;
+import net.imglib2.type.numeric.integer.UnsignedShortType;
 import org.scijava.ItemIO;
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
@@ -126,6 +127,12 @@ public class BdvSourceExportToXMLHDF5_RecomputePyramid implements Command{
 
         for (Source<?> src: srcs) {
             RandomAccessibleInterval<?> refRai = src.getSource(0, 0);
+            if (!(src.getType() instanceof UnsignedShortType)) {
+                
+                System.err.println("Source "+src.getName()+" is not of type UnsignedShortType");
+                System.err.println("It cannot be saved without conversion");
+                continue;
+            }
 
             final VoxelDimensions voxelSize = src.getVoxelDimensions();
             long[] imgDims = new long[]{refRai.dimension(0), refRai.dimension(1), refRai.dimension(2)};

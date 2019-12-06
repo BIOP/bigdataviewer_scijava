@@ -23,7 +23,7 @@ public class BdvHandleHelper {
                 e.getWindow().dispose();
                 if (Recorder.record) {
                     // run("Select Bdv Window", "bdvh=bdv.util.BdvHandleFrame@e6c7718");
-                    String cmdrecord = "run(\"Close Bdv Window\", \"bdvh=" + bdvh + "\");\n";
+                    String cmdrecord = "run(\"Close Bdv Window\", \"bdvh=" + getWindowTitle(bdvh) + "\");\n";
                     Recorder.recordString(cmdrecord);
                 }
             }
@@ -35,7 +35,7 @@ public class BdvHandleHelper {
                 // Very old school
                 if (Recorder.record) {
                     // run("Select Bdv Window", "bdvh=bdv.util.BdvHandleFrame@e6c7718");
-                    String cmdrecord = "run(\"Select Bdv Window\", \"bdvh=" + bdvh + "\");\n";
+                    String cmdrecord = "run(\"Select Bdv Window\", \"bdvh=" + getWindowTitle(bdvh) + "\");\n";
                     Recorder.recordString(cmdrecord);
                 }
             }

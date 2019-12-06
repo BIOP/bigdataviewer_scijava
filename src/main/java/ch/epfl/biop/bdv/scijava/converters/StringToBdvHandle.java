@@ -14,6 +14,11 @@ public class StringToBdvHandle<I extends String, O extends BdvHandle> extends Ab
 
     @Override
     public <T> T convert(Object src, Class<T> dest) {
+        os.getObjects(BdvHandle.class).stream().forEach(bdvh -> {
+            System.out.println(bdvh.toString());
+            System.out.println(BdvHandleHelper.getWindowTitle(bdvh));
+            System.out.println("src="+src);
+        });
         return (T) os.getObjects(BdvHandle.class).stream().filter(bdvh ->
                 (bdvh.toString().equals(src))||(BdvHandleHelper.getWindowTitle(bdvh).equals(src))
                 ).findFirst().get();

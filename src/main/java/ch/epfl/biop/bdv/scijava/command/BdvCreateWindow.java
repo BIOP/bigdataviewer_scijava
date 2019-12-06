@@ -45,7 +45,6 @@ public class BdvCreateWindow implements Command {
         if (is2D) {
             opts = opts.is2D();
         }
-
         // TODO : ask why BdvHandle constructor not public ?
         ArrayImg dummyImg = ArrayImgs.bytes(2, 2, 2);
         BdvStackSource bss = BdvFunctions.show(dummyImg, "dummy", opts.frameTitle(windowTitle).sourceTransform(new AffineTransform3D()));
@@ -58,8 +57,8 @@ public class BdvCreateWindow implements Command {
         bdv_h.getViewerPanel().requestRepaint();
         bss.removeFromBdv();
 
-        BdvHandleHelper.setBdvHandleCloseOperation(bdv_h,os,cacheService, true);
-        windowTitle = BdvHandleHelper.getUniqueWindowTitle(os, windowTitle);
-        BdvHandleHelper.setWindowTitle(bdv_h, windowTitle);
+        //BdvHandleHelper.setBdvHandleCloseOperation(bdv_h,os,cacheService, true);
+        //windowTitle = BdvHandleHelper.getUniqueWindowTitle(os, windowTitle);
+        //BdvHandleHelper.setWindowTitle(bdv_h, windowTitle);
     }
 }

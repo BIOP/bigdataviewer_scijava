@@ -33,15 +33,15 @@ abstract public class BDVSourceAndConverterFunctionalInterfaceCommand implements
     final public static String LIST = "Output List Only";
 
     @Parameter(label = "Input Bdv Frame", type = ItemIO.BOTH)
-    public BdvHandle bdv_h_in;
+    public BdvHandle bdvh;
 
     @Parameter(label="Indexes ('0,3:5'), of the sources to process")
     public String sourceIndexString = "0";
 
     public Function<SourceAndConverter<?>, SourceAndConverter<?>> f;
 
-    @Parameter(label = "Output Bdv Frame", type = ItemIO.BOTH)
-    public BdvHandle bdv_h_out;
+    @Parameter(label = "Output Bdv Frame", type = ItemIO.BOTH, autoFill = false)
+    public BdvHandle bdvh_out;
 
     @Parameter(choices = {REPLACE, ADD, LIST})
     public String output_mode;
@@ -60,7 +60,7 @@ abstract public class BDVSourceAndConverterFunctionalInterfaceCommand implements
                 .stream()
                 .map(idx -> {
                     listIdxToBdvIdx.add(idx);
-                    return bdv_h_in.getViewerPanel().getState().getSources().get(idx);
+                    return bdvh.getViewerPanel().getState().getSources().get(idx);
                 })
                 .collect(Collectors.toList());
 
@@ -69,7 +69,7 @@ abstract public class BDVSourceAndConverterFunctionalInterfaceCommand implements
                     SourceAndConverter<?> src_out = f.apply(src_inside);
                     if (src_out!=null) {
                         if (output_mode.equals(REPLACE)) {
-                            if (bdv_h_in==bdv_h_out) {
+                            if (bdvh==bdvh_out) {
                                 // Proper replacement can be done -> sources is private...
                                 // Lack a function to replace a source ? Or to add at a certain position
                                 int original_index = listIdxToBdvIdx.get(srcs_in.indexOf(s));//map_srcs_in.get(src_inside);//bdv_h_out.getViewerPanel().getState().getSources().indexOf(s);
@@ -82,28 +82,28 @@ abstract public class BDVSourceAndConverterFunctionalInterfaceCommand implements
                                     fState.setAccessible(true);
                                     fSources.setAccessible(true);
 
-                                    SourceState ss = SourceState.create(src_out, (ViewerState) fState.get(bdv_h_out.getViewerPanel()));
-                                    ((ArrayList< SourceState< ? >>) fSources.get(fState.get(bdv_h_out.getViewerPanel()))).set(original_index,ss);
+                                    SourceState ss = SourceState.create(src_out, (ViewerState) fState.get(bdvh_out.getViewerPanel()));
+                                    ((ArrayList< SourceState< ? >>) fSources.get(fState.get(bdvh_out.getViewerPanel()))).set(original_index,ss);
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             } else {
-                                bdv_h_out.getViewerPanel().addSource(src_out);
-                                bdv_h_in.getViewerPanel().removeSource(s.getSpimSource()); // ConverterSetup forgotten ...
+                                bdvh_out.getViewerPanel().addSource(src_out);
+                                bdvh.getViewerPanel().removeSource(s.getSpimSource()); // ConverterSetup forgotten ...
                             }
                         }
                         if (output_mode.equals(ADD)) {
-                            bdv_h_out.getViewerPanel().addSource(src_out);
+                            bdvh_out.getViewerPanel().addSource(src_out);
                         }
                     } else if (output_mode.equals(REPLACE)) {
-                        bdv_h_in.getViewerPanel().removeSource(s.getSpimSource()); // ConverterSetup forgotten ...
+                        bdvh.getViewerPanel().removeSource(s.getSpimSource()); // ConverterSetup forgotten ...
                     }
                     return src_out;
                 }
         ).collect(Collectors.toList());
 
-        bdv_h_out.getViewerPanel().requestRepaint();
+        bdvh_out.getViewerPanel().requestRepaint();
     }
 
     // --- Empty implementation to avoid writing it in subclasses

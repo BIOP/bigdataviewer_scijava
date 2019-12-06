@@ -46,6 +46,7 @@ public class ActiveBdvPreprocessor extends SingleInputPreprocessor<BdvHandle>  {
 
     @Override
     public BdvHandle getValue() {
+
         List<BdvHandle> bdvhs = os.getObjects(BdvHandle.class);
 
         if ((bdvhs == null)||(bdvhs.size()==0)) {
@@ -68,6 +69,7 @@ public class ActiveBdvPreprocessor extends SingleInputPreprocessor<BdvHandle>  {
         if (bdvhs.size()==1) {
             return bdvhs.get(0);
         } else {
+
             // Get the one with the most recent focus ?
             Optional<BdvHandle> bdvh = bdvhs.stream().filter(b -> b.getViewerPanel().hasFocus()).findFirst();
             if (bdvh.isPresent()) {

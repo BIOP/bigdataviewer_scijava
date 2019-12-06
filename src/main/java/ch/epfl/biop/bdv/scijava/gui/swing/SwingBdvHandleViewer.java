@@ -55,8 +55,8 @@ public class SwingBdvHandleViewer extends
     @Override
     protected void redraw() {
         // Needs to update the display
-        textInfo.setText(bdv_h.toString());//BdvHandleHelper.getWindowTitle(bdv_h));
-        nameLabel.setText(bdv_h.toString());//BdvHandleHelper.getWindowTitle(bdv_h));
+        textInfo.setText(BdvHandleHelper.getWindowTitle(bdv_h)+":"+bdv_h.toString());
+        nameLabel.setText(BdvHandleHelper.getWindowTitle(bdv_h)+":"+bdv_h.toString());
         DefaultListModel<SourceState<?>> listModel = new DefaultListModel();
         bdv_h.getViewerPanel().getState().getSources().forEach(src -> {
             listModel.addElement(src);

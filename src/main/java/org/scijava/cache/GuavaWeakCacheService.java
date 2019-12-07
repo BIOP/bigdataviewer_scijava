@@ -51,6 +51,11 @@ import com.google.common.cache.CacheBuilder;
  * - cache can be retrieved
  * @author Mark Hiner
  */
+
+/**
+ * This service is used to link the SpimData Object to its BdvHandle
+ */
+
 @Plugin(type = Service.class)
 public class GuavaWeakCacheService extends AbstractService implements CacheService {
 

@@ -1,11 +1,9 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
-import bdv.util.BdvHandle;
 import bdv.util.BdvStackSource;
-import bdv.viewer.Source;
-import ch.epfl.biop.bdv.scijava.command.display.TranslateBdvOnSource;
-import ch.epfl.biop.bdv.scijava.command.open.AppendSpimDataToBdv;
-import ch.epfl.biop.bdv.scijava.command.spimdata.SaveSpimDataSciJava;
+import ch.epfl.biop.bdv.scijava.command.display.BdvWindowTranslateOnSource;
+import ch.epfl.biop.bdv.scijava.command.open.BdvAppendSpimData;
+import ch.epfl.biop.bdv.scijava.command.spimdata.SpimdatasetSave;
 import mpicbg.spim.data.generic.AbstractSpimData;
 import mpicbg.spim.data.generic.base.Entity;
 import mpicbg.spim.data.generic.sequence.AbstractSequenceDescription;
@@ -315,7 +313,7 @@ public class SwingAbstractSpimDataViewer extends
                         String sourceIndexes = (String) params.get("sourceIndexString");
                         if ((sourceIndexes.split(":").length==1)&&(sourceIndexes.split(",").length==1)) {
                             int idSelected = Integer.valueOf(sourceIndexes);
-                            cmds.run(TranslateBdvOnSource.class, true,
+                            cmds.run(BdvWindowTranslateOnSource.class, true,
                                     "bdvh", params.get("bdvh"),
                                     "sourceIndex", idSelected);
                         }
@@ -348,7 +346,7 @@ public class SwingAbstractSpimDataViewer extends
         JButton showInBdv = new JButton("<html>S<br>H<br>O<br>W</html>");
 
         showInBdv.addActionListener(a -> {
-            cmds.run(AppendSpimDataToBdv.class, true, "spimData", abstractSpimData);
+            cmds.run(BdvAppendSpimData.class, true, "spimData", abstractSpimData);
         });
 
         panel.add(showInBdv, BorderLayout.WEST);
@@ -356,7 +354,7 @@ public class SwingAbstractSpimDataViewer extends
         JButton saveButton = new JButton("<html>S<br>A<br>V<br>E</html>");
 
         saveButton.addActionListener(a -> {
-            cmds.run(SaveSpimDataSciJava.class, true, "spimData", abstractSpimData);
+            cmds.run(SpimdatasetSave.class, true, "spimData", abstractSpimData);
         });
 
         panel.add(saveButton, BorderLayout.EAST);

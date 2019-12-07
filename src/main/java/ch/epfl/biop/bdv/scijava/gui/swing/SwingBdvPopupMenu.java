@@ -1,15 +1,14 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
-import bdv.util.BdvHandle;
-import ch.epfl.biop.bdv.scijava.command.InspectBdvSources;
-import ch.epfl.biop.bdv.scijava.command.display.BdvHideSources;
-import ch.epfl.biop.bdv.scijava.command.display.BdvSetColor;
-import ch.epfl.biop.bdv.scijava.command.display.BdvSetMinMax;
-import ch.epfl.biop.bdv.scijava.command.display.BdvShowSources;
-import ch.epfl.biop.bdv.scijava.command.edit.BdvDuplicateSources;
-import ch.epfl.biop.bdv.scijava.command.edit.transform.BDVSourceAffineTransform;
-import ch.epfl.biop.bdv.scijava.command.edit.transform.BDVSourceResample;
-import ch.epfl.biop.bdv.scijava.command.export.BdvSourceExportToXMLHDF5_RecomputePyramid;
+import ch.epfl.biop.bdv.scijava.command.BdvSourcesInspect;
+import ch.epfl.biop.bdv.scijava.command.display.BdvSourcesHide;
+import ch.epfl.biop.bdv.scijava.command.display.BdvSourcesSetColor;
+import ch.epfl.biop.bdv.scijava.command.display.BdvSourcesSetMinMax;
+import ch.epfl.biop.bdv.scijava.command.display.BdvSourcesShow;
+import ch.epfl.biop.bdv.scijava.command.edit.BdvSourcesDuplicate;
+import ch.epfl.biop.bdv.scijava.command.edit.transform.BdvSourcesAffineTransform;
+import ch.epfl.biop.bdv.scijava.command.edit.transform.BdvSourcesResample;
+import ch.epfl.biop.bdv.scijava.command.export.BdvSourcesExportToXMLHDF5_RecomputePyramid;
 import org.scijava.command.CommandService;
 
 import javax.swing.*;
@@ -30,51 +29,51 @@ public class SwingBdvPopupMenu {
 
         // Show
         JMenuItem menuItem = new JMenuItem("Make Visible");
-        menuItem.addActionListener(e -> cmds.run(BdvShowSources.class, true, paramSupplier.get()));
+        menuItem.addActionListener(e -> cmds.run(BdvSourcesShow.class, true, paramSupplier.get()));
         popup.add(menuItem);
         // Hide
         menuItem = new JMenuItem("Hide");
-        menuItem.addActionListener(e -> cmds.run(BdvHideSources.class, true, paramSupplier.get()));
+        menuItem.addActionListener(e -> cmds.run(BdvSourcesHide.class, true, paramSupplier.get()));
         popup.add(menuItem);
         // MinMax
         menuItem = new JMenuItem("Set Min Max Display Value");
-        menuItem.addActionListener(e -> cmds.run(BdvSetMinMax.class, true, paramSupplier.get()));
+        menuItem.addActionListener(e -> cmds.run(BdvSourcesSetMinMax.class, true, paramSupplier.get()));
         popup.add(menuItem);
 
         // Color
         menuItem = new JMenuItem("Set Color");
-        menuItem.addActionListener(e -> cmds.run(BdvSetColor.class, true, paramSupplier.get()));
+        menuItem.addActionListener(e -> cmds.run(BdvSourcesSetColor.class, true, paramSupplier.get()));
         popup.add(menuItem);
 
         popup.addSeparator();
 
         // Duplicate
         menuItem = new JMenuItem("Duplicate");
-        menuItem.addActionListener(e -> cmds.run(BdvDuplicateSources.class, true, paramSupplier.get()));
+        menuItem.addActionListener(e -> cmds.run(BdvSourcesDuplicate.class, true, paramSupplier.get()));
         popup.add(menuItem);
 
         // Resample
         menuItem = new JMenuItem("Resample");
-        menuItem.addActionListener(e -> cmds.run(BDVSourceResample.class, true, paramSupplier.get()));
+        menuItem.addActionListener(e -> cmds.run(BdvSourcesResample.class, true, paramSupplier.get()));
         popup.add(menuItem);
 
         // Inspect
         menuItem = new JMenuItem("Transform");
-        menuItem.addActionListener(e -> cmds.run(BDVSourceAffineTransform.class, true, paramSupplier.get()));
+        menuItem.addActionListener(e -> cmds.run(BdvSourcesAffineTransform.class, true, paramSupplier.get()));
         popup.add(menuItem);
 
         popup.addSeparator();
 
-        // BdvSourceExportToXMLHDF5_RecomputePyramid
+        // BdvSourcesExportToXMLHDF5_RecomputePyramid
         menuItem = new JMenuItem("Save To New Dataset");
-        menuItem.addActionListener(e -> cmds.run(BdvSourceExportToXMLHDF5_RecomputePyramid.class, true, paramSupplier.get()));
+        menuItem.addActionListener(e -> cmds.run(BdvSourcesExportToXMLHDF5_RecomputePyramid.class, true, paramSupplier.get()));
         popup.add(menuItem);
 
         popup.addSeparator();
 
         // Inspect
         menuItem = new JMenuItem("Inspect");
-        menuItem.addActionListener(e -> cmds.run(InspectBdvSources.class, true, paramSupplier.get()));
+        menuItem.addActionListener(e -> cmds.run(BdvSourcesInspect.class, true, paramSupplier.get()));
         popup.add(menuItem);
     }
 }

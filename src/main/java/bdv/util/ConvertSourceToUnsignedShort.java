@@ -63,7 +63,7 @@ public class ConvertSourceToUnsignedShort {
     static public <T> Source<UnsignedShortType> convertSource(Source<T> iniSrc) {
         if (iniSrc.getType() instanceof UnsignedShortType) return (Source<UnsignedShortType>) iniSrc;
         if (iniSrc.getType() instanceof RealType) return convertRealSource((Source<RealType>) iniSrc);
-        System.err.println("Cannot convert source to Unsigned Short Type, "+iniSrc.getType().getClass().getSimpleName()+" cannot be converted to RealTYpe");
+        System.err.println("Cannot convert source to Unsigned Short Type, "+iniSrc.getType().getClass().getSimpleName()+" cannot be converted to RealType");
         return null;
     }
 }

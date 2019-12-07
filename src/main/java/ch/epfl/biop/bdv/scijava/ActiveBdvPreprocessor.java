@@ -1,6 +1,6 @@
 package ch.epfl.biop.bdv.scijava;
 import bdv.util.BdvHandle;
-import ch.epfl.biop.bdv.scijava.command.BdvCreateWindow;
+import ch.epfl.biop.bdv.scijava.command.BdvWindowCreate;
 import net.imagej.display.process.SingleInputPreprocessor;
 
 import org.scijava.Priority;
@@ -52,7 +52,7 @@ public class ActiveBdvPreprocessor extends SingleInputPreprocessor<BdvHandle>  {
         if ((bdvhs == null)||(bdvhs.size()==0)) {
             try {
                 return (BdvHandle)
-                        cs.run(BdvCreateWindow.class, true,
+                        cs.run(BdvWindowCreate.class, true,
                             "is2D", false,
                             "windowTitle", "Bdv",
                             "px",0,

@@ -3,8 +3,7 @@ package ch.epfl.biop.bdv.scijava.gui.swing;
 import bdv.util.BdvHandle;
 import bdv.util.BdvHandleHelper;
 import bdv.viewer.state.SourceState;
-import ch.epfl.biop.bdv.scijava.command.display.TranslateBdvOnSource;
-import ij.plugin.frame.Recorder;
+import ch.epfl.biop.bdv.scijava.command.display.BdvWindowTranslateOnSource;
 import net.imglib2.Volatile;
 import org.scijava.command.CommandService;
 import org.scijava.plugin.Parameter;
@@ -16,9 +15,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -155,7 +151,7 @@ public class SwingBdvHandleViewer extends
 
                 if (e.getClickCount()==2 && !e.isConsumed()) {
                     e.consume();
-                    cmds.run(TranslateBdvOnSource.class, true,
+                    cmds.run(BdvWindowTranslateOnSource.class, true,
                             "bdvh", bdv_h,
                             "sourceIndex", listOfSources.locationToIndex(new Point(e.getX(), e.getY())));
                 }

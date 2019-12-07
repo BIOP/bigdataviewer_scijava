@@ -15,6 +15,7 @@ import net.imglib2.display.ColorTable;
 import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import org.scijava.ItemIO;
+import org.scijava.ItemVisibility;
 import org.scijava.command.Command;
 import org.scijava.command.DynamicCommand;
 import org.scijava.convert.ConvertService;
@@ -29,7 +30,7 @@ import java.util.Map;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type=Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Samples>Wave 3D")
+@Plugin(type=Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Samples>Bdv example source - Wave 3D")
 public class Wave3DSampleCommand extends DynamicCommand {
 
     // ItemIO.BOTH required because it can be modified in case of appending new data to BDV (-> requires INPUT), or created (-> requires OUTPUT)
@@ -42,7 +43,7 @@ public class Wave3DSampleCommand extends DynamicCommand {
     @Parameter(label = "LUT name", persist = false, callback = "nameChanged")
     private String choice = "Gray";
 
-    @Parameter(required = false, label = "LUT", persist = false)
+    @Parameter(required = false, label = "LUT", persist = false, visibility = ItemVisibility.TRANSIENT)
     private ColorTable table = ColorTables.GRAYS;
 
     @Parameter

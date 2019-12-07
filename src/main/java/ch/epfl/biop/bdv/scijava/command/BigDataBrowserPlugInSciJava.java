@@ -1,5 +1,5 @@
 package ch.epfl.biop.bdv.scijava.command;
-import ch.epfl.biop.bdv.scijava.command.spimdata.BigDataServerPlugInSciJava;
+import ch.epfl.biop.bdv.scijava.command.spimdata.SpimdatasetOpenBigDataServer;
 import org.scijava.command.Command;
 
 import com.google.gson.stream.JsonReader;
@@ -143,7 +143,7 @@ public class BigDataBrowserPlugInSciJava implements Command
                     final String filename = datasetUrlMap.get( key );
                     final String title = new File( filename ).getName();
 
-                    cs.run(BigDataServerPlugInSciJava.class,true,
+                    cs.run(SpimdatasetOpenBigDataServer.class,true,
                             "urlServer",remoteUrl,
                             "datasetName", title);
                 }

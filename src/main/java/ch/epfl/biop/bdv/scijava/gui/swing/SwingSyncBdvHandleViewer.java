@@ -1,6 +1,6 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
-import ch.epfl.biop.bdv.scijava.command.display.SynchronizeBDV;
+import ch.epfl.biop.bdv.scijava.command.display.BdvWindowSynchronize;
 import org.scijava.plugin.Plugin;
 import org.scijava.ui.swing.viewer.EasySwingDisplayViewer;
 import org.scijava.ui.viewer.DisplayViewer;
@@ -10,15 +10,15 @@ import java.awt.*;
 
 @Plugin(type = DisplayViewer.class)
 public class SwingSyncBdvHandleViewer extends
-        EasySwingDisplayViewer<SynchronizeBDV.SyncBdvHandle> {
+        EasySwingDisplayViewer<BdvWindowSynchronize.SyncBdvHandle> {
 
     public SwingSyncBdvHandleViewer()
     {
-        super( SynchronizeBDV.SyncBdvHandle.class );
+        super( BdvWindowSynchronize.SyncBdvHandle.class );
     }
 
     @Override
-    protected boolean canView(SynchronizeBDV.SyncBdvHandle syncBdvHandle) {
+    protected boolean canView(BdvWindowSynchronize.SyncBdvHandle syncBdvHandle) {
         return true;
     }
 
@@ -37,11 +37,11 @@ public class SwingSyncBdvHandleViewer extends
 
     }
 
-    SynchronizeBDV.SyncBdvHandle syncBdvHandle;
+    BdvWindowSynchronize.SyncBdvHandle syncBdvHandle;
     JPanel mainPanel;
 
     @Override
-    protected JPanel createDisplayPanel(SynchronizeBDV.SyncBdvHandle syncBdvHandle) {
+    protected JPanel createDisplayPanel(BdvWindowSynchronize.SyncBdvHandle syncBdvHandle) {
         this.syncBdvHandle = syncBdvHandle;
         mainPanel = new JPanel();
 

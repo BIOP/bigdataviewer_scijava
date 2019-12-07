@@ -8,6 +8,8 @@ import ch.epfl.biop.bdv.scijava.command.display.BdvSetMinMax;
 import ch.epfl.biop.bdv.scijava.command.display.BdvShowSources;
 import ch.epfl.biop.bdv.scijava.command.edit.BdvDuplicateSources;
 import ch.epfl.biop.bdv.scijava.command.edit.transform.BDVSourceAffineTransform;
+import ch.epfl.biop.bdv.scijava.command.edit.transform.BDVSourceResample;
+import ch.epfl.biop.bdv.scijava.command.export.BdvSourceExportToXMLHDF5_RecomputePyramid;
 import org.scijava.command.CommandService;
 
 import javax.swing.*;
@@ -27,11 +29,11 @@ public class SwingBdvPopupMenu {
         popup = new JPopupMenu();
 
         // Show
-        JMenuItem menuItem = new JMenuItem("Make Sources Visible");
+        JMenuItem menuItem = new JMenuItem("Make Visible");
         menuItem.addActionListener(e -> cmds.run(BdvShowSources.class, true, paramSupplier.get()));
         popup.add(menuItem);
         // Hide
-        menuItem = new JMenuItem("Hide Sources");
+        menuItem = new JMenuItem("Hide");
         menuItem.addActionListener(e -> cmds.run(BdvHideSources.class, true, paramSupplier.get()));
         popup.add(menuItem);
         // MinMax
@@ -44,22 +46,31 @@ public class SwingBdvPopupMenu {
         menuItem.addActionListener(e -> cmds.run(BdvSetColor.class, true, paramSupplier.get()));
         popup.add(menuItem);
 
+        popup.addSeparator();
+
         // Duplicate
         menuItem = new JMenuItem("Duplicate");
         menuItem.addActionListener(e -> cmds.run(BdvDuplicateSources.class, true, paramSupplier.get()));
         popup.add(menuItem);
 
+        // Resample
+        menuItem = new JMenuItem("Resample");
+        menuItem.addActionListener(e -> cmds.run(BDVSourceResample.class, true, paramSupplier.get()));
+        popup.add(menuItem);
+
         // Inspect
         menuItem = new JMenuItem("Transform");
-        menuItem.addActionListener(e -> {
-            // TODO : set same convention for name parameters
-            //Map<String,Object> params = paramSupplier.get();
-            //BdvHandle bdvh = (BdvHandle) params.get("bdvh");
-            //params.remove("bdvh");
-            //params.put("bdv_h_in", bdvh);
-            cmds.run(BDVSourceAffineTransform.class, true, paramSupplier.get());
-        });
+        menuItem.addActionListener(e -> cmds.run(BDVSourceAffineTransform.class, true, paramSupplier.get()));
         popup.add(menuItem);
+
+        popup.addSeparator();
+
+        // BdvSourceExportToXMLHDF5_RecomputePyramid
+        menuItem = new JMenuItem("Save To New Dataset");
+        menuItem.addActionListener(e -> cmds.run(BdvSourceExportToXMLHDF5_RecomputePyramid.class, true, paramSupplier.get()));
+        popup.add(menuItem);
+
+        popup.addSeparator();
 
         // Inspect
         menuItem = new JMenuItem("Inspect");

@@ -6,6 +6,7 @@ import bdv.VolatileSpimSource;
 import bdv.img.WarpedSource;
 import bdv.tools.transformation.TransformedSource;
 import bdv.util.BdvHandle;
+import bdv.util.RandomAccessibleIntervalSource;
 import bdv.viewer.Source;
 import net.imglib2.realtransform.AffineTransform3D;
 import org.scijava.command.Command;
@@ -114,6 +115,12 @@ public class InspectBdvSources implements Command {
             log.accept(logPrefix + bdvSrc.getName()+" is a "+AbstractSpimSource.class.getSimpleName());
             AbstractSpimSource ass = (AbstractSpimSource) bdvSrc;
             // Can access fields to get more informations ?
+        }
+
+        if (bdvSrc instanceof RandomAccessibleIntervalSource) {
+            log.accept(logPrefix + bdvSrc.getName()+" is a "+RandomAccessibleIntervalSource.class.getSimpleName());
+            RandomAccessibleIntervalSource ris = (RandomAccessibleIntervalSource) bdvSrc;
+            logFull.accept(logPrefix + "- type:"+ris.getType().getClass().getSimpleName());
         }
 
     }

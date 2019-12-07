@@ -35,7 +35,6 @@ public class TranslateBdvOnSource implements Command {
 
         atSrc.apply(src,tgt);
 
-
         AffineTransform3D atBdv = new AffineTransform3D();
         bdvh.getViewerPanel().getState().getViewerTransform(atBdv);
 
@@ -43,7 +42,7 @@ public class TranslateBdvOnSource implements Command {
         atBdv.set(-tgt[1]*getNormTransform(1,atBdv),1,3);
         atBdv.set(-tgt[2]*getNormTransform(2,atBdv),2,3);
 
-        cs.run(BdvSetCurrentTransform.class, true, "bdv_h", bdvh, "at3D", atBdv);
+        cs.run(BdvSetCurrentTransform.class, true, "bdvh", bdvh, "at3D", atBdv);
     }
 
     /**

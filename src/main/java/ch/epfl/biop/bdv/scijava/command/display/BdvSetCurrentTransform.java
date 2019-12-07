@@ -11,13 +11,13 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 @Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Set Current Location")
 public class BdvSetCurrentTransform implements Command {
     @Parameter
-    BdvHandle bdv_h;
+    BdvHandle bdvh;
 
     @Parameter()
     AffineTransform3D at3D;
 
     public void run() {
-        bdv_h.getViewerPanel().setCurrentViewerTransform(at3D.copy());
-        bdv_h.getViewerPanel().requestRepaint();
+        bdvh.getViewerPanel().setCurrentViewerTransform(at3D.copy());
+        bdvh.getViewerPanel().requestRepaint();
     }
 }

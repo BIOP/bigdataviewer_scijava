@@ -58,7 +58,7 @@ public class ActiveBdvPreprocessor extends SingleInputPreprocessor<BdvHandle>  {
                             "px",0,
                             "py",0,
                             "pz",0,
-                            "s",1).get().getOutput("bdv_h");
+                            "s",1).get().getOutput("bdvh");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {

@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 /**
  * TODO:
  * - Show info of view setups
- * - Add update button for bdv_h linked if necessary
+ * - Add update button for bdvh linked if necessary
  * - Add edit possibility for view setup
  * - List commands which can be used with AbstractSpimData
  */

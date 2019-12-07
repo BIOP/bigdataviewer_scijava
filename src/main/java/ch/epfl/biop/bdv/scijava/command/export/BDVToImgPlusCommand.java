@@ -101,13 +101,13 @@ public class BDVToImgPlusCommand<T extends RealType<T>> implements Command {
         ViewerState viewerState = bdv_h.getViewerPanel().getState();
 
         //Center on the display center of the viewer ...
-        //double w = bdv_h.getViewerPanel().getDisplay().getWidth();
-        //double h = bdv_h.getViewerPanel().getDisplay().getHeight();
+        //double w = bdvh.getViewerPanel().getDisplay().getWidth();
+        //double h = bdvh.getViewerPanel().getDisplay().getHeight();
 
         RealPoint pt = new RealPoint(3); // Number of dimension
 
         //Get global coordinates of the central position  of the viewer
-        //bdv_h.getViewerPanel().displayToGlobalCoordinates(w/2.0, h/2.0, pt);
+        //bdvh.getViewerPanel().displayToGlobalCoordinates(w/2.0, h/2.0, pt);
         double posX = pt.getDoublePosition(0);
         double posY = pt.getDoublePosition(1);
         double posZ = pt.getDoublePosition(2);

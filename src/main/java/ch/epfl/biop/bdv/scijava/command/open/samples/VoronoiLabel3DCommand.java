@@ -53,7 +53,7 @@ public class VoronoiLabel3DCommand implements Command{
         final RandomAccessibleInterval<FloatType> labelImage = getTestLabelImage(new long[] { sx, sy, sz }, numLabels, computeImageBeforeDisplay);
         final BdvSource source = BdvFunctions.show(labelImage,"Voronoi Label Image",  options);
         source.setColor(new ARGBType(0xFF00FF00));
-        source.setDisplayRange(0,1);
+        source.setDisplayRange(0,255);
 
         bdv_h = source.getBdvHandle();
     }
@@ -168,7 +168,7 @@ public class VoronoiLabel3DCommand implements Command{
                         ( interval.realMax( d ) - interval.realMin( d ) ) + interval.realMin( d ), d );
 
             // add a new element with a random intensity in the range 0...1
-            elements.add( point, new FloatType( rnd.nextFloat() ) );
+            elements.add( point, new FloatType( rnd.nextFloat()*255 ) );
         }
 
         return elements;

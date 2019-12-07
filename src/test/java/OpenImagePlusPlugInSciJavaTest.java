@@ -1,4 +1,4 @@
-import ch.epfl.biop.bdv.scijava.command.open.BdvOpenImagePlus;
+import ch.epfl.biop.bdv.scijava.command.open.BdvAppendImagePlus;
 import ij.IJ;
 import ij.ImagePlus;
 import net.imagej.ImageJ;
@@ -12,7 +12,7 @@ public class OpenImagePlusPlugInSciJavaTest {
         image.show();
         final net.imagej.ImageJ ij = new ImageJ();
         ij.ui().showUI();
-        ij.get(CommandService.class).run(BdvOpenImagePlus.class,true, "imp", image);
+        ij.get(CommandService.class).run(BdvAppendImagePlus.class,true, "imp", image);
     }
 
 }

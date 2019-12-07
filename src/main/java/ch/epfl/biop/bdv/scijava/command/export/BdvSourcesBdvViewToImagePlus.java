@@ -33,7 +33,7 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 import static java.lang.Math.sqrt;
 
 @Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Export Sources>As ImagePlus", initializer = "initParams")
-public class BdvToImgPlusCommand<T extends RealType<T>> implements Command {
+public class BdvSourcesBdvViewToImagePlus<T extends RealType<T>> implements Command {
     @Parameter(label = "BigDataViewer View (affine transform 3D)")
     AffineTransform3D transformedSourceToViewer;
 

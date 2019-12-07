@@ -1,4 +1,4 @@
-package ch.epfl.biop.bdv.scijava.command.display;
+package ch.epfl.biop.bdv.scijava.command.display.window;
 
 import bdv.util.BdvHandle;
 import net.imglib2.realtransform.AffineTransform3D;

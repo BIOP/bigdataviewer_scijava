@@ -3,7 +3,7 @@ package ch.epfl.biop.bdv.scijava.gui.swing;
 import bdv.util.BdvHandle;
 import bdv.util.BdvHandleHelper;
 import bdv.viewer.state.SourceState;
-import ch.epfl.biop.bdv.scijava.command.display.BdvWindowTranslateOnSource;
+import ch.epfl.biop.bdv.scijava.command.display.window.BdvWindowTranslateOnSource;
 import net.imglib2.Volatile;
 import org.scijava.command.CommandService;
 import org.scijava.plugin.Parameter;

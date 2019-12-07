@@ -21,10 +21,10 @@ import java.util.logging.Logger;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
 @Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Image File [SCIFIO]")
-public class BdvOpenWithSciFIO implements Command
+public class BdvAppendWithSciFIO implements Command
 {
 
-    private static final Logger LOGGER = Logger.getLogger( BdvOpenWithSciFIO.class.getName() );
+    private static final Logger LOGGER = Logger.getLogger( BdvAppendWithSciFIO.class.getName() );
 
     @Parameter(label = "Image File")
     public File file;

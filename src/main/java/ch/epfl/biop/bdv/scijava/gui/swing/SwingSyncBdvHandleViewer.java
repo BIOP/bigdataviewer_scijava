@@ -1,6 +1,6 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
-import ch.epfl.biop.bdv.scijava.command.display.BdvWindowSynchronize;
+import ch.epfl.biop.bdv.scijava.command.display.window.BdvWindowSynchronize;
 import org.scijava.plugin.Plugin;
 import org.scijava.ui.swing.viewer.EasySwingDisplayViewer;
 import org.scijava.ui.viewer.DisplayViewer;

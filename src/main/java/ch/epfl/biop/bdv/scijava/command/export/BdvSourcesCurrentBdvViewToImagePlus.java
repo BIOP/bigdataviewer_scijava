@@ -48,9 +48,9 @@ import static java.lang.Math.sqrt;
  */
 
 @Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Export Sources>As ImagePlus (current view)", initializer = "initParams")
-public class BdvSlicesToImgPlus<T extends RealType<T>> implements Command {
+public class BdvSourcesCurrentBdvViewToImagePlus<T extends RealType<T>> implements Command {
 
-    private static final Logger LOGGER = Logger.getLogger( BdvSlicesToImgPlus.class.getName() );
+    private static final Logger LOGGER = Logger.getLogger( BdvSourcesCurrentBdvViewToImagePlus.class.getName() );
 
     // ItemIO.BOTH required because it can be modified in case of appending new data to BDV (-> requires INPUT), or created (-> requires OUTPUT)
     @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH, callback = "matchXYBDVFrame")
@@ -355,7 +355,7 @@ public class BdvSlicesToImgPlus<T extends RealType<T>> implements Command {
                 "urlServer","http://fly.mpi-cbg.de:8081",
                 "datasetName", "Drosophila").get();
         // Returns ImagePlus slice
-        ij.command().run(BdvSlicesToImgPlus.class, true);
+        ij.command().run(BdvSourcesCurrentBdvViewToImagePlus.class, true);
     }
 
 }

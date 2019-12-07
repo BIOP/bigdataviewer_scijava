@@ -1,10 +1,10 @@
 package ch.epfl.biop.bdv.scijava.gui.swing;
 
 import ch.epfl.biop.bdv.scijava.command.BdvSourcesInspect;
-import ch.epfl.biop.bdv.scijava.command.display.BdvSourcesHide;
-import ch.epfl.biop.bdv.scijava.command.display.BdvSourcesSetColor;
-import ch.epfl.biop.bdv.scijava.command.display.BdvSourcesSetMinMax;
-import ch.epfl.biop.bdv.scijava.command.display.BdvSourcesShow;
+import ch.epfl.biop.bdv.scijava.command.display.sources.BdvSourcesHide;
+import ch.epfl.biop.bdv.scijava.command.display.sources.BdvSourcesSetColor;
+import ch.epfl.biop.bdv.scijava.command.display.sources.BdvSourcesSetMinMax;
+import ch.epfl.biop.bdv.scijava.command.display.sources.BdvSourcesShow;
 import ch.epfl.biop.bdv.scijava.command.edit.BdvSourcesDuplicate;
 import ch.epfl.biop.bdv.scijava.command.edit.transform.BdvSourcesAffineTransform;
 import ch.epfl.biop.bdv.scijava.command.edit.transform.BdvSourcesResample;

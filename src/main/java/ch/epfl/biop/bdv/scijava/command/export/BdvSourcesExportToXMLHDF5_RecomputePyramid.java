@@ -48,7 +48,12 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
  *
  */
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Export Sources>As Xml/Hdf5 SpimDataset", initializer = "initParams")
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Export Sources>As Xml/Hdf5 SpimDataset",
+        initializer = "initParams",
+        label = "Export a set of Sources into a new Xml/Hdf5 bdv dataset",
+        description = "Mipmaps are recomputed. Do not work with RGB images. " +
+                "Other pixel types are truncated to their int value between 0 and 65535")
 public class BdvSourcesExportToXMLHDF5_RecomputePyramid implements Command{
 
     private static final Logger LOGGER = Logger.getLogger( BdvSourcesExportToXMLHDF5_RecomputePyramid.class.getName() );

@@ -9,12 +9,10 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-/**
- * Puts in front/focus the JFrame associated to a BdvHandle
- * Useful for IJ1 Macro Language programming
- */
-
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Select Bdv Window")
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Display>Select Bdv Window",
+        label="Puts in front/focus a Bdv Window",
+        description="Useful for IJ1 Macro Language programming")
 public class BdvWindowSelect implements Command {
 
     @Parameter(label = "Name of the Bdv window")

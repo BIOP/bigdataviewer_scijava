@@ -23,8 +23,11 @@ import java.util.stream.Collectors;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-
-@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Register>BigWarp"+ScijavaBdvCmdSuffix)
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Register>BigWarp"+ScijavaBdvCmdSuffix,
+        label = "Initializes BigWarp using pre existing set of SourceAndConverter",
+        description = "Initializes BigWarp using pre existing set of SourceAndConverter"
+)
 public class BigWarpInitWithBdvSources implements Command {
 
     private static final Logger LOGGER = Logger.getLogger( BigWarpInitWithBdvSources.class.getName() );
@@ -35,13 +38,13 @@ public class BigWarpInitWithBdvSources implements Command {
     @Parameter(type = ItemIO.OUTPUT)
     BdvHandle bdvHandleQ;
 
-    @Parameter
+    @Parameter(label = "Input Bdv Window containing fixed sources")
     BdvHandle bdv_h_fixed;
 
     @Parameter(label="Fixed source indexes ('2,3:5'), starts at 0")
     String idx_src_fixed;
 
-    @Parameter
+    @Parameter(label = "Input Bdv Window containing moving sources")
     BdvHandle bdv_h_moving;
 
     @Parameter(label="Moving source indexes ('2,3:5'), starts at 0")

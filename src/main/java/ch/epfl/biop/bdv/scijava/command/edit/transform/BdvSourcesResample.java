@@ -12,7 +12,13 @@ import org.scijava.plugin.Plugin;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
 
-@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Resample Sources")
+@Plugin(type = Command.class, initializer = "init",
+        menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Resample Sources",
+        label = "Resample a Bdv Source like another one",
+        description = "This command is useful to save any sort of source which is not" +
+                "sampled on a grid (procedural, warped), and to resample it onto" +
+                "an appropriate grid (defined by the source template). Once resampled, the source" +
+                "can be exported as a spim Xml Dataset, for instance.")
 public class BdvSourcesResample extends BdvSourceAndConverterFunctionalInterfaceCommand {
 
     @Parameter(label = "Bdv Frame containing source resampling template")
@@ -21,7 +27,7 @@ public class BdvSourcesResample extends BdvSourceAndConverterFunctionalInterface
     @Parameter(label = "Index of the source resampling template")
     int idxSourceDst;
 
-    @Parameter
+    @Parameter(label = "Reuse mipmaps of the resampling template source")
     boolean reuseMipMaps;
 
     public BdvSourcesResample() {

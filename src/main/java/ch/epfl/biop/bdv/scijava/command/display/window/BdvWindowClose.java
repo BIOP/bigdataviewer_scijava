@@ -9,15 +9,15 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-/**
- * Scijava Command which closes a BdvHandle window
- * The convert service is used to find the BdvHandle from its String representation.
- * Valid Strings are:
- * - the title of the JFrame containing the ViewerPanel of the BdvHandle Object
- * - the result of the toString() method of the BdvHandle Object (= default SciJava name)
- * -> Assumes the Bdv is containing wihtin a single JFrame
- */
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Close Bdv Window")
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Display>Close Bdv Window",
+        label="Close Bdv Window",
+        description = "Scijava Command which closes a BdvHandle window\n" +
+                " The convert service is used to find the BdvHandle from its String representation.\n" +
+                " Valid Strings are:\n" +
+                " - the title of the JFrame containing the ViewerPanel of the BdvHandle Object\n" +
+                " - the result of the toString() method of the BdvHandle Object (= default SciJava name)\n" +
+                " -> Assumes the Bdv is containing within a single JFrame")
 public class BdvWindowClose implements Command {
 
     @Parameter(label = "Name of the Bdv Window")

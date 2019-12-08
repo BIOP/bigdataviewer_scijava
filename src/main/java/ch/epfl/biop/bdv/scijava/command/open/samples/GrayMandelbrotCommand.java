@@ -1,9 +1,6 @@
 package ch.epfl.biop.bdv.scijava.command.open.samples;
 
-import bdv.util.BdvFunctions;
-import bdv.util.BdvHandle;
-import bdv.util.BdvOptions;
-import bdv.util.Procedural3DImageShort;
+import bdv.util.*;
 import net.imagej.display.ColorTables;
 import net.imagej.lut.LUTService;
 import net.imglib2.FinalInterval;
@@ -29,15 +26,14 @@ import java.util.Map;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type=Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Samples>Bdv example source - Fractal (Gray)")
+@Plugin(type=Command.class, initializer = "init",
+        menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Samples>Bdv example source - Fractal (Gray)",
+        label = "Adds the mandelbrot set into a bdv window ( gray level  between 0 and 255)")
 public class GrayMandelbrotCommand extends DynamicCommand {
 
     // ItemIO.BOTH required because it can be modified in case of appending new data to BDV (-> requires INPUT), or created (-> requires OUTPUT)
     @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH)
     public BdvHandle bdv_h;
-
-    @Parameter(required = false, label = "LUT", persist = false)
-    private ColorTable table = ColorTables.GRAYS;
 
     public int maxIterations = 255;
 
@@ -70,8 +66,9 @@ public class GrayMandelbrotCommand extends DynamicCommand {
         ).getRRA();
 
         BdvOptions options = BdvOptions.options().addTo(bdv_h);
-
-        bdv_h = BdvFunctions.show( rra, interval, "Mandelbrot Set", options ).getBdvHandle();
+        BdvStackSource bss = BdvFunctions.show( rra, interval, "Mandelbrot Set", options );
+        bss.setDisplayRange(0,255);
+        bdv_h = bss.getBdvHandle();
 
     }
 

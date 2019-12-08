@@ -26,26 +26,28 @@ import java.util.Random;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
 
-@Plugin(type= Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Samples>Bdv example source - Voronoi Label 3D")
+@Plugin(type= Command.class, initializer = "init",
+        menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Samples>Bdv example source - Voronoi Label 3D",
+        label = "Random 3D points defining voronoi cells, in 3D.")
 public class VoronoiLabel3DCommand implements Command{
 
     // ItemIO.BOTH required because it can be modified in case of appending new data to BDV (-> requires INPUT), or created (-> requires OUTPUT)
     @Parameter(label = "BigDataViewer Frame", type = ItemIO.BOTH, required = false)
     public BdvHandle bdv_h;
 
-    @Parameter
+    @Parameter(label = "Compute image before displaying it (avoid for big image)")
     public boolean computeImageBeforeDisplay = false;
 
-    @Parameter
+    @Parameter(label = "Number of Pixels in X")
     public int sx = 256;
 
-    @Parameter
+    @Parameter(label = "Number of Pixels in Y")
     public int sy = 256;
 
-    @Parameter
+    @Parameter(label = "Number of Pixels in Z")
     public int sz = 256;
 
-    @Parameter(label = "Number of Labels")
+    @Parameter(label = "Number of Random Points = number of voronoi cells")
     public int numLabels = 256;
 
     public void run() {

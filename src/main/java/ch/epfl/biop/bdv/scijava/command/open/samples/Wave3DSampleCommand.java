@@ -30,7 +30,9 @@ import java.util.Map;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type=Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Samples>Bdv example source - Wave 3D")
+@Plugin(type=Command.class, initializer = "init",
+        menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Samples>Bdv example source - Wave 3D",
+        label = "Procedurally generated wave3d image, with a lookuptable.")
 public class Wave3DSampleCommand extends DynamicCommand {
 
     // ItemIO.BOTH required because it can be modified in case of appending new data to BDV (-> requires INPUT), or created (-> requires OUTPUT)

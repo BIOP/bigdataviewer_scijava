@@ -10,13 +10,18 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Affine>Transform Sources (Affine, string)")
+@Plugin(type = Command.class, initializer = "init",
+        menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Affine>Transform Sources (Affine, string)",
+        label = "Performs an affinetransform on bdv sources.",
+        description = " If transformInPlace is checked, then the source " +
+                "is transformed in place, which means that the output can be list only. If not, the transformation" +
+                "is made through a wrapping whithin a TransformedSource. The affine transform is a 4x3 matrix separated with comma")
 public class BdvSourcesAffineTransformWithString extends BdvSourceAndConverterFunctionalInterfaceCommand {
 
     @Parameter(label = "Affine Transform Matrix", style = "text area")
     String stringMatrix = "1,0,0,0,\n 0,1,0,0,\n 0,0,1,0, \n 0,0,0,1";
 
-    @Parameter
+    @Parameter(label = "Transform the source in place = the original transform is lost")
     boolean transformInPlace = true;
 
     public BdvSourcesAffineTransformWithString() {

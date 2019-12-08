@@ -25,7 +25,11 @@ import java.util.*;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"SpimDataset>Save SpimDataset")
+@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"SpimDataset>Save SpimDataset",
+        label = "Command that saves a Spimdata dataset object",
+        description = "Save a spimdata dataset. Manual transform can be pushed into the" +
+                "dataset by looking recursively through wrapped Source. Limitations are to be expected." +
+                "Only pushing transformations from timepoint 0 at the moment")
 public class SpimdatasetSave implements Command {
 
     @Parameter

@@ -15,10 +15,13 @@ import java.util.List;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>SpimDataset")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>SpimDataset",
+        label = "Plugin to append a spimdata dataset into a bdv window. A Spimdataset should be " +
+                "present in the ObjectService for this command to work. Use Spimdata command" +
+                "for that beforehand.")
 public class BdvAppendSpimData implements Command {
 
-    @Parameter
+    @Parameter(label = "Input Spimdataset")
     AbstractSpimData spimData;
 
     @Parameter(type = ItemIO.BOTH)

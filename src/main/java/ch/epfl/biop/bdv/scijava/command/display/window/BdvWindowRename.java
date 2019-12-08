@@ -10,11 +10,10 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-/**
- * Renames the specified BdvWindow
- * Specifying a name facilitates the selection of a Bdv Window in IJ1 Macro language
- */
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Rename Bdv Window")
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Display>Rename Bdv Window",
+        label="Renames a Bdv Window",
+        description="Specifying a name facilitates the selection of a Bdv Window in IJ1 Macro language")
 public class BdvWindowRename implements Command {
 
     @Parameter(label = "Bdv Window", type = ItemIO.BOTH)

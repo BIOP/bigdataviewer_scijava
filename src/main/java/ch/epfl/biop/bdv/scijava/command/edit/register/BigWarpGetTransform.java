@@ -11,10 +11,13 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Register>Get BigWarp Transform")
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Register>Get BigWarp Transform",
+        label = "Get the current transformation specified by a BigWarp instance",
+        description = "")
 public class BigWarpGetTransform implements Command {
 
-    @Parameter
+    @Parameter(label = "Input Bdv Window")
     BdvHandle bdvh;
 
     @Parameter(type = ItemIO.OUTPUT)

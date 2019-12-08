@@ -12,7 +12,8 @@ import org.scijava.plugin.Plugin;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Current IJ1 Image [ImgLib2]")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Current IJ1 Image [ImgLib2]",
+        label = "plugin to append the current image in a bdv window, using ImgLib2 wrapping (limited)")
 public class BdvAppendImgPlus implements Command {
 
     // ItemIO.BOTH required because it can be modified in case of appending new data to BDV (-> requires INPUT), or created (-> requires OUTPUT)

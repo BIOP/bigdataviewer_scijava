@@ -8,16 +8,15 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-/**
- * Set the location of the current view of a Bdv Window
- * Do not check whether the new view keeps a direct orthonormal view -> take care!
- */
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Set Current Location")
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Display>Set Current Location",
+        label="Set the location of the current view of a Bdv Window",
+        description="Do not check whether the new view keeps a direct orthonormal view -> take care!")
 public class BdvWindowSetCurrentTransform implements Command {
-    @Parameter
+    @Parameter(label = "Input Bdv Window")
     BdvHandle bdvh;
 
-    @Parameter()
+    @Parameter(label = "Affine Transform specifying the Bdv window view location")
     AffineTransform3D at3D;
 
     public void run() {

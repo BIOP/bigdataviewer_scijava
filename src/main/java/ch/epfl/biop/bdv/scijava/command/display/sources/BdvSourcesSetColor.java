@@ -10,11 +10,11 @@ import org.scijava.util.ColorRGB;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-/**
- * Scijava Command which sets the color of bdv sources
- * Multiple sources can be specified through the input parameter sourceIndexString
- */
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Set Sources Color")
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Display>Set Sources Color",
+        label="Set the color of bdv sources",
+        description="Set the color of bdv sources. Multiple sources can be specified.")
+
 public class BdvSourcesSetColor implements Command {
 
     @Parameter(label = "Bdv Window")
@@ -23,7 +23,7 @@ public class BdvSourcesSetColor implements Command {
     @Parameter(label = "Color")
     ColorRGB c;
 
-    @Parameter(label="Indexes ('0,3:5'), of the sources")
+    @Parameter(label="Indexes ('0,3:5'), of the sources", description = "description test")
     public String sourceIndexString = "0";
 
     @Override

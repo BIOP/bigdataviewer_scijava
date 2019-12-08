@@ -9,11 +9,12 @@ import org.scijava.plugin.Plugin;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
 /**
- * Scijava Command which sets the min and max display value of bdv sources
- * Multiple sources can be specified through the input parameter sourceIndexString
  * TODO : solve issue in case no convertersetup is found
  */
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Set Sources Min Max Display")
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Display>Set Sources Min Max Display",
+        label="Set the min and max display values of bdv sources",
+        description="Set the min and max display values of bdv sources. Multiple sources can be specified.")
 public class BdvSourcesSetMinMax implements Command {
 
     @Parameter(label = "Bdv Window")

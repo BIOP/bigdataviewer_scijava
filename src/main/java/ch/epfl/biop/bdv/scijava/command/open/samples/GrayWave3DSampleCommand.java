@@ -4,33 +4,25 @@ import bdv.util.BdvFunctions;
 import bdv.util.BdvHandle;
 import bdv.util.BdvOptions;
 import bdv.util.Procedural3DImageShort;
-import net.imagej.display.ColorTables;
-import net.imagej.lut.LUTService;
 import net.imglib2.FinalInterval;
 import net.imglib2.Interval;
 import net.imglib2.RealRandomAccessible;
-import net.imglib2.converter.Converter;
-import net.imglib2.converter.Converters;
-import net.imglib2.display.ColorTable;
-import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import org.scijava.ItemIO;
-import org.scijava.ItemVisibility;
 import org.scijava.command.Command;
 import org.scijava.command.DynamicCommand;
 import org.scijava.convert.ConvertService;
-import org.scijava.module.MutableModuleItem;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Map;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type=Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Samples>Bdv example source - Wave 3D (Gray)")
+@Plugin(type=Command.class, initializer = "init",
+        menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Samples>Bdv example source - Wave 3D (Gray)",
+        label = "Procedurally generated wave3d image, gray levels.")
 public class GrayWave3DSampleCommand extends DynamicCommand {
 
     // ItemIO.BOTH required because it can be modified in case of appending new data to BDV (-> requires INPUT), or created (-> requires OUTPUT)

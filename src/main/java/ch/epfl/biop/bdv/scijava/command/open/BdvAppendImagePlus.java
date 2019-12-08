@@ -55,7 +55,8 @@ import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
  * @author Tobias Pietzsch &lt;tobias.pietzsch@gmail.com&gt;
  */
 @Plugin(type = Command.class,
-        menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Current IJ1 Image (buggy) []")
+        menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Current IJ1 Image (buggy) []",
+        label = "plugin to append the current image in a bdv window")
 public class BdvAppendImagePlus implements Command
 {
     @Parameter(type = ItemIO.INPUT)

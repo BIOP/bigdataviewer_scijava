@@ -6,19 +6,19 @@ import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
+import static ch.epfl.biop.bdv.scijava.command.Info.*;
 
-/**
- * Scijava Command which hides bdv sources
- * Multiple sources can be specified through the input parameter sourceIndexString
- */
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Hide Sources")
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Display>Hide Sources",
+        label="Hide bdv sources",
+        description="Hide bdv sources. Multiple sources can be specified.")
+
 public class BdvSourcesHide implements Command {
 
-    @Parameter(label = "Bdv Window")
+    @Parameter(label = ScijavaBdvHandleLabel)
     BdvHandle bdvh;
 
-    @Parameter(label="Indexes ('0,3:5'), of the sources to hide")
+    @Parameter(label=ScijavaBdvLabelIndexes, description=ScijavaBdvDescriptionIndexes)
     public String sourceIndexString = "0";
 
     @Override

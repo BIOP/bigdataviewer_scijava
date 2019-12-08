@@ -47,7 +47,12 @@ import static java.lang.Math.sqrt;
  * BIOP, EPFL, 2019
  */
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Export Sources>As ImagePlus (current view)", initializer = "initParams")
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Export Sources>As ImagePlus (current view)",
+        initializer = "initParams",
+        label = "Export current Bdv View as an ImagePlus",
+        description = "Limitations : do not work with multiple ARGB source -> please loop this command\n" +
+                "Do not work with multiple source of multiple Pixel Type -> please loop this command")
 public class BdvSourcesCurrentBdvViewToImagePlus<T extends RealType<T>> implements Command {
 
     private static final Logger LOGGER = Logger.getLogger( BdvSourcesCurrentBdvViewToImagePlus.class.getName() );

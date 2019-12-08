@@ -20,7 +20,8 @@ import java.util.logging.Logger;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Image File [SCIFIO]")
+@Plugin(type = Command.class,menuPath = ScijavaBdvRootMenu+"Bdv>Put Sources>Image File [SCIFIO]",
+    label = "Command which opens a file using SciFIO and appends it into in a bdv window.")
 public class BdvAppendWithSciFIO implements Command
 {
 

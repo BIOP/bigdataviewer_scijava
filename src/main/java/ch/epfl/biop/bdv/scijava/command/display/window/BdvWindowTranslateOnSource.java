@@ -11,13 +11,14 @@ import org.scijava.plugin.Plugin;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 import static java.lang.Math.sqrt;
 
-/**
- * Translate the location of the Bdv window to the right corner of the specified indexed source
- * No rotation or scaling is attempted to fit in a better way the specified source:
- * it is not guaranteed tha the specified source is not skewed or is in the direct orientation
- * thus it's complicated to keep a direct orthonormal referential when trying to align better the bdv window and the source
- */
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Translate Bdv Location On Source")
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Display>Translate Bdv Location On Source",
+        label = "Translate the location of the Bdv window to the right corner of the specified indexed source",
+        description = "Translate the location of the Bdv window to the right corner of the specified indexed source\n" +
+                " * No rotation or scaling is attempted to fit in a better way the specified source:\n" +
+                " * it is not guaranteed tha the specified source is not skewed or is in the direct orientation\n" +
+                " * thus it's complicated to keep a direct orthonormal referential when trying to align better the bdv window and the source\n" +
+                " ")
 public class BdvWindowTranslateOnSource implements Command {
 
     @Parameter

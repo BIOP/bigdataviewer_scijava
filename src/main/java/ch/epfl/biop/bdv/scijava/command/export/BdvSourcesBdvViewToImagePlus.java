@@ -32,7 +32,12 @@ import java.util.stream.Stream;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 import static java.lang.Math.sqrt;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Export Sources>As ImagePlus", initializer = "initParams")
+@Plugin(type = Command.class,
+        initializer = "initParams",
+        menuPath = ScijavaBdvRootMenu+"Bdv>Export Sources>As ImagePlus",
+        label = "Export a Bdv View as an ImagePlus (an AffineTransform3D is required to specify the location)",
+        description = "Limitations : do not work with multiple ARGB source -> please loop this command\n" +
+                "Do not work with multiple source of multiple Pixel Type -> please loop this command")
 public class BdvSourcesBdvViewToImagePlus<T extends RealType<T>> implements Command {
     @Parameter(label = "BigDataViewer View (affine transform 3D)")
     AffineTransform3D transformedSourceToViewer;

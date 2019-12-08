@@ -172,6 +172,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.9.11</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>sc.fiji</groupId>
 			<artifactId>bigwarp_fiji</artifactId>
 		</dependency>

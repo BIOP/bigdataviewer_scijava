@@ -8,7 +8,10 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Affine>New Affine Transform")
+@Plugin(type = Command.class, initializer = "init",
+        menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Affine>New Affine Transform",
+        label = "Creates an affine transform and makes it accessible for other commands",
+        description = "Affine transform is a 4x3 matrix; elements are separated by comma.")
 public class CreateAffineTransformCommand implements Command {
 
     @Parameter(label = "Affine Transform Matrix", style = "text area")

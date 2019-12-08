@@ -5,17 +5,13 @@ import bdv.viewer.SourceAndConverter;
 import bdv.viewer.ViewerPanel;
 import bdv.viewer.state.SourceState;
 import bdv.viewer.state.ViewerState;
-import net.imglib2.Volatile;
 import org.scijava.ItemIO;
 import org.scijava.command.Command;
-import org.scijava.command.DynamicCommand;
 import org.scijava.plugin.Parameter;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;

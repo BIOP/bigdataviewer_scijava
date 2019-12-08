@@ -8,11 +8,10 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-/**
- * Scijava Command which shows bdv sources
- * Multiple sources can be specified through the input parameter sourceIndexString
- */
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Show Sources")
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Display>Show Sources",
+        label="Show bdv sources",
+        description="Show bdv sources. Multiple sources can be specified.")
 public class BdvSourcesShow implements Command {
 
     @Parameter(label = "Bdv Window")

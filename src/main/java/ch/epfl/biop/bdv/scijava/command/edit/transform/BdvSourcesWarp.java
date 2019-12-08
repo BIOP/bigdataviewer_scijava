@@ -11,7 +11,12 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Transform Sources (realtransform)")
+@Plugin(type = Command.class, initializer = "init",
+        menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Transform Sources (realtransform)",
+        label = "Takes a transform (rather not affine), and applies it on specified sources",
+        description = "If the transform is affine, it is preferable to use the BdvSourceAffineTransform" +
+                "command. If the transform is more general (like a Warping, typically an output of BigWarp), " +
+                "then this method can be used")
 public class BdvSourcesWarp extends BdvSourceAndConverterFunctionalInterfaceCommand {
     @Parameter(label = "RealTransform object")
     RealTransform rt;

@@ -10,13 +10,19 @@ import org.scijava.plugin.Plugin;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, initializer = "init", menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Affine>Transform Sources (AffineTransform3D)")
+@Plugin(type = Command.class, initializer = "init",
+        menuPath = ScijavaBdvRootMenu+"Bdv>Edit Sources>Transform>Affine>Transform Sources (AffineTransform3D)",
+        label = "Performs an affinetransform on bdv sources.",
+        description = "If transformInPlace is checked, then the source " +
+                "is transformed in place, which means that the output can be list only. If not, the transformation" +
+                "is made through a wrapping whithin a TransformedSource. An AffineTransform3D object should be available" +
+                "within ObjectService to use this command in the GUI")
 public class BdvSourcesAffineTransform extends BdvSourceAndConverterFunctionalInterfaceCommand {
 
     @Parameter(label = "Affine Transform Matrix", style = "text area")
     AffineTransform3D at;
 
-    @Parameter
+    @Parameter(label = "Transform the source in place = the original transform is lost")
     boolean transformInPlace = true;
 
     public BdvSourcesAffineTransform() {

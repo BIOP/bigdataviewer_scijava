@@ -59,4 +59,13 @@ public class Info implements Command {
      */
     final public static String ScijavaBdvCmdSuffix = " (SciJava)";
 
+    /**
+     * Label for selecting indexes of sources within bdv windows
+     */
+    final public static String ScijavaBdvLabelIndexes = "Indexes of the sources, comma separated";
+
+    final public static String ScijavaBdvDescriptionIndexes = "Multiple sources can be specified; 0,4,7 or range 3:5";
+
+    final public static String ScijavaBdvHandleLabel = "Bdv window";
+
 }

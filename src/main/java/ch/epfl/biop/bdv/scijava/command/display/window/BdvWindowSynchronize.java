@@ -10,14 +10,14 @@ import java.util.Arrays;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-/**
- * Synchronizes the location of 2 Bdv windows
- * One is the master = controlling the slave window
- * A thread checks every syncDelayInMs ms if the views are identical or not, if not, then the slave window is updated
- * The syncrnoization can be stopped temporarily thanke to the SwingSyncBdvHandleViewer class which is triggered
- * Synchronization can be chained to synchrnoize more than two viewers
- */
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Display>Synchronize 2 Bdvs")
+@Plugin(type = Command.class,
+        menuPath = ScijavaBdvRootMenu+"Bdv>Display>Synchronize 2 Bdvs",
+        label="Synchronizes the location of 2 Bdv windows",
+        description="Synchronizes the location of 2 Bdv windows\n" +
+                " * One is the master = controlling the slave window\n" +
+                " * A thread checks every syncDelayInMs ms if the views are identical or not, if not, then the slave window is updated\n" +
+                " * The syncrnoization can be stopped temporarily thanke to the SwingSyncBdvHandleViewer class which is triggered\n" +
+                " * Synchronization can be chained to synchrnoize more than two viewers")
 public class BdvWindowSynchronize implements Command {
 
     @Parameter(label = "Master Bdv Window")

@@ -19,7 +19,8 @@ import java.util.List;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvCmdSuffix;
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"SpimDataset>Open>SpimDataset [XML File]")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"SpimDataset>Open>SpimDataset [XML File]",
+        label = "Command that opens a Spimdata dataset from a xml Spimdata file. Click on Show to display it.")
 public class SpimdatasetOpenXML implements Command {
 
     @Parameter(label = "XML File")

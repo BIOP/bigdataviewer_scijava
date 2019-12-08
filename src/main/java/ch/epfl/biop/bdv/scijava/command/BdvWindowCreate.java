@@ -18,19 +18,20 @@ import java.util.List;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Create Empty BDV Frame")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Create Empty BDV Frame",
+    label = "Creates an empty Bdv window")
 public class BdvWindowCreate implements Command {
 
-    @Parameter
+    @Parameter(label = "Create a 2D Bdv window")
     public boolean is2D = false;
 
-    @Parameter
+    @Parameter(label = "Title of the new Bdv window")
     public String windowTitle = "Bdv";
 
     @Parameter(type = ItemIO.OUTPUT)
     public BdvHandle bdv_h;
 
-    @Parameter
+    @Parameter(label = "Location and size of the view of the new Bdv window")
     public double px = 0, py = 0, pz = 0, s = 100;
 
     @Parameter

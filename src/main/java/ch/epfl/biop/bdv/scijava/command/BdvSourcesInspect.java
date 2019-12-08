@@ -17,13 +17,17 @@ import java.util.function.Consumer;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
-@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Inspect BDV Sources")
+@Plugin(type = Command.class, menuPath = ScijavaBdvRootMenu+"Bdv>Inspect BDV Sources",
+    label = "Prints in the console informations about a bdv sources.",
+    description = "Looks recursively through wrapped sources in order to understand the logic " +
+            "behind a source which could have been loaded from a dataset, affinetransformed, " +
+            "warped, affinetransformed again...")
 public class BdvSourcesInspect implements Command {
 
-    @Parameter
+    @Parameter(label = "Input Bdv Window")
     BdvHandle bdvh;
 
-    @Parameter(label="Indexes ('0,3:5'), of the sources to process")
+    @Parameter(label="Indexes ('0,3:5'), of the sources to inspect")
     public String sourceIndexString = "0";
 
     @Parameter

@@ -1,27 +1,18 @@
 package ch.epfl.biop.bdv.scijava.command.open.samples;
 
 import bdv.util.*;
-import net.imagej.display.ColorTables;
-import net.imagej.lut.LUTService;
 import net.imglib2.FinalInterval;
 import net.imglib2.Interval;
 import net.imglib2.RealRandomAccessible;
-import net.imglib2.converter.Converter;
-import net.imglib2.converter.Converters;
-import net.imglib2.display.ColorTable;
 import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import org.scijava.ItemIO;
 import org.scijava.command.Command;
 import org.scijava.command.DynamicCommand;
-import org.scijava.convert.ConvertService;
-import org.scijava.module.MutableModuleItem;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Map;
 
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
@@ -68,6 +59,7 @@ public class GrayMandelbrotCommand extends DynamicCommand {
         BdvOptions options = BdvOptions.options().addTo(bdv_h);
         BdvStackSource bss = BdvFunctions.show( rra, interval, "Mandelbrot Set", options );
         bss.setDisplayRange(0,255);
+        bss.setColor(new ARGBType(ARGBType.rgba(101,164,227,255)));
         bdv_h = bss.getBdvHandle();
 
     }

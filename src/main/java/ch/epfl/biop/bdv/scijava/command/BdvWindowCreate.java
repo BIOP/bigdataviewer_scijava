@@ -29,7 +29,7 @@ public class BdvWindowCreate implements Command {
     public String windowTitle = "Bdv";
 
     @Parameter(type = ItemIO.OUTPUT)
-    public BdvHandle bdv_h;
+    public BdvHandle bdvh;
 
     @Parameter(label = "Location and size of the view of the new Bdv window")
     public double px = 0, py = 0, pz = 0, s = 100;
@@ -49,17 +49,17 @@ public class BdvWindowCreate implements Command {
         // TODO : ask why BdvHandle constructor not public ?
         ArrayImg dummyImg = ArrayImgs.bytes(2, 2, 2);
         BdvStackSource bss = BdvFunctions.show(dummyImg, "dummy", opts.frameTitle(windowTitle).sourceTransform(new AffineTransform3D()));
-        bdv_h = bss.getBdvHandle();
+        bdvh = bss.getBdvHandle();
         AffineTransform3D at3D = new AffineTransform3D();
         at3D.translate(-px, -py, -pz);
-        double scale = bdv_h.getViewerPanel().getWidth() / s;
+        double scale = bdvh.getViewerPanel().getWidth() / s;
         at3D.scale(scale, scale, 1);
-        bdv_h.getViewerPanel().setCurrentViewerTransform(at3D);
-        bdv_h.getViewerPanel().requestRepaint();
+        bdvh.getViewerPanel().setCurrentViewerTransform(at3D);
+        bdvh.getViewerPanel().requestRepaint();
         bss.removeFromBdv();
 
-        BdvHandleHelper.setBdvHandleCloseOperation(bdv_h,os,cacheService, true);
+        BdvHandleHelper.setBdvHandleCloseOperation(bdvh,os,cacheService, true);
         windowTitle = BdvHandleHelper.getUniqueWindowTitle(os, windowTitle);
-        BdvHandleHelper.setWindowTitle(bdv_h, windowTitle);
+        BdvHandleHelper.setWindowTitle(bdvh, windowTitle);
     }
 }

@@ -5,10 +5,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BuildDocumentation {
@@ -22,6 +19,8 @@ public class BuildDocumentation {
 
         Set<Class<? extends Command>> commandClasses =
                 reflections.getSubTypesOf(Command.class);
+
+        HashMap<String, String> docPerClass = new HashMap<>();
 
         commandClasses.forEach(c -> {
 
@@ -69,9 +68,19 @@ public class BuildDocumentation {
 
                 doc+="\n";
 
-                System.out.println(doc);
+                //System.out.println(doc);
+                docPerClass.put(c.getName(),doc);
             }
         });
+        Object[] keys = docPerClass.keySet().toArray();
+        Arrays.sort(keys);
+        for (Object key:keys) {
+            String k = (String) key;
+            System.out.println(docPerClass.get(k));
+            //System.out.println(k);
+
+
+        }
 
     }
 }

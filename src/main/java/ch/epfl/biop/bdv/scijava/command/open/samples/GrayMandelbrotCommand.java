@@ -12,9 +12,6 @@ import org.scijava.command.DynamicCommand;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-import java.net.URL;
-import java.util.Map;
-
 import static ch.epfl.biop.bdv.scijava.command.Info.ScijavaBdvRootMenu;
 
 @Plugin(type=Command.class, initializer = "init",
@@ -27,10 +24,6 @@ public class GrayMandelbrotCommand extends DynamicCommand {
     public BdvHandle bdv_h;
 
     public int maxIterations = 255;
-
-    // -- other fields --
-
-    private Map<String, URL> luts = null;
 
     public void run() {
 

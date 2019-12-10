@@ -35,7 +35,13 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
+import bdv.util.BdvHandle;
+import mpicbg.spim.data.generic.AbstractSpimData;
+import net.imglib2.realtransform.AffineTransform3D;
+import net.imglib2.realtransform.RealTransform;
+import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.script.ScriptService;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 
@@ -73,8 +79,17 @@ public class GuavaWeakCacheService extends AbstractService implements CacheServi
         });
     }
 
+    @Parameter
+    ScriptService scriptService;
+
     @Override
     public void initialize() {
+        // TODO : change location of these aliases
+        scriptService.addAlias(BdvHandle.class);
+        scriptService.addAlias(RealTransform.class);
+        scriptService.addAlias(AffineTransform3D.class);
+        scriptService.addAlias(AbstractSpimData.class);
+
         cache = CacheBuilder.newBuilder().weakKeys().build();
     }
 

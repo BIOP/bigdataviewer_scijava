@@ -1,3 +1,5 @@
+ARCHIVED : OBSOLETE AND REPLACED BY https://github.com/bigdataviewer/bigdataviewer-playground
+
 ## Fiji plugins for starting BigDataViewer and exporting data, scijava-friendly.
 
 ### Project goal:
